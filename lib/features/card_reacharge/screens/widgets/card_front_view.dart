@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/image_strings.dart';
+// import 'package:tsavaari/utils/constants/image_strings.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
 import 'package:tsavaari/utils/device/device_utility.dart';
 import 'package:tsavaari/utils/helpers/helper_functions.dart';
@@ -29,12 +30,12 @@ class CardFrontView extends StatelessWidget {
           width: double.infinity,
           height: cardHeight,
           decoration: BoxDecoration(
-            image: const DecorationImage(
-              image: AssetImage(TImages.metroCardFrontside),
-              fit: BoxFit.cover,
-            ),
+            // image: const DecorationImage(
+            //   image: AssetImage(TImages.metroCardFrontside),
+            //   fit: BoxFit.cover,
+            // ),
             borderRadius: BorderRadius.circular(TSizes.md),
-            // color: isDark ? TColors.dark : TColors.light,
+            color: isDark ? TColors.dark : TColors.light,
             boxShadow: [
               BoxShadow(
                 blurRadius: TSizes.md,
@@ -44,55 +45,68 @@ class CardFrontView extends StatelessWidget {
           ),
           child: Stack(
             children: [
+              //--Logo
+              const Positioned(
+                  top: TSizes.defaultSpace,
+                  left: TSizes.defaultSpace,
+                  child: CircleAvatar(
+                    backgroundColor: TColors.white,
+                    backgroundImage: AssetImage(TImages.appLogo),
+                  )),
               //--Edit and Delete Icons
-              // Positioned(
-              //   bottom: TSizes.sm,
-              //   right: TSizes.sm,
-              //   child: Row(
-              //     children: [
-              //       FloatingActionButton(
-              //         heroTag: "edit-btn",
-              //         onPressed: () {},
-              //         mini: true,
-              //         shape: const CircleBorder(),
-              //         backgroundColor: TColors.white,
-              //         child: const Icon(
-              //           Iconsax.edit,
-              //           color: TColors.info,
-              //         ),
-              //       ),
-              //       FloatingActionButton(
-              //         heroTag: "remove-btn",
-              //         onPressed: () {},
-              //         mini: true,
-              //         shape: const CircleBorder(),
-              //         backgroundColor: TColors.white,
-              //         child: const Icon(
-              //           Iconsax.card_remove,
-              //           color: TColors.error,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-
-              //--Card Number
               Positioned(
-                top: cardHeight * .35,
-                left: TSizes.defaultSpace,
-                child: Text(
-                  cardNumber,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineMedium!
-                      .copyWith(color: TColors.primary),
+                // bottom: TSizes.sm,
+                // right: TSizes.sm,
+                top: TSizes.defaultSpace,
+                right: TSizes.defaultSpace,
+                child: Row(
+                  children: [
+                    FloatingActionButton(
+                      heroTag: "edit-btn",
+                      onPressed: () {},
+                      mini: true,
+                      shape: const CircleBorder(),
+                      backgroundColor: TColors.white,
+                      child: const Icon(
+                        Iconsax.edit,
+                        color: TColors.info,
+                      ),
+                    ),
+                    FloatingActionButton(
+                      heroTag: "remove-btn",
+                      onPressed: () {},
+                      mini: true,
+                      shape: const CircleBorder(),
+                      backgroundColor: TColors.white,
+                      child: const Icon(
+                        Iconsax.card_remove,
+                        color: TColors.error,
+                      ),
+                    ),
+                  ],
                 ),
               ),
 
-              //--  Card Balance & Recharge button
+              //--Card Number
               Positioned(
-                top: TSizes.sm / 2,
-                right: TDeviceUtils.getScreenWidth(context) * .15,
+                // top: cardHeight * .35,
+                top: cardHeight * .5,
+                left: TSizes.defaultSpace,
+                child: Text(
+                  cardNumber,
+                  // style: Theme.of(context)
+                  //     .textTheme
+                  //     .headlineMedium!
+                  //     .copyWith(color: TColors.primary),
+                  style: Theme.of(context).textTheme.headlineSmall!,
+                ),
+              ),
+
+              //--  Recharge button
+              Positioned(
+                top: cardHeight * .4,
+                // right: TDeviceUtils.getScreenWidth(context) * .15,
+                right: TSizes.defaultSpace,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: TColors.success,
@@ -108,8 +122,8 @@ class CardFrontView extends StatelessWidget {
                   child: Row(
                     children: [
                       const Icon(
-                        Iconsax.bill,
-                        size: TSizes.iconXs,
+                        Iconsax.money_add,
+                        size: TSizes.iconSm,
                         color: TColors.white,
                       ),
                       const SizedBox(
@@ -139,10 +153,8 @@ class CardFrontView extends StatelessWidget {
                       width: TDeviceUtils.getScreenWidth(context) * .3,
                       child: Text(
                         cardHolderName,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineSmall!
-                            .copyWith(color: TColors.primary),
+                        style: Theme.of(context).textTheme.headlineSmall!,
+                        // .copyWith(color: TColors.primary),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -156,19 +168,15 @@ class CardFrontView extends StatelessWidget {
                             children: [
                               Text(
                                 '\u{20B9} $cardBalance/-',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .copyWith(color: TColors.secondary),
+                                style: Theme.of(context).textTheme.bodyLarge!,
+                                // .copyWith(color: TColors.secondary),
                               ),
                               Text(
                                 'Balance',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .copyWith(
-                                      color: TColors.secondary,
-                                    ),
+                                style: Theme.of(context).textTheme.bodyLarge!,
+                                // .copyWith(
+                                //   color: TColors.secondary,
+                                // ),
                               ),
                             ],
                           ),
@@ -181,7 +189,7 @@ class CardFrontView extends StatelessWidget {
                             decoration: const BoxDecoration(
                               border: Border(
                                 left: BorderSide(
-                                    color: TColors.secondary, width: 2),
+                                    color: TColors.darkGrey, width: 2),
                               ),
                             ),
                           ),
@@ -195,33 +203,29 @@ class CardFrontView extends StatelessWidget {
                             children: [
                               Text(
                                 '08/11/24',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .copyWith(
-                                  color: TColors.secondary,
-                                  shadows: [
-                                    const BoxShadow(
-                                      color: TColors.black,
-                                      blurRadius: TSizes.md,
-                                    )
-                                  ],
-                                ),
+                                style: Theme.of(context).textTheme.bodyLarge!,
+                                //     .copyWith(
+                                //   color: TColors.secondary,
+                                //   shadows: [
+                                //     const BoxShadow(
+                                //       color: TColors.black,
+                                //       blurRadius: TSizes.md,
+                                //     ),
+                                //   ],
+                                // ),
                               ),
                               Text(
                                 'Validity',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .copyWith(
-                                  color: TColors.secondary,
-                                  shadows: [
-                                    const BoxShadow(
-                                      color: TColors.black,
-                                      blurRadius: TSizes.md,
-                                    )
-                                  ],
-                                ),
+                                style: Theme.of(context).textTheme.bodyLarge!,
+                                //     .copyWith(
+                                //   color: TColors.secondary,
+                                //   shadows: [
+                                //     const BoxShadow(
+                                //       color: TColors.black,
+                                //       blurRadius: TSizes.md,
+                                //     )
+                                //   ],
+                                // ),
                               ),
                             ],
                           ),

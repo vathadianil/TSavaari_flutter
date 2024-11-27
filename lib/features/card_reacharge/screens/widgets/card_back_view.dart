@@ -21,19 +21,19 @@ class CardBackView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final isDark = THelperFunctions.isDarkMode(context);
+    final isDark = THelperFunctions.isDarkMode(context);
     return Column(
       children: [
         Container(
           width: double.infinity,
           height: cardHeight,
           decoration: BoxDecoration(
-            image: const DecorationImage(
-              image: AssetImage(TImages.metroCardBackside),
-              fit: BoxFit.cover,
-            ),
+            // image: const DecorationImage(
+            //   image: AssetImage(TImages.metroCardBackside),
+            //   fit: BoxFit.cover,
+            // ),
             borderRadius: BorderRadius.circular(TSizes.md),
-            // color: isDark ? TColors.dark : TColors.light,
+            color: isDark ? TColors.dark : TColors.light,
             boxShadow: [
               BoxShadow(
                 blurRadius: TSizes.md,
@@ -45,31 +45,27 @@ class CardBackView extends StatelessWidget {
           ),
           child: Stack(
             children: [
-              //--Card Number
-              Positioned(
-                bottom: TSizes.sm / 2,
-                right: TSizes.defaultSpace,
-                child: Text(
-                  cardNumber,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .copyWith(color: TColors.primary),
-                ),
-              ),
+              //--Logo
+              const Positioned(
+                  top: TSizes.defaultSpace,
+                  left: TSizes.defaultSpace,
+                  child: CircleAvatar(
+                    backgroundColor: TColors.white,
+                    backgroundImage: AssetImage(TImages.appLogo),
+                  )),
 
               //-- Reachage Heading
               Positioned(
-                top: cardHeight * .15,
-                left: TSizes.defaultSpace / 2,
+                // top: cardHeight * .15,
+                top: cardHeight * .4,
+                // left: TSizes.defaultSpace / 2,
+                left: TSizes.defaultSpace,
                 child: SizedBox(
                   width: 180,
                   child: Text(
                     'Last Rechage Info',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium!
-                        .copyWith(color: TColors.primary),
+                    style: Theme.of(context).textTheme.titleMedium!,
+                    // .copyWith(color: TColors.primary),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -78,27 +74,24 @@ class CardBackView extends StatelessWidget {
 
               //--Last Recharge amount
               Positioned(
-                top: (cardHeight * .28),
-                left: TSizes.defaultSpace / 2,
+                // top: (cardHeight * .28),
+                top: (cardHeight * .54),
+                left: TSizes.defaultSpace,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Amount :',
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelSmall!
-                          .copyWith(color: TColors.primary),
+                      style: Theme.of(context).textTheme.labelSmall!,
+                      // .copyWith(color: TColors.primary),
                     ),
                     const SizedBox(
                       width: TSizes.xs,
                     ),
                     Text(
                       '\u{20B9} 200/-',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge!
-                          .copyWith(color: TColors.primary),
+                      style: Theme.of(context).textTheme.bodyLarge!,
+                      // .copyWith(color: TColors.primary),
                     ),
                     const SizedBox(
                       width: TSizes.xs,
@@ -137,28 +130,35 @@ class CardBackView extends StatelessWidget {
               ),
               //--Last Recharge amount Date
               Positioned(
-                top: (cardHeight * .38),
-                left: TSizes.defaultSpace / 2,
+                // top: (cardHeight * .38),
+                top: (cardHeight * .67),
+                left: TSizes.defaultSpace,
                 child: Row(
                   children: [
                     Text(
                       'Date :',
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelSmall!
-                          .copyWith(color: TColors.primary),
+                      style: Theme.of(context).textTheme.labelSmall!,
+                      // .copyWith(color: TColors.primary),
                     ),
                     const SizedBox(
                       width: TSizes.xs,
                     ),
                     Text(
                       '3rd Mar 2024 10:30 AM',
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelSmall!
-                          .copyWith(color: TColors.primary),
+                      style: Theme.of(context).textTheme.bodyLarge!,
+                      // .copyWith(color: TColors.primary),
                     ),
                   ],
+                ),
+              ),
+              //--Card Number
+              Positioned(
+                bottom: TSizes.sm / 2,
+                right: TSizes.defaultSpace,
+                child: Text(
+                  cardNumber,
+                  style: Theme.of(context).textTheme.bodyLarge!,
+                  // .copyWith(color: TColors.primary),
                 ),
               ),
             ],
