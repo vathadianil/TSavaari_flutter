@@ -30,6 +30,7 @@ class CardBackView extends StatelessWidget {
           decoration: BoxDecoration(
             image: const DecorationImage(
               image: AssetImage(TImages.metroCardBackside),
+              fit: BoxFit.cover,
             ),
             borderRadius: BorderRadius.circular(TSizes.md),
             // color: isDark ? TColors.dark : TColors.light,
@@ -44,68 +45,23 @@ class CardBackView extends StatelessWidget {
           ),
           child: Stack(
             children: [
-              //-- Logo
-              // const Positioned(
-              //   left: TSizes.defaultSpace,
-              //   top: TSizes.defaultSpace,
-              //   child: CircleAvatar(
-              //     backgroundColor: TColors.light,
-              //     backgroundImage: AssetImage(TImages.appLogo),
-              //   ),
-              // ),
-
-              //--Last Recharge status
-              Positioned(
-                top: cardHeight * .22,
-                left: TSizes.defaultSpace,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: TSizes.md,
-                    vertical: TSizes.sm / 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: TColors.success,
-                    borderRadius: BorderRadius.circular(TSizes.lg),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Iconsax.tick_circle,
-                        size: TSizes.md,
-                        color: TColors.white,
-                      ),
-                      const SizedBox(
-                        width: TSizes.xs,
-                      ),
-                      Text(
-                        'Success',
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelSmall!
-                            .copyWith(color: TColors.white),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
               //--Card Number
               Positioned(
-                top: cardHeight * .4,
-                left: TSizes.defaultSpace,
+                bottom: TSizes.sm / 2,
+                right: TSizes.defaultSpace,
                 child: Text(
                   cardNumber,
                   style: Theme.of(context)
                       .textTheme
-                      .headlineSmall!
-                      .copyWith(color: TColors.white),
+                      .bodyLarge!
+                      .copyWith(color: TColors.primary),
                 ),
               ),
 
               //-- Reachage Heading
               Positioned(
-                top: cardHeight * .52,
-                left: TSizes.defaultSpace,
+                top: cardHeight * .15,
+                left: TSizes.defaultSpace / 2,
                 child: SizedBox(
                   width: 180,
                   child: Text(
@@ -113,7 +69,7 @@ class CardBackView extends StatelessWidget {
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium!
-                        .copyWith(color: TColors.white),
+                        .copyWith(color: TColors.primary),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -122,8 +78,8 @@ class CardBackView extends StatelessWidget {
 
               //--Last Recharge amount
               Positioned(
-                top: (cardHeight * .64),
-                left: TSizes.defaultSpace,
+                top: (cardHeight * .28),
+                left: TSizes.defaultSpace / 2,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -132,7 +88,7 @@ class CardBackView extends StatelessWidget {
                       style: Theme.of(context)
                           .textTheme
                           .labelSmall!
-                          .copyWith(color: TColors.white),
+                          .copyWith(color: TColors.primary),
                     ),
                     const SizedBox(
                       width: TSizes.xs,
@@ -142,15 +98,47 @@ class CardBackView extends StatelessWidget {
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge!
-                          .copyWith(color: TColors.white),
+                          .copyWith(color: TColors.primary),
+                    ),
+                    const SizedBox(
+                      width: TSizes.xs,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: TSizes.sm,
+                        vertical: TSizes.sm / 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: TColors.success,
+                        borderRadius: BorderRadius.circular(TSizes.lg),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Iconsax.tick_circle,
+                            size: TSizes.md,
+                            color: TColors.white,
+                          ),
+                          const SizedBox(
+                            width: TSizes.xs,
+                          ),
+                          Text(
+                            'Success',
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelSmall!
+                                .copyWith(color: TColors.white),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
               //--Last Recharge amount Date
               Positioned(
-                top: (cardHeight * .73),
-                left: TSizes.defaultSpace,
+                top: (cardHeight * .38),
+                left: TSizes.defaultSpace / 2,
                 child: Row(
                   children: [
                     Text(
@@ -158,7 +146,7 @@ class CardBackView extends StatelessWidget {
                       style: Theme.of(context)
                           .textTheme
                           .labelSmall!
-                          .copyWith(color: TColors.white),
+                          .copyWith(color: TColors.primary),
                     ),
                     const SizedBox(
                       width: TSizes.xs,
@@ -168,38 +156,11 @@ class CardBackView extends StatelessWidget {
                       style: Theme.of(context)
                           .textTheme
                           .labelSmall!
-                          .copyWith(color: TColors.white),
+                          .copyWith(color: TColors.primary),
                     ),
                   ],
                 ),
               ),
-
-              //--Recharge
-              Positioned(
-                // top: (cardHeight / 1.3) - (TSizes.spaceBtwSections),
-                top: TSizes.defaultSpace,
-                right: TSizes.defaultSpace,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: TColors.success,
-                    side: const BorderSide(color: TColors.white),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: TSizes.xs,
-                      horizontal: TSizes.sm,
-                    ),
-                    shadowColor: TColors.black,
-                    elevation: TSizes.md,
-                  ),
-                  onPressed: () {},
-                  child: Text(
-                    'Top up',
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: TColors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ),
-              )
             ],
           ),
         ),

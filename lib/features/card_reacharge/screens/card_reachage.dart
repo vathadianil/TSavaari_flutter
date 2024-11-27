@@ -20,7 +20,7 @@ class CardReachargeScreen extends StatelessWidget {
 
   get expiryDate => '04/24';
 
-  get cardHolderName => 'Sam';
+  get cardHolderName => 'Krishna Chaitanya Kumar';
 
   get cardHeight => 220.0;
 
