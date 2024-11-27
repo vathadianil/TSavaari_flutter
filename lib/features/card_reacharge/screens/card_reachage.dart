@@ -100,9 +100,10 @@ class CardReachargeScreen extends StatelessWidget {
                     );
                   },
                 ),
-
+              //--Transaction history cards
               if (btnTabbarController.tabIndex.value == 1)
                 ListView.separated(
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return CardTopupHistory(index: index);
