@@ -4,7 +4,6 @@ import 'package:tsavaari/common/widgets/containers/t_ticket_shape_widget.dart';
 import 'package:tsavaari/common/widgets/shapes/circle_shape.dart';
 import 'package:tsavaari/common/widgets/shapes/dashed_horizontal_line.dart';
 import 'package:tsavaari/features/my_orders/widgets/ticket_status.dart';
-import 'package:tsavaari/features/qr/book_qr/controllers/station_list_controller.dart';
 import 'package:tsavaari/features/qr/display_qr/models/qr_code_model.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
@@ -20,14 +19,6 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
-    final stationListController = StationListController.instance;
-
-    final fromStation = THelperFunctions.getStationFromStationName(
-            ticketData.fromStation!, stationListController.stationList)
-        .shortName;
-    final toStation = THelperFunctions.getStationFromStationName(
-            ticketData.toStation!, stationListController.stationList)
-        .shortName;
 
     return InkWell(
       onTap: onTap,
@@ -95,9 +86,15 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      fromStation ?? '',
-                      style: Theme.of(context).textTheme.headlineMedium!,
+                    SizedBox(
+                      width: TDeviceUtils.getScreenWidth(context) * .2,
+                      child: Text(
+                        ticketData.fromStation ?? '',
+                        style: Theme.of(context).textTheme.bodyLarge!,
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                     SizedBox(
                       width: TDeviceUtils.getScreenWidth(context) * .1,
@@ -109,9 +106,15 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
                     SizedBox(
                       width: TDeviceUtils.getScreenWidth(context) * .1,
                     ),
-                    Text(
-                      toStation ?? '',
-                      style: Theme.of(context).textTheme.headlineMedium!,
+                    SizedBox(
+                      width: TDeviceUtils.getScreenWidth(context) * .2,
+                      child: Text(
+                        ticketData.fromStation ?? '',
+                        style: Theme.of(context).textTheme.bodyLarge!,
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ],
                 ),
@@ -132,7 +135,7 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
                       children: [
                         Text(
                           'Passengers',
-                          style: Theme.of(context).textTheme.labelMedium,
+                          style: Theme.of(context).textTheme.labelLarge,
                         ),
                         Text(
                           '${ticketData.noOfPersons} Adults',
@@ -144,7 +147,7 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
                       children: [
                         Text(
                           'Total Fare',
-                          style: Theme.of(context).textTheme.labelMedium,
+                          style: Theme.of(context).textTheme.labelLarge,
                         ),
                         Text(
                           '${ticketData.totalFareAmount}/-',
@@ -159,11 +162,13 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
                           child: QrImageView(
                             data: 'https://www.ltmetro.com',
                             version: QrVersions.auto,
-                            eyeStyle: const QrEyeStyle(
-                                color: TColors.darkGrey,
-                                eyeShape: QrEyeShape.square),
-                            dataModuleStyle: const QrDataModuleStyle(
-                                color: TColors.darkGrey),
+                            eyeStyle: QrEyeStyle(
+                              color: isDark ? TColors.light : TColors.dark,
+                              eyeShape: QrEyeShape.square,
+                            ),
+                            dataModuleStyle: QrDataModuleStyle(
+                              color: isDark ? TColors.light : TColors.dark,
+                            ),
                           ),
                         ),
                         if (ticketData.tickets![0].statusId! == 10)
