@@ -110,7 +110,8 @@ class DisplayQrScreen extends StatelessWidget {
                     roundTripData: getFormatttedTicketData('roundTrip'),
                   ),
                 if (tickets![0].ticketTypeId == 10 ||
-                    tickets![0].ticketType == 'SJT')
+                    tickets![0].ticketType == 'SJT' ||
+                    tickets![0].ticketType == 'RJT')
                   QrTicketCard(tickets: tickets!, stationList: stationList),
               ],
             ),

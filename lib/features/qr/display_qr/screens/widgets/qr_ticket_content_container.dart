@@ -23,12 +23,13 @@ class QrTicketContentContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final displayQrController = DisplayQrController.instance;
-    final isSjtSinglePassenger =
-        (tickets[0].ticketTypeId == 10 || tickets[0].ticketType == 'SJT')
-            ? tickets.length == 1
-                ? true
-                : false
-            : false;
+    final isSjtSinglePassenger = (tickets[0].ticketTypeId == 10 ||
+            tickets[0].ticketType == 'SJT' ||
+            tickets[0].ticketType == 'RJT')
+        ? tickets.length == 1
+            ? true
+            : false
+        : false;
 
     final isRjtSinglePassenger = tickets[0].ticketTypeId == 20
         ? tickets.length == 1
