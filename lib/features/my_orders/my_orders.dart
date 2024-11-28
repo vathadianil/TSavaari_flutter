@@ -74,13 +74,14 @@ class MyOrdersScreen extends StatelessWidget {
                           //--Active Tickets
                           ? ListView.separated(
                               shrinkWrap: true,
+                              reverse: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
                                 return MyOrdersTicketShapeCard(
                                   ticketData: ordersController.activeTickets
                                       .first.ticketHistory![index],
                                   onTap: () {
-                                    Get.to(DisplayQrScreen(
+                                    Get.to(() => DisplayQrScreen(
                                         tickets: ordersController
                                             .activeTickets
                                             .first
@@ -104,6 +105,7 @@ class MyOrdersScreen extends StatelessWidget {
                               //--Past Tickets
                               ? ListView.separated(
                                   shrinkWrap: true,
+                                  reverse: true,
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemBuilder: (context, index) {
                                     return MyOrdersTicketShapeCard(

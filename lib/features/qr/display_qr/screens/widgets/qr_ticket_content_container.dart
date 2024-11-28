@@ -23,11 +23,12 @@ class QrTicketContentContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final displayQrController = DisplayQrController.instance;
-    final isSjtSinglePassenger = tickets[0].ticketTypeId == 10
-        ? tickets.length == 1
-            ? true
-            : false
-        : false;
+    final isSjtSinglePassenger =
+        (tickets[0].ticketTypeId == 10 || tickets[0].ticketType == 'SJT')
+            ? tickets.length == 1
+                ? true
+                : false
+            : false;
 
     final isRjtSinglePassenger = tickets[0].ticketTypeId == 20
         ? tickets.length == 1
@@ -55,7 +56,8 @@ class QrTicketContentContainer extends StatelessWidget {
               () => TicketStatus(
                 ticketStatus:
                     tickets[displayQrController.carouselCurrentIndex.value]
-                        .ticketStatus!,
+                            .ticketStatus ??
+                        '',
               ),
             ),
           ],
@@ -116,7 +118,7 @@ class QrTicketContentContainer extends StatelessWidget {
         //--Ticket id
         Obx(
           () => Text(
-            'TKID ${tickets[displayQrController.carouselCurrentIndex.value].ticketId!}',
+            'TKID ${tickets[displayQrController.carouselCurrentIndex.value].ticketId}',
             softWrap: true,
             style: Theme.of(context)
                 .textTheme
@@ -129,8 +131,10 @@ class QrTicketContentContainer extends StatelessWidget {
         ),
         //Ticket Expiry
         TicketExpiry(
-          dateTime: THelperFunctions.getFormattedDateTimeString(
-              tickets[0].ticketExpiryTime!),
+          dateTime: tickets[0].ticketExpiryTime != null
+              ? THelperFunctions.getFormattedDateTimeString(
+                  tickets[0].ticketExpiryTime!)
+              : '',
         ),
 
         if (!isSjtSinglePassenger && !isRjtSinglePassenger)
@@ -140,7 +144,7 @@ class QrTicketContentContainer extends StatelessWidget {
         const Divider(),
 
         //--Carbon emission message
-        CarbonEmissionMessage(message: tickets[0].carbonEmissionMsg!),
+        CarbonEmissionMessage(message: tickets[0].carbonEmissionMsg ?? ''),
       ],
     );
   }

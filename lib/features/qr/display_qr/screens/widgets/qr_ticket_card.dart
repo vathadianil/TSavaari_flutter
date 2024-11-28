@@ -20,7 +20,6 @@ class QrTicketCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
-
     return Column(
       children: [
         PhysicalModel(

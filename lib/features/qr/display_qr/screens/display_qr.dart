@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -23,13 +21,10 @@ class DisplayQrScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(DisplayQrController());
-    print('----------------------------------------------------------------');
-    print(tickets![0].ticketTypeId);
 
     List<TicketsListModel> getFormatttedTicketData(String indicator) {
-      List<TicketsListModel> copiedtickets =
-          TicketsListModel.fromJson(jsonDecode(jsonEncode(tickets)))
-              as List<TicketsListModel>;
+      List<TicketsListModel> copiedtickets = [];
+
       if (tickets![0].ticketTypeId == 20 && indicator == 'oneWay') {
         copiedtickets = [];
         for (var i = 0; i < tickets!.length; i++) {
@@ -114,7 +109,8 @@ class DisplayQrScreen extends StatelessWidget {
                     onWayData: getFormatttedTicketData('oneWay'),
                     roundTripData: getFormatttedTicketData('roundTrip'),
                   ),
-                if (tickets![0].ticketTypeId == 10)
+                if (tickets![0].ticketTypeId == 10 ||
+                    tickets![0].ticketType == 'SJT')
                   QrTicketCard(tickets: tickets!, stationList: stationList),
               ],
             ),

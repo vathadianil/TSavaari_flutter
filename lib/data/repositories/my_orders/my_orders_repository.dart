@@ -12,9 +12,7 @@ class MyOrdersRepository extends GetxController {
         payload,
         newUrl: false,
       );
-      print(
-          '-----------------------------------------------------------------------');
-      print(data);
+
       return ActiveTicketModel.fromJson(data);
     } on PlatformException catch (e) {
       throw PlatformException(code: e.code).message!;

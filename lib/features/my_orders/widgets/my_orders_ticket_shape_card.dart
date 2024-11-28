@@ -109,7 +109,7 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
                     SizedBox(
                       width: TDeviceUtils.getScreenWidth(context) * .2,
                       child: Text(
-                        ticketData.fromStation ?? '',
+                        ticketData.toStation ?? '',
                         style: Theme.of(context).textTheme.bodyLarge!,
                         maxLines: 2,
                         textAlign: TextAlign.center,

@@ -20,29 +20,42 @@ class DisplayrouteContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final platformInfoData = tickets[0].platFormNo!.split(',');
     var platFormInfo = [];
-    final fromStationData = THelperFunctions.getStationFromStationId(
-        tickets[0].fromStationId!, stationList);
 
-    final toStationData = THelperFunctions.getStationFromStationId(
-        tickets[0].toStationId!, stationList);
+    StationListModel fromStationData;
+    StationListModel toStationData;
+    if (tickets[0].fromStation != null) {
+      fromStationData = THelperFunctions.getStationFromStationName(
+          tickets[0].fromStation!, stationList);
+    } else {
+      fromStationData = THelperFunctions.getStationFromStationId(
+          tickets[0].fromStationId!, stationList);
+    }
+
+    if (tickets[0].toStation != null) {
+      toStationData = THelperFunctions.getStationFromStationName(
+          tickets[0].toStation!, stationList);
+    } else {
+      toStationData = THelperFunctions.getStationFromStationId(
+          tickets[0].toStationId!, stationList);
+    }
     if (platformInfoData.length == 3) {
       platFormInfo = [
         PlatformInfoModel(
             stationName: fromStationData.name,
-            color: [fromStationData.corridorColor!],
+            color: [fromStationData.corridorColor ?? ''],
             platform: 'P${platformInfoData[0]}',
             isInterChange: false),
         PlatformInfoModel(
             stationName: platformInfoData[1],
             color: [
-              fromStationData.corridorColor!,
-              toStationData.corridorColor!
+              fromStationData.corridorColor ?? '',
+              toStationData.corridorColor ?? ''
             ],
             platform: 'P${platformInfoData[2]}',
             isInterChange: true),
         PlatformInfoModel(
             stationName: toStationData.name,
-            color: [toStationData.corridorColor!],
+            color: [toStationData.corridorColor ?? ''],
             platform: '',
             isInterChange: false)
       ];
@@ -50,12 +63,12 @@ class DisplayrouteContainer extends StatelessWidget {
       platFormInfo = [
         PlatformInfoModel(
             stationName: fromStationData.name,
-            color: [fromStationData.corridorColor!],
+            color: [fromStationData.corridorColor ?? ''],
             platform: 'P${platformInfoData[0]}',
             isInterChange: false),
         PlatformInfoModel(
             stationName: toStationData.name,
-            color: [toStationData.corridorColor!],
+            color: [toStationData.corridorColor ?? ''],
             platform: '',
             isInterChange: false)
       ];

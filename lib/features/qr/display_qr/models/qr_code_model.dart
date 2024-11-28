@@ -120,7 +120,6 @@ class TicketsListModel {
   String? platFormNo;
   String? ticketExpiryTime;
   String? carbonEmissionMsg;
-
   String? rjtId;
   String? fromStation;
   String? toStation;
@@ -192,10 +191,10 @@ class TicketsListModel {
     platFormNo = json['platFormNo'];
     ticketExpiryTime = json['ticketExpiryTime'];
     carbonEmissionMsg = json['carbonEmissionMsg'];
-
     rjtId = json['rjtId'];
     fromStation = json['fromStation'];
     toStation = json['toStation'];
+    purchaseDatetime = json['purchaseDatetime'];
     purchaseDatetime = json['purchaseDatetime'];
     cancellationTime = json['cancellationTime'];
     resonForCanclation = json['resonForCanclation'];
@@ -205,7 +204,8 @@ class TicketsListModel {
     maxAllowdExitTime = json['maxAllowdExitTime'];
     merchantType = json['merchantType'];
     finalCost = json['finalCost'];
-    relateTicketId = json['relate_Ticket_Id'];
+    ticketType = json['ticketType'];
+    relateTicketId = json['relateTicketId'];
     returnCode = json['returnCode'];
     returnMsg = json['returnMsg'];
   }
@@ -216,6 +216,7 @@ class TicketsListModel {
     data['ticketId'] = ticketId;
     data['rjtID'] = rjtID;
     data['orderID'] = orderID;
+    data['statusId'] = statusId;
     data['ticketContent'] = ticketContent;
     data['fromStationId'] = fromStationId;
     data['toStationId'] = toStationId;
@@ -229,9 +230,9 @@ class TicketsListModel {
     data['ticketExpiryTime'] = ticketExpiryTime;
     data['carbonEmissionMsg'] = carbonEmissionMsg;
     data['rjtId'] = rjtId;
-    data['statusId'] = statusId;
     data['fromStation'] = fromStation;
     data['toStation'] = toStation;
+    data['purchaseDatetime'] = purchaseDatetime;
     data['purchaseDatetime'] = purchaseDatetime;
     data['cancellationTime'] = cancellationTime;
     data['resonForCanclation'] = resonForCanclation;
@@ -241,7 +242,8 @@ class TicketsListModel {
     data['maxAllowdExitTime'] = maxAllowdExitTime;
     data['merchantType'] = merchantType;
     data['finalCost'] = finalCost;
-    data['relate_Ticket_Id'] = relateTicketId;
+    data['ticketType'] = ticketType;
+    data['relateTicketId'] = relateTicketId;
     data['returnCode'] = returnCode;
     data['returnMsg'] = returnMsg;
     return data;
