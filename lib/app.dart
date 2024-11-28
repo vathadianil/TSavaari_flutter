@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:tsavaari/bindings/general_bindings.dart';
 import 'package:tsavaari/routes/app_routes.dart';
 import 'package:tsavaari/utils/constants/api_constants.dart';
-// import 'package:tsavaari/utils/constants/colors.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tsavaari/utils/constants/text_strings.dart';
+import 'package:tsavaari/utils/device/device_utility.dart';
+import 'package:tsavaari/utils/loaders/shimmer_effect.dart';
 import 'package:tsavaari/utils/theme/theme.dart';
 
 class App extends StatelessWidget {
@@ -23,16 +25,18 @@ class App extends StatelessWidget {
 
       //Show Loader or circular progress indicator meanwhile authentication service is
       //deciding to show releveant screen
+
       home: Scaffold(
-        // backgroundColor: TColors.primary,
         body: Center(
-          child: Image(
-            fit: BoxFit.cover,
-            image: NetworkImage(
-              ApiEndPoint.splashImageUrl,
-            ),
+            child: CachedNetworkImage(
+          imageUrl: ApiEndPoint.splashImageUrl,
+          fit: BoxFit.cover,
+          placeholder: (context, url) => ShimmerEffect(
+            width: double.infinity,
+            height: TDeviceUtils.getScreenHeight() / 2,
           ),
-        ),
+          errorWidget: (context, url, error) => const Icon(Icons.error),
+        )),
       ),
     );
   }
