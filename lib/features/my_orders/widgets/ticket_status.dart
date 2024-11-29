@@ -5,19 +5,22 @@ import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
 
 class TicketStatusChip extends StatelessWidget {
-  const TicketStatusChip(
-      {super.key,
-      required this.ticketStatus,
-      this.left = 0,
-      this.bottom = 25,
-      this.borderColor = TColors.success,
-      this.textColor = TColors.success});
+  const TicketStatusChip({
+    super.key,
+    required this.ticketStatus,
+    this.left = 0,
+    this.bottom = 25,
+    this.borderColor = TColors.success,
+    this.textColor = TColors.success,
+    this.backgroundColor = TColors.light,
+  });
 
   final String ticketStatus;
   final double left;
   final double bottom;
   final Color borderColor;
   final Color textColor;
+  final Color backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,7 @@ class TicketStatusChip extends StatelessWidget {
             horizontal: TSizes.md,
           ),
           decoration: BoxDecoration(
-            color: TColors.light,
+            color: backgroundColor,
             border: Border.all(color: borderColor, width: 2),
             borderRadius: const BorderRadius.all(
               Radius.circular(

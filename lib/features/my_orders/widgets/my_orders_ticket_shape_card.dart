@@ -189,12 +189,27 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
                                 borderColor: TColors.error,
                                 textColor: TColors.error,
                               )
-                            : TicketStatusChip(
-                                left: 7,
-                                bottom: 28,
-                                ticketStatus:
-                                    ticketData.tickets![0].ticketStatus!,
-                              ),
+                            : (ticketData.tickets![0].statusId == 20)
+                                ? const TicketStatusChip(
+                                    left: -10,
+                                    bottom: 25,
+                                    textColor: TColors.secondary,
+                                    borderColor: TColors.secondary,
+                                    backgroundColor: TColors.dark,
+                                    ticketStatus: 'In Transit',
+                                  )
+                                : (ticketData.tickets![0].statusId == 40)
+                                    ? const TicketStatusChip(
+                                        left: -10,
+                                        bottom: 25,
+                                        textColor: TColors.error,
+                                        borderColor: TColors.error,
+                                        ticketStatus: 'Refunded')
+                                    : const TicketStatusChip(
+                                        left: 7,
+                                        bottom: 28,
+                                        ticketStatus: 'New',
+                                      ),
                       ],
                     ),
                   ],
