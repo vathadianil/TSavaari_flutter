@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:tsavaari/common/controllers/button_tabbar_controller.dart';
 import 'package:tsavaari/common/widgets/containers/t_ticket_shape_widget.dart';
 import 'package:tsavaari/common/widgets/shapes/circle_shape.dart';
 import 'package:tsavaari/common/widgets/shapes/dashed_horizontal_line.dart';
@@ -19,6 +20,7 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
+    final tabController = ButtonTabbarController.instance;
 
     return InkWell(
       onTap: onTap,
@@ -163,20 +165,36 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
                             data: 'https://www.ltmetro.com',
                             version: QrVersions.auto,
                             eyeStyle: QrEyeStyle(
-                              color: isDark ? TColors.light : TColors.dark,
+                              color: tabController.tabIndex.value == 1
+                                  ? TColors.darkGrey
+                                  : isDark
+                                      ? TColors.light
+                                      : TColors.dark,
                               eyeShape: QrEyeShape.square,
                             ),
                             dataModuleStyle: QrDataModuleStyle(
-                              color: isDark ? TColors.light : TColors.dark,
+                              color: tabController.tabIndex.value == 1
+                                  ? TColors.darkGrey
+                                  : isDark
+                                      ? TColors.light
+                                      : TColors.dark,
                             ),
                           ),
                         ),
-                        if (ticketData.tickets![0].statusId! == 10)
-                          TicketStatusChip(
-                            left: 7,
-                            bottom: 28,
-                            ticketStatus: ticketData.tickets![0].ticketStatus!,
-                          ),
+                        (tabController.tabIndex.value == 1)
+                            ? const TicketStatusChip(
+                                left: 0,
+                                bottom: 30,
+                                ticketStatus: 'Expired',
+                                borderColor: TColors.error,
+                                textColor: TColors.error,
+                              )
+                            : TicketStatusChip(
+                                left: 7,
+                                bottom: 28,
+                                ticketStatus:
+                                    ticketData.tickets![0].ticketStatus!,
+                              ),
                       ],
                     ),
                   ],
