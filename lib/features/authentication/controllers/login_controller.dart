@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:tsavaari/data/repositories/authentication/authenticaion_repository.dart';
 import 'package:tsavaari/utils/constants/image_strings.dart';
+import 'package:tsavaari/utils/helpers/helper_functions.dart';
 import 'package:tsavaari/utils/helpers/network_manager.dart';
 import 'package:tsavaari/utils/popups/full_screen_loader.dart';
 import 'package:tsavaari/utils/popups/loaders.dart';
@@ -11,11 +12,14 @@ class LoginController extends GetxController {
   //Variables
   final deviceStorage = GetStorage();
 
-  Future<void> login() async {
+  Future<void> login(context) async {
     try {
       //Loading
       TFullScreenLoader.openLoadingDialog(
-          'Logging you in', TImages.trainAnimation);
+          'Logging you in',
+          THelperFunctions.isDarkMode(context)
+              ? TImages.trainAnimationDark
+              : TImages.trainAnimationLight);
 
       //Check Internet Connectivity
       final isConnected = await NetworkManager.instance.isConnected();
@@ -49,11 +53,14 @@ class LoginController extends GetxController {
     }
   }
 
-  Future<void> logout() async {
+  Future<void> logout(context) async {
     try {
       //Loading
       TFullScreenLoader.openLoadingDialog(
-          'Logging you out', TImages.trainAnimation);
+          'Logging you out',
+          THelperFunctions.isDarkMode(context)
+              ? TImages.trainAnimationDark
+              : TImages.trainAnimationLight);
       //Check Internet Connectivity
       final isConnected = await NetworkManager.instance.isConnected();
       if (!isConnected) {

@@ -20,8 +20,10 @@ class TImages {
       "assets/images/animations/animation-of-docer.json";
 
   //-- Gif animations
-  static const String trainAnimation =
-      "assets/images/animations/train_animation.gif";
+  static const String trainAnimationDark =
+      "assets/images/animations/train_animation_dark.gif";
+  static const String trainAnimationLight =
+      "assets/images/animations/train_animation_light.gif";
 
 //-- Icons
   static const String interChangeIcon = "assets/icons/interchange.png";
