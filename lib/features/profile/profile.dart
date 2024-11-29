@@ -17,7 +17,7 @@ class ProfileScreen extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                LoginController.instance.logout(context);
+                LoginController.instance.logout();
               },
               icon: const Icon(Iconsax.logout))
         ],

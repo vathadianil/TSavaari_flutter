@@ -18,7 +18,7 @@ class ProceedToPayBtn extends StatelessWidget {
       ),
       child: ElevatedButton(
         onPressed: () {
-          bookQrController.generateTicket(context);
+          bookQrController.generateTicket();
         },
         style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(

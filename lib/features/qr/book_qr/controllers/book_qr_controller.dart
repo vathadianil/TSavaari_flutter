@@ -113,13 +113,10 @@ class BookQrController extends GetxController {
     }
   }
 
-  Future<void> generateTicket(context) async {
+  Future<void> generateTicket() async {
     try {
       TFullScreenLoader.openLoadingDialog(
-          'Processing your request',
-          THelperFunctions.isDarkMode(context)
-              ? TImages.trainAnimationDark
-              : TImages.trainAnimationLight);
+          'Processing your request', TImages.trainAnimation);
 
       //Check Internet Connectivity
       final isConnected = await NetworkManager.instance.isConnected();

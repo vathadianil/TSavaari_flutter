@@ -94,7 +94,7 @@ class LoginScreen extends StatelessWidget {
                             width: double.infinity,
                             child: ElevatedButton(
                               onPressed: () {
-                                controller.login(context);
+                                controller.login();
                               },
                               child: Text(
                                 TTexts.signIn,
