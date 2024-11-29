@@ -52,7 +52,12 @@ class BookQrController extends GetxController {
           : null;
       final toStationId = toStation?.stationId;
 
-      if (token == null || fromStationId == null || toStationId == null) {
+      if (token == null ||
+          token == '' ||
+          fromStationId == null ||
+          fromStationId == '' ||
+          toStationId == null ||
+          toStationId == '') {
         return;
       }
 
@@ -111,7 +116,7 @@ class BookQrController extends GetxController {
   Future<void> generateTicket() async {
     try {
       TFullScreenLoader.openLoadingDialog(
-          'Processing your request', TImages.docerAnimation);
+          'Processing your request', TImages.trainAnimation);
 
       //Check Internet Connectivity
       final isConnected = await NetworkManager.instance.isConnected();

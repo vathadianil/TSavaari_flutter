@@ -21,12 +21,14 @@ class TAnimationLoaderWidget extends StatelessWidget {
     this.showAction = false,
     this.actionText,
     this.onActionPressed,
+    this.isGifanimation = true,
   });
 
   final String text;
   final String animation;
   final bool showAction;
   final String? actionText;
+  final bool isGifanimation;
   final VoidCallback? onActionPressed;
 
   @override
@@ -35,7 +37,15 @@ class TAnimationLoaderWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Lottie.asset(animation, width: MediaQuery.of(context).size.width * 0.8), // Display Lottie animation
+          if (isGifanimation)
+            Image.asset(
+              animation,
+              width: MediaQuery.of(context).size.width * 0.8,
+            )
+          else
+            Lottie.asset(animation,
+                width: MediaQuery.of(context).size.width *
+                    0.8), // Display Lottie animation
           const SizedBox(height: TSizes.defaultSpace),
           Text(
             text,
@@ -48,10 +58,14 @@ class TAnimationLoaderWidget extends StatelessWidget {
                   width: 250,
                   child: OutlinedButton(
                     onPressed: onActionPressed,
-                    style: OutlinedButton.styleFrom(backgroundColor: TColors.dark),
+                    style:
+                        OutlinedButton.styleFrom(backgroundColor: TColors.dark),
                     child: Text(
                       actionText!,
-                      style: Theme.of(context).textTheme.bodyMedium!.apply(color: TColors.light),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .apply(color: TColors.light),
                     ),
                   ),
                 )

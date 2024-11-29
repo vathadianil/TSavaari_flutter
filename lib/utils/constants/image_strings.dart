@@ -19,6 +19,10 @@ class TImages {
   static const String docerAnimation =
       "assets/images/animations/animation-of-docer.json";
 
+  //-- Gif animations
+  static const String trainAnimation =
+      "assets/images/animations/train_animation.gif";
+
 //-- Icons
   static const String interChangeIcon = "assets/icons/interchange.png";
   static const String facebook = "assets/icons/facebook.png";
@@ -42,8 +46,7 @@ class TImages {
       "assets/images/common/passengers_and_platform.png";
   static const String shuttleService =
       "assets/images/common/shuttle_service.png";
-  // static const String upplalMetroStation =
-  //     "assets/images/common/uppal_metro.jpg";
+
   static const String evCharging = "assets/images/common/charger.png";
   static const String neighbourhoodArea = "assets/images/common/area.png";
   static const String busStops = "assets/images/common/bus_stop.png";
