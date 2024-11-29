@@ -40,7 +40,7 @@ class TAnimationLoaderWidget extends StatelessWidget {
           if (isGifanimation)
             Image.asset(
               animation,
-              width: MediaQuery.of(context).size.width * 0.8,
+              // width: MediaQuery.of(context).size.width * 0.8,
             )
           else
             Lottie.asset(animation,
