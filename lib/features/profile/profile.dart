@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:tsavaari/common/widgets/appbar/t_appbar.dart';
 import 'package:tsavaari/features/authentication/controllers/login_controller.dart';
@@ -8,6 +9,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(LoginController());
     return Scaffold(
       appBar: TAppBar(
         showBackArrow: false,

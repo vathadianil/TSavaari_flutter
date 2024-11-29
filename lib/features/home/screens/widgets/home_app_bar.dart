@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:tsavaari/common/widgets/appbar/t_appbar.dart';
 import 'package:tsavaari/common/widgets/notifications/notification_icon.dart';
@@ -40,7 +41,7 @@ class HomeAppBar extends StatelessWidget {
                     return const ShimmerEffect(width: 80, height: 15);
                   }
                   return SizedBox(
-                    width: TDeviceUtils.getScreenWidth(context) / 2,
+                    width: TDeviceUtils.getScreenWidth(context) * .4,
                     child: Text(
                       // controller.user.value.fullname,
                       'Hi, Sam',
@@ -58,20 +59,45 @@ class HomeAppBar extends StatelessWidget {
               const SizedBox(
                 height: TSizes.spaceBtwItems / 4,
               ),
-              Text(
-                TTexts.homeAppbarTitle,
-                style: Theme.of(context)
-                    .textTheme
-                    .labelMedium!
-                    .apply(color: TColors.grey),
-                textScaler:
-                    TextScaler.linear(ScaleSize.textScaleFactor(context)),
+              SizedBox(
+                width: TDeviceUtils.getScreenWidth(context) * .43,
+                child: Text(
+                  TTexts.homeAppbarTitle,
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelMedium!
+                      .apply(color: TColors.grey),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textScaler: TextScaler.linear(
+                    ScaleSize.textScaleFactor(context),
+                  ),
+                ),
               ),
             ],
           ),
         ],
       ),
       actions: [
+        InkWell(
+          onTap: () {},
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.share,
+                color: TColors.white,
+              ),
+              Text(
+                'Share',
+                style: Theme.of(context)
+                    .textTheme
+                    .labelSmall!
+                    .copyWith(color: TColors.white),
+              )
+            ],
+          ),
+        ),
         NotificationIcon(
           onPressed: () {},
         ),

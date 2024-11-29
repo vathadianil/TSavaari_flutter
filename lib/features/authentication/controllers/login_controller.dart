@@ -53,7 +53,9 @@ class LoginController extends GetxController {
     try {
       //Loading
       TFullScreenLoader.openLoadingDialog(
-          'Logging you out', TImages.trainAnimation);
+        'Logging you out',
+        TImages.trainAnimation,
+      );
       //Check Internet Connectivity
       final isConnected = await NetworkManager.instance.isConnected();
       if (!isConnected) {

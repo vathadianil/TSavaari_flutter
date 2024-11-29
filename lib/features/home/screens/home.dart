@@ -56,13 +56,13 @@ class HomeScreen extends StatelessWidget {
       //   title: 'Do\'s &\nDont\'s',
       //   targetScreen: '/',
       // ),
-      MetroServicesModel(
-        id: '7',
-        active: true,
-        icon: 'offers',
-        title: 'Refer a\nFriend',
-        targetScreen: '/',
-      ),
+      // MetroServicesModel(
+      //   id: '7',
+      //   active: true,
+      //   icon: 'offers',
+      //   title: 'Refer a\nFriend',
+      //   targetScreen: '/',
+      // ),
       MetroServicesModel(
         id: '8',
         active: true,

@@ -13,6 +13,9 @@ class TicketStatusChip extends StatelessWidget {
     this.borderColor = TColors.success,
     this.textColor = TColors.success,
     this.backgroundColor = TColors.light,
+    this.padding = const EdgeInsets.symmetric(
+      horizontal: TSizes.md,
+    ),
   });
 
   final String ticketStatus;
@@ -21,6 +24,7 @@ class TicketStatusChip extends StatelessWidget {
   final Color borderColor;
   final Color textColor;
   final Color backgroundColor;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +34,7 @@ class TicketStatusChip extends StatelessWidget {
       child: Transform.rotate(
         angle: -math.pi / 4,
         child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: TSizes.md,
-          ),
+          padding: padding,
           decoration: BoxDecoration(
             color: backgroundColor,
             border: Border.all(color: borderColor, width: 2),

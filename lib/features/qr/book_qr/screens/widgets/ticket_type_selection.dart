@@ -19,6 +19,7 @@ class TicketTypeSlection extends StatelessWidget {
         TextButton(
           onPressed: () {
             controller.ticketType.value = false;
+            controller.getFare();
           },
           child: Text('One Way', style: Theme.of(context).textTheme.bodyLarge),
         ),
@@ -51,6 +52,7 @@ class TicketTypeSlection extends StatelessWidget {
         TextButton(
           onPressed: () {
             controller.ticketType.value = true;
+            controller.getFare();
           },
           child:
               Text('Round Trip', style: Theme.of(context).textTheme.bodyLarge),
