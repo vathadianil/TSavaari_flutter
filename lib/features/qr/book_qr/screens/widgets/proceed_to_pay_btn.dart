@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:tsavaari/features/qr/book_qr/controllers/book_qr_controller.dart';
+import 'package:tsavaari/features/qr/book_qr/screens/widgets/terms_and_conditions_popup.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
 import 'package:tsavaari/utils/device/device_utility.dart';
@@ -36,7 +37,11 @@ class ProceedToPayBtn extends StatelessWidget {
                   style: Theme.of(context).textTheme.labelSmall,
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.dialog(const Dialog(
+                      child: TermsandConditionsPopup(),
+                    ));
+                  },
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.only(left: TSizes.sm),
                   ),
