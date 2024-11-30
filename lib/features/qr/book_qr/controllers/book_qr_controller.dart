@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_cashfree_pg_sdk/api/cfpayment/cfwebcheckoutpayment.dart';
 import 'package:flutter_cashfree_pg_sdk/api/cfpaymentgateway/cfpaymentgatewayservice.dart';
 import 'package:flutter_cashfree_pg_sdk/api/cfsession/cfsession.dart';
@@ -127,6 +129,13 @@ class BookQrController extends GetxController {
         return;
       }
 
+      String platformCode = '';
+      if (Platform.isAndroid) {
+        platformCode = 'AND';
+      } else if (Platform.isIOS) {
+        platformCode = 'IOS';
+      }
+
       final payload = {
         "customer_details": {
           "customer_id": "CUSTID123",
@@ -139,7 +148,7 @@ class BookQrController extends GetxController {
           "notify_url":
               "https://122.252.226.254:5114/api/v1/NotifyUrl/CFPaymentRequest"
         },
-        "order_id": "AND${DateTime.now().millisecondsSinceEpoch}",
+        "order_id": "SAL$platformCode${DateTime.now().millisecondsSinceEpoch}",
         "order_amount": (passengerCount.value * qrFareData.first.finalFare!),
         "order_currency": "INR",
         "order_note": "some order note here"
@@ -153,6 +162,7 @@ class BookQrController extends GetxController {
           .setOrderId(createOrderData.orderId!)
           .setPaymentSessionId(createOrderData.paymentSessionId!)
           .build();
+
       final cfWebCheckout =
           CFWebCheckoutPaymentBuilder().setSession(session).build();
       final cfPaymentGateWay = CFPaymentGatewayService();
