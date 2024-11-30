@@ -34,6 +34,7 @@ class BookQrController extends GetxController {
   final stationController = StationListController.instance;
   final qrFareData = <QrGetFareModel>{}.obs;
   final fareCalculationData = <FareCalculationModel>{}.obs;
+  final termsAndConditions = false.obs;
 
   Future<void> getFare() async {
     try {

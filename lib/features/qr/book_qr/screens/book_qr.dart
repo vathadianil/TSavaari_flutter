@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:tsavaari/common/widgets/appbar/t_appbar.dart';
 import 'package:tsavaari/features/qr/book_qr/controllers/book_qr_controller.dart';
 import 'package:tsavaari/features/qr/book_qr/controllers/station_list_controller.dart';
-import 'package:tsavaari/features/qr/book_qr/screens/widgets/display_fare_and_route_container.dart';
+import 'package:tsavaari/features/qr/book_qr/screens/widgets/display_fare_and_pay_btn_container.dart';
 import 'package:tsavaari/features/qr/book_qr/screens/widgets/source_destination_selection.dart';
 import 'package:tsavaari/features/qr/book_qr/screens/widgets/ticket_count_selection.dart';
 import 'package:tsavaari/features/qr/book_qr/screens/widgets/ticket_type_selection.dart';
@@ -67,7 +67,7 @@ class BookQrScreen extends StatelessWidget {
               height: TSizes.spaceBtwSections,
             ),
             //-- Display Total Fare and Route
-            const DisplayFareAndRouteContainer(),
+            const DisplayFarePayBtnContainer(),
           ],
         ),
       ),

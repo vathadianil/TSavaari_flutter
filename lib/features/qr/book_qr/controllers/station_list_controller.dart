@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:tsavaari/data/repositories/book_qr/station_list_repository.dart';
+import 'package:tsavaari/features/authentication/screens/login/login.dart';
 import 'package:tsavaari/features/qr/book_qr/models/station_list_model.dart';
 import 'package:tsavaari/utils/popups/loaders.dart';
 
@@ -29,6 +30,13 @@ class StationListController extends GetxController {
             await stationListRepository.fetchStationList(token);
         stationList
             .assignAll(stationsData.stations as Iterable<StationListModel>);
+      } else {
+        TLoaders.errorSnackBar(
+            title: 'Oh Snap!',
+            message: 'Your Session has expired!. Please Login Again.');
+        Get.offAll(
+          () => const LoginScreen(),
+        );
       }
     } catch (e) {
       TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());

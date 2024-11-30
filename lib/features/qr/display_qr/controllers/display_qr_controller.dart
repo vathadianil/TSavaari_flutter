@@ -14,7 +14,7 @@ class DisplayQrController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    changeBrightness();
+    // changeBrightness();
   }
 
   @override

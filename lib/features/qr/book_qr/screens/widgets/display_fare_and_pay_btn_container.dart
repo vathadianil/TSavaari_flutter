@@ -7,8 +7,8 @@ import 'package:tsavaari/features/qr/book_qr/screens/widgets/qr_shimmer_containe
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
 
-class DisplayFareAndRouteContainer extends StatelessWidget {
-  const DisplayFareAndRouteContainer({
+class DisplayFarePayBtnContainer extends StatelessWidget {
+  const DisplayFarePayBtnContainer({
     super.key,
   });
 
@@ -22,7 +22,7 @@ class DisplayFareAndRouteContainer extends StatelessWidget {
           if (BookQrController.instance.qrFareData.isNotEmpty &&
               !BookQrController.instance.isLoading.value)
             Container(
-              padding: const EdgeInsets.all(TSizes.defaultSpace),
+              // padding: const EdgeInsets.all(TSizes.defaultSpace),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(TSizes.md),
                 border: Border.all(
@@ -33,11 +33,6 @@ class DisplayFareAndRouteContainer extends StatelessWidget {
               child: const Column(
                 children: [
                   DisplayFare(),
-                  SizedBox(
-                    height: TSizes.spaceBtwItems,
-                  ),
-                  // DisplayrouteContainer(),
-
                   //-- Proceed to pay button
                   ProceedToPayBtn(),
                 ],
