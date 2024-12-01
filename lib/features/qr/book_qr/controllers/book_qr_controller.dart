@@ -70,7 +70,6 @@ class BookQrController extends GetxController {
         return;
       }
 
-      //Show loader while loading categories
       isLoading.value = true;
 
       if (Get.currentRoute == Routes.bookQr) {

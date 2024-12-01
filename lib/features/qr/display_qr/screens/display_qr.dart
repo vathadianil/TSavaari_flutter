@@ -5,6 +5,7 @@ import 'package:tsavaari/bottom_navigation/bottom_navigation_menu.dart';
 import 'package:tsavaari/common/controllers/checkbox_controller.dart';
 import 'package:tsavaari/common/widgets/appbar/t_appbar.dart';
 import 'package:tsavaari/features/qr/display_qr/controllers/display_qr_controller.dart';
+import 'package:tsavaari/features/qr/display_qr/controllers/refund_preview_controller.dart';
 import 'package:tsavaari/features/qr/display_qr/models/qr_code_model.dart';
 import 'package:tsavaari/features/qr/display_qr/screens/widgets/display_qr_bottom_sheet.dart';
 import 'package:tsavaari/features/qr/display_qr/screens/widgets/qr_ticket_card.dart';
@@ -59,7 +60,7 @@ class DisplayQrScreen extends StatelessWidget {
                     return DisplayQrBottomSheet(
                       tickets: tickets,
                     );
-                  });
+                  }).whenComplete(() => Get.delete<RefundPreviewController>());
             },
             style: OutlinedButton.styleFrom(
               side: BorderSide(

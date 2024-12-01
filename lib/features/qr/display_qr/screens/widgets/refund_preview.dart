@@ -8,6 +8,7 @@ import 'package:tsavaari/features/qr/display_qr/controllers/refund_preview_contr
 import 'package:tsavaari/features/qr/display_qr/models/qr_code_model.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/loaders/shimmer_effect.dart';
 
 class RefundPreview extends StatelessWidget {
   const RefundPreview({super.key, this.tickets});
@@ -16,7 +17,9 @@ class RefundPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(RefundPreviewController());
+    final refundController =
+        Get.put(RefundPreviewController(tickets: tickets!));
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,56 +57,90 @@ class RefundPreview extends StatelessWidget {
                 color: TColors.grey,
               ),
             ),
-            child: ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: Obx(
-                    () => Radio(
-                        toggleable: true,
-                        value: index,
-                        groupValue: RefundPreviewController
-                            .instance.radioSelectedValue
-                            .indexWhere((element) => element == index),
-                        onChanged: (value) {
-                          print(
-                              '--------------------------------------------------');
-
-                          print(RefundPreviewController
-                              .instance.radioSelectedValue);
-
-                          RefundPreviewController.instance.radioSelectedValue
-                              .addIf(
-                                  !RefundPreviewController
-                                      .instance.radioSelectedValue
-                                      .contains(index),
-                                  index);
-                        }),
-                  ),
-                  title: Text('Passenger ${(index + 1).toString()}'),
-                  subtitle: const Text(
-                    'Cancel Possible',
-                  ),
-                  subtitleTextStyle: const TextStyle(color: TColors.success),
-                  trailing: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        ' \u{20B9} ${tickets![index].finalCost!}/-',
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                      const Text('Refund Amount'),
-                    ],
-                  ),
-                );
-              },
-              separatorBuilder: (context, index) {
-                return const SizedBox(
-                  height: TSizes.spaceBtwItems,
-                );
-              },
-              itemCount: tickets!.length,
+            child: Obx(
+              () => Column(
+                children: [
+                  if (refundController.refundPreviewData.isEmpty)
+                    const Text('No Data Found'),
+                  if (refundController.isLoading.value)
+                    ListView.separated(
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return const ShimmerEffect(
+                            width: double.infinity,
+                            height: 60,
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(
+                            height: TSizes.spaceBtwItems,
+                          );
+                        },
+                        itemCount: 2),
+                  if (!refundController.isLoading.value &&
+                      refundController.refundPreviewData.isNotEmpty)
+                    ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          leading: Obx(
+                            () => Checkbox(
+                                value: refundController.radioSelectedValue
+                                    .contains(tickets![index].ticketId),
+                                onChanged: refundController
+                                            .refundPreviewData[index]
+                                            .returnCode ==
+                                        '0'
+                                    ? (value) {
+                                        if (refundController.radioSelectedValue
+                                            .contains(
+                                                tickets![index].ticketId)) {
+                                          refundController.radioSelectedValue
+                                              .remove(tickets![index].ticketId);
+                                        } else {
+                                          refundController.radioSelectedValue
+                                              .add(tickets![index].ticketId);
+                                        }
+                                      }
+                                    : null),
+                          ),
+                          title: Text('Passenger ${(index + 1).toString()}'),
+                          subtitle: Text(
+                            refundController
+                                        .refundPreviewData[index].returnCode ==
+                                    '0'
+                                ? 'Refund Possble'
+                                : 'Refund Not Possible',
+                          ),
+                          subtitleTextStyle: TextStyle(
+                              color: refundController.refundPreviewData[index]
+                                          .returnCode ==
+                                      '0'
+                                  ? TColors.success
+                                  : TColors.error),
+                          trailing: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                ' \u{20B9} ${refundController.refundPreviewData[index].returnCode == '0' ? tickets![index].finalCost! : '0'}/-',
+                                style:
+                                    Theme.of(context).textTheme.headlineSmall,
+                              ),
+                              const Text('Refund Amount'),
+                            ],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return const SizedBox(
+                          height: TSizes.spaceBtwItems,
+                        );
+                      },
+                      itemCount: tickets!.length,
+                    ),
+                ],
+              ),
             ),
           ),
           ProceedToPayBtn(
