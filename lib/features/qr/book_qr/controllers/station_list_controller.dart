@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:tsavaari/data/repositories/book_qr/station_list_repository.dart';
@@ -12,7 +14,7 @@ class StationListController extends GetxController {
   final isLoading = true.obs;
   final stationListRepository = Get.put(StationListRepository());
   final deviceStorage = GetStorage();
-  final RxList<StationListModel> stationList = <StationListModel>[].obs;
+  RxList<StationListModel> stationList = <StationListModel>[].obs;
 
   @override
   void onInit() {
@@ -24,12 +26,17 @@ class StationListController extends GetxController {
     try {
       //Show loader while loading categories
       isLoading.value = true;
-      final token = await deviceStorage.read('token');
-      if (token != null) {
+      final token = await deviceStorage.read('token') ?? '';
+
+      if (token != '') {
         final stationsData =
             await stationListRepository.fetchStationList(token);
         stationList
             .assignAll(stationsData.stations as Iterable<StationListModel>);
+        final stationListMap =
+            stationList.map((station) => station.toJson()).toList();
+        String jsonStringStationListMap = jsonEncode(stationListMap);
+        await deviceStorage.write('stationList', jsonStringStationListMap);
       } else {
         TLoaders.errorSnackBar(
             title: 'Oh Snap!',

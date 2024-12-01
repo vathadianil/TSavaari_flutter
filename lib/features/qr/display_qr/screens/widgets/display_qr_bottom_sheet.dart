@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tsavaari/features/qr/display_qr/controllers/bottom_sheet_pageview_controller.dart';
+import 'package:tsavaari/features/qr/display_qr/models/qr_code_model.dart';
 import 'package:tsavaari/features/qr/display_qr/screens/widgets/bottom_sheet_main_page.dart';
 import 'package:tsavaari/features/qr/display_qr/screens/widgets/refund_preview.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
@@ -8,7 +9,10 @@ import 'package:tsavaari/utils/constants/sizes.dart';
 class DisplayQrBottomSheet extends StatelessWidget {
   const DisplayQrBottomSheet({
     super.key,
+    this.tickets,
   });
+
+  final List<TicketsListModel>? tickets;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +28,9 @@ class DisplayQrBottomSheet extends StatelessWidget {
               bottomSheetController.nextPage(context);
             },
           ),
-          const RefundPreview(),
+          RefundPreview(
+            tickets: tickets,
+          ),
         ],
       ),
     );
