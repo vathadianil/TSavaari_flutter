@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tsavaari/common/controllers/checkbox_controller.dart';
 import 'package:tsavaari/features/qr/book_qr/controllers/book_qr_controller.dart';
 import 'package:tsavaari/features/qr/book_qr/screens/widgets/display_fare.dart';
 import 'package:tsavaari/features/qr/book_qr/screens/widgets/proceed_to_pay_btn.dart';
@@ -22,7 +23,6 @@ class DisplayFarePayBtnContainer extends StatelessWidget {
           if (BookQrController.instance.qrFareData.isNotEmpty &&
               !BookQrController.instance.isLoading.value)
             Container(
-              // padding: const EdgeInsets.all(TSizes.defaultSpace),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(TSizes.md),
                 border: Border.all(
@@ -30,11 +30,19 @@ class DisplayFarePayBtnContainer extends StatelessWidget {
                   color: TColors.grey,
                 ),
               ),
-              child: const Column(
+              child: Column(
                 children: [
-                  DisplayFare(),
+                  const DisplayFare(),
                   //-- Proceed to pay button
-                  ProceedToPayBtn(),
+                  ProceedToPayBtn(
+                    btnText:
+                        'Proceed to Pay  \u{20B9}${BookQrController.instance.passengerCount.value * BookQrController.instance.qrFareData.first.finalFare!}/-',
+                    onPressed: CheckBoxController.instance.checkBoxState.value
+                        ? () {
+                            BookQrController.instance.generateTicket();
+                          }
+                        : null,
+                  ),
                 ],
               ),
             ),

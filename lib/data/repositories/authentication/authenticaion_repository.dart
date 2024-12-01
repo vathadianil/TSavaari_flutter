@@ -29,8 +29,6 @@ class AuthenticationRepository extends GetxController {
   //Function show relevant screen
   screenRedirect() async {
     final token = await deviceStorage.read('token');
-    print('---------------------------------------------');
-    print(token);
     if (token != null && token != '') {
       Get.offAll(() => const BottomNavigationMenu());
     } else {

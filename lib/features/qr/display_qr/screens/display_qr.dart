@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:tsavaari/bottom_navigation/bottom_navigation_menu.dart';
+import 'package:tsavaari/common/controllers/checkbox_controller.dart';
 import 'package:tsavaari/common/widgets/appbar/t_appbar.dart';
 import 'package:tsavaari/features/qr/display_qr/controllers/display_qr_controller.dart';
 import 'package:tsavaari/features/qr/display_qr/models/qr_code_model.dart';
@@ -15,14 +16,18 @@ import 'package:tsavaari/utils/helpers/helper_functions.dart';
 
 class DisplayQrScreen extends StatelessWidget {
   const DisplayQrScreen(
-      {super.key, required this.tickets, required this.stationList});
+      {super.key,
+      required this.tickets,
+      required this.stationList,
+      this.previousScreenIndication = 'bookQr'});
   final List<TicketsListModel>? tickets;
   final List<StationListModel> stationList;
+  final String previousScreenIndication;
 
   @override
   Widget build(BuildContext context) {
     final displayQrController = Get.put(DisplayQrController());
-
+    Get.put(CheckBoxController());
     List<TicketsListModel> getFormatttedTicketData(String indicator) {
       List<TicketsListModel> copiedtickets = [];
 
@@ -72,7 +77,11 @@ class DisplayQrScreen extends StatelessWidget {
           ),
           IconButton(
               onPressed: () {
-                Get.offAll(() => const BottomNavigationMenu());
+                if (previousScreenIndication == 'bookQr') {
+                  Get.offAll(() => const BottomNavigationMenu());
+                } else {
+                  Get.back();
+                }
               },
               icon: const Icon(
                 Iconsax.close_circle,

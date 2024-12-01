@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:tsavaari/common/controllers/checkbox_controller.dart';
+import 'package:tsavaari/features/qr/book_qr/screens/widgets/proceed_to_pay_btn.dart';
+import 'package:tsavaari/features/qr/display_qr/controllers/bottom_sheet_pageview_controller.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
 
@@ -8,35 +11,82 @@ class RefundPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            FloatingActionButton(
-              onPressed: () {},
-              mini: true,
-              shape: const CircleBorder(),
-              backgroundColor: TColors.grey,
-              child: const Icon(
-                Iconsax.arrow_left_24,
-                color: TColors.black,
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              IconButton(
+                  onPressed: () {
+                    BottomSheetPageViewController.instace.previousPage(context);
+                  },
+                  icon: const Icon(Iconsax.arrow_left)),
+              const SizedBox(
+                width: TSizes.md,
+              ),
+              Text('Cancel Ticket',
+                  style: Theme.of(context).textTheme.headlineSmall),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Select Passengers to Cancel'),
+              TextButton(
+                onPressed: () {},
+                child: const Text('Select All'),
+              ),
+            ],
+          ),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(TSizes.md),
+              border: Border.all(
+                width: 1,
+                color: TColors.grey,
               ),
             ),
-            const SizedBox(
-              width: TSizes.md,
+            child: ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: Radio(
+                      value: true, groupValue: false, onChanged: (value) {}),
+                  title: const Text('Passenger 1'),
+                  subtitle: const Text(
+                    'Cancel Possible',
+                  ),
+                  subtitleTextStyle: const TextStyle(color: TColors.success),
+                  trailing: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '40/-',
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      const Text('Refund Amount'),
+                    ],
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return const SizedBox(
+                  height: TSizes.spaceBtwItems,
+                );
+              },
+              itemCount: 4,
             ),
-            Text(
-              'Cancel Ticket',
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineMedium!
-                  .copyWith(color: TColors.error),
-            ),
-          ],
-        ),
-      ],
+          ),
+          ProceedToPayBtn(
+            btnText: 'Proceed to Cancel',
+            onPressed:
+                CheckBoxController.instance.checkBoxState.value ? () {} : null,
+          ),
+        ],
+      ),
     );
   }
 }

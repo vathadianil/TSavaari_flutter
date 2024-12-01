@@ -10,7 +10,6 @@ class BottomNavigationMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(NavigationController());
-
     return Scaffold(
       body: Obx(
         () => Stack(

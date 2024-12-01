@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tsavaari/common/controllers/checkbox_controller.dart';
 import 'package:tsavaari/common/widgets/appbar/t_appbar.dart';
 import 'package:tsavaari/features/qr/book_qr/controllers/book_qr_controller.dart';
 import 'package:tsavaari/features/qr/book_qr/controllers/station_list_controller.dart';
@@ -18,6 +19,7 @@ class BookQrScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(StationListController());
     Get.put(BookQrController());
+    Get.put(CheckBoxController());
     return Scaffold(
       appBar: const TAppBar(
         showBackArrow: true,

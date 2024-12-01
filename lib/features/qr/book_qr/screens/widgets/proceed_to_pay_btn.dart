@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:tsavaari/features/qr/book_qr/controllers/book_qr_controller.dart';
+import 'package:tsavaari/common/controllers/checkbox_controller.dart';
 import 'package:tsavaari/features/qr/book_qr/screens/widgets/terms_and_conditions_popup.dart';
+import 'package:tsavaari/routes/routes.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
 import 'package:tsavaari/utils/device/device_utility.dart';
@@ -12,11 +11,16 @@ import 'package:tsavaari/utils/helpers/helper_functions.dart';
 class ProceedToPayBtn extends StatelessWidget {
   const ProceedToPayBtn({
     super.key,
+    required this.btnText,
+    required this.onPressed,
   });
+
+  final String btnText;
+  final Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
-    final bookQrController = BookQrController.instance;
+    final checkBoxController = CheckBoxController.instance;
     final dark = THelperFunctions.isDarkMode(context);
     return Column(
       children: [
@@ -25,9 +29,9 @@ class ProceedToPayBtn extends StatelessWidget {
           children: [
             Obx(
               () => Checkbox(
-                value: bookQrController.termsAndConditions.value,
-                onChanged: (value) => bookQrController.termsAndConditions
-                    .value = !bookQrController.termsAndConditions.value,
+                value: checkBoxController.checkBoxState.value,
+                onChanged: (value) => checkBoxController.checkBoxState.value =
+                    !checkBoxController.checkBoxState.value,
               ),
             ),
             Row(
@@ -73,13 +77,11 @@ class ProceedToPayBtn extends StatelessWidget {
         ),
         Obx(
           () => ElevatedButton(
-            onPressed: bookQrController.termsAndConditions.value
-                ? () {
-                    bookQrController.generateTicket();
-                  }
-                : null,
+            onPressed: onPressed,
             style: ElevatedButton.styleFrom(
-              disabledBackgroundColor: TColors.grey,
+              backgroundColor: checkBoxController.checkBoxState.value
+                  ? TColors.primary
+                  : TColors.grey,
               padding: const EdgeInsets.symmetric(
                 horizontal: TSizes.defaultSpace,
                 vertical: TSizes.defaultSpace / 2,
@@ -87,10 +89,12 @@ class ProceedToPayBtn extends StatelessWidget {
               side: const BorderSide(color: TColors.accent),
             ),
             child: Text(
-              'Proceed to Pay  \u{20B9}${bookQrController.passengerCount.value * bookQrController.qrFareData.first.finalFare!}/-',
+              btnText,
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    color: bookQrController.termsAndConditions.value
-                        ? TColors.light
+                    color: checkBoxController.checkBoxState.value
+                        ? Get.currentRoute == Routes.bookQr
+                            ? TColors.light
+                            : TColors.error
                         : TColors.darkGrey,
                   ),
             ),

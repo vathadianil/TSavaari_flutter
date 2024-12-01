@@ -82,13 +82,15 @@ class MyOrdersScreen extends StatelessWidget {
                                       .first.ticketHistory![index],
                                   onTap: () {
                                     Get.to(() => DisplayQrScreen(
-                                        tickets: ordersController
-                                            .activeTickets
-                                            .first
-                                            .ticketHistory![index]
-                                            .tickets,
-                                        stationList:
-                                            stationController.stationList));
+                                          tickets: ordersController
+                                              .activeTickets
+                                              .first
+                                              .ticketHistory![index]
+                                              .tickets,
+                                          stationList:
+                                              stationController.stationList,
+                                          previousScreenIndication: 'myOrders',
+                                        ));
                                   },
                                 );
                               },
@@ -111,7 +113,21 @@ class MyOrdersScreen extends StatelessWidget {
                                     return MyOrdersTicketShapeCard(
                                       ticketData: ordersController.activeTickets
                                           .first.ticketHistory![index],
-                                      onTap: () {},
+                                      onTap: () {
+                                        Get.to(
+                                          () => DisplayQrScreen(
+                                            tickets: ordersController
+                                                .activeTickets
+                                                .first
+                                                .ticketHistory![index]
+                                                .tickets,
+                                            stationList:
+                                                stationController.stationList,
+                                            previousScreenIndication:
+                                                'myOrders',
+                                          ),
+                                        );
+                                      },
                                     );
                                   },
                                   separatorBuilder: (context, index) {
