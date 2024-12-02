@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:tsavaari/features/home/screens/home.dart';
 import 'package:tsavaari/features/my_orders/my_orders.dart';
 import 'package:tsavaari/features/profile/profile.dart';
-import 'package:tsavaari/features/travel_history/travel_history.dart';
+// import 'package:tsavaari/features/travel_history/travel_history.dart';
 import 'package:tsavaari/utils/device/device_utility.dart';
 
 class NavigationController extends GetxController {
@@ -12,7 +12,7 @@ class NavigationController extends GetxController {
   final top = (TDeviceUtils.getScreenHeight() * 0.65).obs;
   final screens = [
     const HomeScreen(),
-    const TravelHistoryScreen(),
+    // const TravelHistoryScreen(),
     const MyOrdersScreen(),
     const ProfileScreen()
   ];

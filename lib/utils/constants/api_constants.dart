@@ -13,5 +13,6 @@ class ApiEndPoint {
       'getactiveticketdetailsbytsavaari/services.do';
   static String getPastTickets =
       'getexpiredticketdetailsbytsavaari/services.do';
-  static String refundPreview = "/qr/refunPreview";
+  static String refundPreview = "qr/refunPreview";
+  static String refundConfirm = "qr/refunConfirmed";
 }

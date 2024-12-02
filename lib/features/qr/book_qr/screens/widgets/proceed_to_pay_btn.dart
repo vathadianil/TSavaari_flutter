@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tsavaari/common/controllers/checkbox_controller.dart';
 import 'package:tsavaari/features/qr/book_qr/screens/widgets/terms_and_conditions_popup.dart';
-import 'package:tsavaari/routes/routes.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
 import 'package:tsavaari/utils/device/device_utility.dart';
@@ -92,9 +91,7 @@ class ProceedToPayBtn extends StatelessWidget {
               btnText,
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     color: checkBoxController.checkBoxState.value
-                        ? Get.currentRoute == Routes.bookQr
-                            ? TColors.light
-                            : TColors.error
+                        ? TColors.light
                         : TColors.darkGrey,
                   ),
             ),

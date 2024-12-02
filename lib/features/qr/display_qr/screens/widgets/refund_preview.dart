@@ -19,7 +19,6 @@ class RefundPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final refundController =
         Get.put(RefundPreviewController(tickets: tickets!));
-
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,7 +59,8 @@ class RefundPreview extends StatelessWidget {
             child: Obx(
               () => Column(
                 children: [
-                  if (refundController.refundPreviewData.isEmpty)
+                  if (!refundController.isLoading.value &&
+                      refundController.refundPreviewData.isEmpty)
                     const Text('No Data Found'),
                   if (refundController.isLoading.value)
                     ListView.separated(
@@ -78,6 +78,8 @@ class RefundPreview extends StatelessWidget {
                         },
                         itemCount: 2),
                   if (!refundController.isLoading.value &&
+                      tickets!.length ==
+                          refundController.refundPreviewData.length &&
                       refundController.refundPreviewData.isNotEmpty)
                     ListView.separated(
                       shrinkWrap: true,
@@ -123,7 +125,7 @@ class RefundPreview extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                ' \u{20B9} ${refundController.refundPreviewData[index].returnCode == '0' ? tickets![index].finalCost! : '0'}/-',
+                                '\u{20B9} ${refundController.refundPreviewData[index].refundAmount ?? '0'}/-',
                                 style:
                                     Theme.of(context).textTheme.headlineSmall,
                               ),
@@ -143,10 +145,17 @@ class RefundPreview extends StatelessWidget {
               ),
             ),
           ),
-          ProceedToPayBtn(
-            btnText: 'Proceed to Cancel',
-            onPressed:
-                CheckBoxController.instance.checkBoxState.value ? () {} : null,
+          Obx(
+            () => ProceedToPayBtn(
+              btnText: 'Proceed to Cancel',
+              onPressed: (CheckBoxController.instance.checkBoxState.value &&
+                      refundController.radioSelectedValue.isNotEmpty)
+                  ? () {
+                      Navigator.pop(context);
+                      refundController.getRefundConfirm();
+                    }
+                  : null,
+            ),
           ),
         ],
       ),

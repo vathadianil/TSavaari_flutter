@@ -19,13 +19,13 @@ final List<BottomNavigationModel> navigationList = [
       id: '3',
       active: true,
       icon: 'order',
-      targetPageIndex: 2,
+      targetPageIndex: 1,
       title: 'Orders'),
   BottomNavigationModel(
       id: '4',
       active: true,
       icon: 'user',
-      targetPageIndex: 3,
+      targetPageIndex: 2,
       title: 'Profile'),
 ];
 

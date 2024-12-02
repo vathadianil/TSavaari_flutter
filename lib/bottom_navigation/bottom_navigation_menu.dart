@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:tsavaari/bottom_navigation/controller/navigation_controller.dart';
 import 'package:tsavaari/bottom_navigation/widgets/floating_button.dart';
 import 'package:tsavaari/bottom_navigation/widgets/navigation_container.dart';
+import 'package:tsavaari/features/my_orders/controllers/orders_controller.dart';
 
 class BottomNavigationMenu extends StatelessWidget {
   const BottomNavigationMenu({super.key});
@@ -23,6 +24,7 @@ class BottomNavigationMenu extends StatelessWidget {
                 currentIndex: controller.selectedIndex.value,
                 onPressed: (index) {
                   controller.onDestinationSelectionChange(index);
+                  Get.delete<OrdersController>();
                 },
               ),
             ),
