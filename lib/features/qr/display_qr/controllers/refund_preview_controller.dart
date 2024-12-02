@@ -86,9 +86,9 @@ class RefundPreviewController extends GetxController {
         return;
       }
       var refundQuoteIdList = [];
-      for (var index = 0; index < radioSelectedValue.length; index++) {
+      for (var index = 0; index < tickets.length; index++) {
         refundQuoteIdList.addIf(
-            refundPreviewData[index].ticketid == radioSelectedValue[index],
+            radioSelectedValue.contains(refundPreviewData[index].ticketid),
             refundPreviewData[index].refundQuoteId);
       }
       for (var index = 0; index < radioSelectedValue.length; index++) {
@@ -109,9 +109,17 @@ class RefundPreviewController extends GetxController {
 
       //Stop Loading
       TFullScreenLoader.stopLoading();
+      var isSuccess = true;
+      for (var refundStatus in response) {
+        if (refundStatus.returnCode != '0') {
+          isSuccess = false;
+        }
+      }
       TLoaders.successSnackBar(
           title: 'Success', message: 'Your tickets have been refunded');
-      Get.offAll(() => const BottomNavigationMenu());
+      if (isSuccess) {
+        Get.offAll(() => const BottomNavigationMenu());
+      }
     } catch (e) {
       //Stop Loading
       TFullScreenLoader.stopLoading();
