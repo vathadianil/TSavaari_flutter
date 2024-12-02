@@ -19,6 +19,9 @@ class RefundPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final refundController =
         Get.put(RefundPreviewController(tickets: tickets!));
+    print('-----------------------------------------------');
+    print(tickets![0].ticketType);
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,23 +89,80 @@ class RefundPreview extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         return ListTile(
+                          onTap: refundController
+                                      .refundPreviewData[index].returnCode ==
+                                  '0'
+                              ? () {
+                                  if (tickets![index].ticketType == 'RJT' ||
+                                      tickets![index].ticketTypeId == 20) {
+                                    if (refundController.radioSelectedValue
+                                        .contains((tickets![index].rjtID ??
+                                            tickets![index].rjtId))) {
+                                      refundController.radioSelectedValue
+                                          .remove((tickets![index].rjtID ??
+                                              tickets![index].rjtId));
+                                    } else {
+                                      refundController.radioSelectedValue.add(
+                                          (tickets![index].rjtID ??
+                                              tickets![index].rjtId));
+                                    }
+                                  } else {
+                                    if (refundController.radioSelectedValue
+                                        .contains(tickets![index].ticketId)) {
+                                      refundController.radioSelectedValue
+                                          .remove(tickets![index].ticketId);
+                                    } else {
+                                      refundController.radioSelectedValue
+                                          .add(tickets![index].ticketId);
+                                    }
+                                  }
+                                }
+                              : null,
                           leading: Obx(
                             () => Checkbox(
-                                value: refundController.radioSelectedValue
-                                    .contains(tickets![index].ticketId),
+                                //if the ticket is RJT we are checking for rjtid ortherwise ticketid
+                                value: (tickets![index].ticketType == 'RJT' ||
+                                        tickets![index].ticketTypeId == 20)
+                                    ? refundController.radioSelectedValue
+                                        .contains((tickets![index].rjtID ??
+                                            tickets![index].rjtId))
+                                    : refundController.radioSelectedValue
+                                        .contains(tickets![index].ticketId),
                                 onChanged: refundController
                                             .refundPreviewData[index]
                                             .returnCode ==
                                         '0'
                                     ? (value) {
-                                        if (refundController.radioSelectedValue
-                                            .contains(
-                                                tickets![index].ticketId)) {
-                                          refundController.radioSelectedValue
-                                              .remove(tickets![index].ticketId);
+                                        if (tickets![index].ticketType ==
+                                                'RJT' ||
+                                            tickets![index].ticketTypeId ==
+                                                20) {
+                                          if (refundController
+                                              .radioSelectedValue
+                                              .contains(
+                                                  (tickets![index].rjtID ??
+                                                      tickets![index].rjtId))) {
+                                            refundController.radioSelectedValue
+                                                .remove(
+                                                    (tickets![index].rjtID ??
+                                                        tickets![index].rjtId));
+                                          } else {
+                                            refundController.radioSelectedValue
+                                                .add((tickets![index].rjtID ??
+                                                    tickets![index].rjtId));
+                                          }
                                         } else {
-                                          refundController.radioSelectedValue
-                                              .add(tickets![index].ticketId);
+                                          if (refundController
+                                              .radioSelectedValue
+                                              .contains(
+                                                  tickets![index].ticketId)) {
+                                            refundController.radioSelectedValue
+                                                .remove(
+                                                    tickets![index].ticketId);
+                                          } else {
+                                            refundController.radioSelectedValue
+                                                .add(tickets![index].ticketId);
+                                          }
                                         }
                                       }
                                     : null),

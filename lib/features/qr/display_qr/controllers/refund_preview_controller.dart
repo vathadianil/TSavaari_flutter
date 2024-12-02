@@ -40,8 +40,14 @@ class RefundPreviewController extends GetxController {
           isLoading.value = true;
           final response = await _refundQrRepository.refundPreview({
             "token": "$token",
-            "ticketId": tickets[index].ticketId,
-            "rjtId": "",
+            "ticketId": (tickets[index].ticketType == 'SJT' ||
+                    tickets[index].ticketTypeId == 10)
+                ? tickets[index].ticketId
+                : '',
+            "rjtId": (tickets[index].ticketType == 'RJT' ||
+                    tickets[index].ticketTypeId == 20)
+                ? (tickets[index].rjtID ?? tickets[index].rjtId)
+                : '',
             "passId": "",
             "merchantId": MerchantDetails.merchantId,
             "ltmrhlPurchaseId": "",
@@ -87,15 +93,28 @@ class RefundPreviewController extends GetxController {
       }
       var refundQuoteIdList = [];
       for (var index = 0; index < tickets.length; index++) {
-        refundQuoteIdList.addIf(
-            radioSelectedValue.contains(refundPreviewData[index].ticketid),
-            refundPreviewData[index].refundQuoteId);
+        if (tickets[index].ticketType == 'RJT' ||
+            tickets[index].ticketTypeId == 20) {
+          refundQuoteIdList.addIf(
+              radioSelectedValue.contains(refundPreviewData[index].rjtId),
+              refundPreviewData[index].refundQuoteId);
+        } else {
+          refundQuoteIdList.addIf(
+              radioSelectedValue.contains(refundPreviewData[index].ticketid),
+              refundPreviewData[index].refundQuoteId);
+        }
       }
       for (var index = 0; index < radioSelectedValue.length; index++) {
         apiArray.add(_refundQrRepository.refundConfirm({
           "token": "$token",
-          "ticketId": radioSelectedValue[index],
-          "rjtId": "",
+          "ticketId": (tickets[index].ticketType == 'SJT' ||
+                  tickets[index].ticketTypeId == 10)
+              ? radioSelectedValue[index]
+              : '',
+          "rjtId": (tickets[index].ticketType == 'RJT' ||
+                  tickets[index].ticketTypeId == 20)
+              ? radioSelectedValue[index]
+              : '',
           "passId": "",
           "merchantId": MerchantDetails.merchantId,
           "ltmrhlPurchaseId": "",
