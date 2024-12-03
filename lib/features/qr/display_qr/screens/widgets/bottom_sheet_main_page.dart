@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:tsavaari/features/qr/display_qr/controllers/bottom_sheet_pageview_controller.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
 import 'package:tsavaari/utils/helpers/helper_functions.dart';
@@ -7,10 +8,7 @@ import 'package:tsavaari/utils/helpers/helper_functions.dart';
 class BottomSheetMainPage extends StatelessWidget {
   const BottomSheetMainPage({
     super.key,
-    required this.onTap,
   });
-
-  final Function() onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +35,10 @@ class BottomSheetMainPage extends StatelessWidget {
             ),
           ),
           child: ListTile(
+            onTap: () {
+              BottomSheetPageViewController.instace
+                  .changeDesitinationPage(context);
+            },
             leading: Icon(
               Iconsax.location,
               color: THelperFunctions.isDarkMode(context)
@@ -65,7 +67,9 @@ class BottomSheetMainPage extends StatelessWidget {
             borderRadius: BorderRadius.circular(TSizes.md),
           ),
           child: ListTile(
-            onTap: onTap,
+            onTap: () {
+              BottomSheetPageViewController.instace.refundPage(context);
+            },
             leading: const Icon(
               Iconsax.ticket,
               color: TColors.error,

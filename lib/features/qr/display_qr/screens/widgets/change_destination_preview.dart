@@ -4,21 +4,21 @@ import 'package:iconsax/iconsax.dart';
 import 'package:tsavaari/common/controllers/checkbox_controller.dart';
 import 'package:tsavaari/features/qr/book_qr/screens/widgets/proceed_to_pay_btn.dart';
 import 'package:tsavaari/features/qr/display_qr/controllers/bottom_sheet_pageview_controller.dart';
-import 'package:tsavaari/features/qr/display_qr/controllers/refund_preview_controller.dart';
+import 'package:tsavaari/features/qr/display_qr/controllers/change_destination_preview_controller.dart';
 import 'package:tsavaari/features/qr/display_qr/models/qr_code_model.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
 import 'package:tsavaari/utils/loaders/shimmer_effect.dart';
 
-class RefundPreview extends StatelessWidget {
-  const RefundPreview({super.key, this.tickets});
+class ChangeDesinationPreview extends StatelessWidget {
+  const ChangeDesinationPreview({super.key, this.tickets});
 
   final List<TicketsListModel>? tickets;
 
   @override
   Widget build(BuildContext context) {
-    final refundController =
-        Get.put(RefundPreviewController(tickets: tickets!));
+    final changeDestinationPreviewController =
+        Get.put(ChangeDestinationPreviewController(tickets: tickets!));
 
     return SingleChildScrollView(
       child: Column(
@@ -35,7 +35,7 @@ class RefundPreview extends StatelessWidget {
               const SizedBox(
                 width: TSizes.md,
               ),
-              Text('Cancel Ticket',
+              Text('Change Destiantion',
                   style: Theme.of(context).textTheme.headlineSmall),
             ],
           ),
@@ -43,17 +43,21 @@ class RefundPreview extends StatelessWidget {
             () => Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (!refundController.isLoading.value &&
+                if (!changeDestinationPreviewController.isLoading.value &&
                     tickets!.length ==
-                        refundController.refundPreviewData.length &&
-                    refundController.refundPreviewData.isNotEmpty)
-                  const Text('Select Passengers to Cancel'),
+                        changeDestinationPreviewController
+                            .refundPreviewData.length &&
+                    changeDestinationPreviewController
+                        .refundPreviewData.isNotEmpty)
+                  const Text('Select Passengers'),
 
                 //--Select all button
-                if (!refundController.isLoading.value &&
+                if (!changeDestinationPreviewController.isLoading.value &&
                     tickets!.length ==
-                        refundController.refundPreviewData.length &&
-                    refundController.refundPreviewData.isNotEmpty)
+                        changeDestinationPreviewController
+                            .refundPreviewData.length &&
+                    changeDestinationPreviewController
+                        .refundPreviewData.isNotEmpty)
                   TextButton(
                     onPressed: () {
                       onValueChanged(0, isSelectAll: true);
@@ -74,10 +78,11 @@ class RefundPreview extends StatelessWidget {
             child: Obx(
               () => Column(
                 children: [
-                  if (!refundController.isLoading.value &&
-                      refundController.refundPreviewData.isEmpty)
+                  if (!changeDestinationPreviewController.isLoading.value &&
+                      changeDestinationPreviewController
+                          .refundPreviewData.isEmpty)
                     const Text('No Data Found'),
-                  if (refundController.isLoading.value)
+                  if (changeDestinationPreviewController.isLoading.value)
                     ListView.separated(
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
@@ -92,16 +97,18 @@ class RefundPreview extends StatelessWidget {
                           );
                         },
                         itemCount: 2),
-                  if (!refundController.isLoading.value &&
+                  if (!changeDestinationPreviewController.isLoading.value &&
                       tickets!.length ==
-                          refundController.refundPreviewData.length &&
-                      refundController.refundPreviewData.isNotEmpty)
+                          changeDestinationPreviewController
+                              .refundPreviewData.length &&
+                      changeDestinationPreviewController
+                          .refundPreviewData.isNotEmpty)
                     ListView.separated(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         return ListTile(
-                          onTap: refundController
+                          onTap: changeDestinationPreviewController
                                       .refundPreviewData[index].returnCode ==
                                   '0'
                               ? () {
@@ -112,7 +119,7 @@ class RefundPreview extends StatelessWidget {
                             () => Checkbox(
                                 //if the ticket is RJT we are checking for rjtid ortherwise ticketid
                                 value: isTicketSelected(index),
-                                onChanged: refundController
+                                onChanged: changeDestinationPreviewController
                                             .refundPreviewData[index]
                                             .returnCode ==
                                         '0'
@@ -123,14 +130,15 @@ class RefundPreview extends StatelessWidget {
                           ),
                           title: Text('Passenger ${(index + 1).toString()}'),
                           subtitle: Text(
-                            refundController
+                            changeDestinationPreviewController
                                         .refundPreviewData[index].returnCode ==
                                     '0'
                                 ? 'Refund Possble'
                                 : 'Refund Not Possible',
                           ),
                           subtitleTextStyle: TextStyle(
-                              color: refundController.refundPreviewData[index]
+                              color: changeDestinationPreviewController
+                                          .refundPreviewData[index]
                                           .returnCode ==
                                       '0'
                                   ? TColors.success
@@ -139,7 +147,7 @@ class RefundPreview extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                '\u{20B9} ${refundController.refundPreviewData[index].refundAmount ?? 0}/-',
+                                '\u{20B9} ${changeDestinationPreviewController.refundPreviewData[index].refundAmount ?? 0}/-',
                                 style:
                                     Theme.of(context).textTheme.headlineSmall,
                               ),
@@ -163,40 +171,44 @@ class RefundPreview extends StatelessWidget {
             height: TSizes.spaceBtwItems,
           ),
           Obx(
-            () => refundController.radioSelectedValue.isNotEmpty
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: TSizes.defaultSpace),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text('Total to be Refunded'),
-                        Text(
-                          '\u{20B9}${refundController.totalRefundAmount.value.toString()}/-',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineMedium!
-                              .copyWith(color: TColors.error),
+            () =>
+                changeDestinationPreviewController.radioSelectedValue.isNotEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: TSizes.defaultSpace),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text('Total to be Refunded'),
+                            Text(
+                              '\u{20B9}${changeDestinationPreviewController.totalRefundAmount.value.toString()}/-',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium!
+                                  .copyWith(color: TColors.error),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  )
-                : const SizedBox(),
+                      )
+                    : const SizedBox(),
           ),
           Obx(
-            () => refundController.radioSelectedValue.isNotEmpty
-                ? ProceedToPayBtn(
-                    btnText: 'Proceed to Cancel',
-                    onPressed:
-                        (CheckBoxController.instance.checkBoxState.value &&
-                                refundController.radioSelectedValue.isNotEmpty)
-                            ? () {
-                                Navigator.pop(context);
-                                refundController.getRefundConfirm();
-                              }
-                            : null,
-                  )
-                : const SizedBox(),
+            () =>
+                changeDestinationPreviewController.radioSelectedValue.isNotEmpty
+                    ? ProceedToPayBtn(
+                        btnText: 'Proceed to Cancel',
+                        onPressed:
+                            (CheckBoxController.instance.checkBoxState.value &&
+                                    changeDestinationPreviewController
+                                        .radioSelectedValue.isNotEmpty)
+                                ? () {
+                                    Navigator.pop(context);
+                                    changeDestinationPreviewController
+                                        .getRefundConfirm();
+                                  }
+                                : null,
+                      )
+                    : const SizedBox(),
           ),
         ],
       ),
@@ -205,7 +217,7 @@ class RefundPreview extends StatelessWidget {
 
   bool isTicketSelected(int index) {
     var ticketId = _getTicketId(index);
-    return RefundPreviewController.instance.radioSelectedValue
+    return ChangeDestinationPreviewController.instance.radioSelectedValue
         .contains(ticketId);
   }
 
@@ -218,33 +230,38 @@ class RefundPreview extends StatelessWidget {
   }
 
   void _selectAllTickets() {
-    RefundPreviewController.instance.radioSelectedValue.clear();
+    ChangeDestinationPreviewController.instance.radioSelectedValue.clear();
 
     for (var index = 0; index < tickets!.length; index++) {
       if (_isRefundable(index)) {
         var ticketId = _getTicketId(index);
-        RefundPreviewController.instance.radioSelectedValue.add(ticketId);
+        ChangeDestinationPreviewController.instance.radioSelectedValue
+            .add(ticketId);
       }
     }
   }
 
   void _toggleTicketSelection(int index) {
     var ticketId = _getTicketId(index);
-    int refundAmount =
-        RefundPreviewController.instance.refundPreviewData[index].refundAmount!;
+    int refundAmount = ChangeDestinationPreviewController
+        .instance.refundPreviewData[index].refundAmount!;
 
-    if (RefundPreviewController.instance.radioSelectedValue
+    if (ChangeDestinationPreviewController.instance.radioSelectedValue
         .contains(ticketId)) {
-      RefundPreviewController.instance.radioSelectedValue.remove(ticketId);
-      RefundPreviewController.instance.totalRefundAmount.value -= refundAmount;
+      ChangeDestinationPreviewController.instance.radioSelectedValue
+          .remove(ticketId);
+      ChangeDestinationPreviewController.instance.totalRefundAmount.value -=
+          refundAmount;
     } else {
-      RefundPreviewController.instance.radioSelectedValue.add(ticketId);
-      RefundPreviewController.instance.totalRefundAmount.value += refundAmount;
+      ChangeDestinationPreviewController.instance.radioSelectedValue
+          .add(ticketId);
+      ChangeDestinationPreviewController.instance.totalRefundAmount.value +=
+          refundAmount;
     }
   }
 
   bool _isRefundable(int index) {
-    return RefundPreviewController
+    return ChangeDestinationPreviewController
             .instance.refundPreviewData[index].returnCode ==
         '0';
   }

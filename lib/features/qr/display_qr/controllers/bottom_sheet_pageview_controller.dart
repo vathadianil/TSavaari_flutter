@@ -13,15 +13,18 @@ class BottomSheetPageViewController extends GetxController {
     currentPageIndex.value = index;
   }
 
-  ///Update current Index and Jump to the next page
-  void nextPage(BuildContext context) {
-    int page = currentPageIndex.value + 1;
+  void refundPage(BuildContext context) {
+    int page = 2;
     pageController.jumpToPage(page);
   }
 
-  ///Update current Index and Jump to the Previous page
-  void previousPage(BuildContext context) {
-    int page = currentPageIndex.value - 1;
+  void changeDesitinationPage(BuildContext context) {
+    int page = 1;
+    pageController.jumpToPage(page);
+  }
+
+  void firstPage(BuildContext context) {
+    int page = 0;
     pageController.jumpToPage(page);
   }
 }
