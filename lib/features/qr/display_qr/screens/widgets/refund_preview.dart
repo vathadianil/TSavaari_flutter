@@ -134,29 +134,7 @@ class RefundPreview extends StatelessWidget {
                                       .refundPreviewData[index].returnCode ==
                                   '0'
                               ? () {
-                                  if (tickets![index].ticketType == 'RJT' ||
-                                      tickets![index].ticketTypeId == 20) {
-                                    if (refundController.radioSelectedValue
-                                        .contains((tickets![index].rjtID ??
-                                            tickets![index].rjtId))) {
-                                      refundController.radioSelectedValue
-                                          .remove((tickets![index].rjtID ??
-                                              tickets![index].rjtId));
-                                    } else {
-                                      refundController.radioSelectedValue.add(
-                                          (tickets![index].rjtID ??
-                                              tickets![index].rjtId));
-                                    }
-                                  } else {
-                                    if (refundController.radioSelectedValue
-                                        .contains(tickets![index].ticketId)) {
-                                      refundController.radioSelectedValue
-                                          .remove(tickets![index].ticketId);
-                                    } else {
-                                      refundController.radioSelectedValue
-                                          .add(tickets![index].ticketId);
-                                    }
-                                  }
+                                  onValueChanged(index);
                                 }
                               : null,
                           leading: Obx(
@@ -168,43 +146,15 @@ class RefundPreview extends StatelessWidget {
                                         .contains((tickets![index].rjtID ??
                                             tickets![index].rjtId))
                                     : refundController.radioSelectedValue
-                                        .contains(tickets![index].ticketId),
+                                        .contains(
+                                        tickets![index].ticketId,
+                                      ),
                                 onChanged: refundController
                                             .refundPreviewData[index]
                                             .returnCode ==
                                         '0'
                                     ? (value) {
-                                        if (tickets![index].ticketType ==
-                                                'RJT' ||
-                                            tickets![index].ticketTypeId ==
-                                                20) {
-                                          if (refundController
-                                              .radioSelectedValue
-                                              .contains(
-                                                  (tickets![index].rjtID ??
-                                                      tickets![index].rjtId))) {
-                                            refundController.radioSelectedValue
-                                                .remove(
-                                                    (tickets![index].rjtID ??
-                                                        tickets![index].rjtId));
-                                          } else {
-                                            refundController.radioSelectedValue
-                                                .add((tickets![index].rjtID ??
-                                                    tickets![index].rjtId));
-                                          }
-                                        } else {
-                                          if (refundController
-                                              .radioSelectedValue
-                                              .contains(
-                                                  tickets![index].ticketId)) {
-                                            refundController.radioSelectedValue
-                                                .remove(
-                                                    tickets![index].ticketId);
-                                          } else {
-                                            refundController.radioSelectedValue
-                                                .add(tickets![index].ticketId);
-                                          }
-                                        }
+                                        onValueChanged(index);
                                       }
                                     : null),
                           ),
@@ -264,5 +214,28 @@ class RefundPreview extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void onValueChanged(int index) {
+    if (tickets![index].ticketType == 'RJT' ||
+        tickets![index].ticketTypeId == 20) {
+      if (RefundPreviewController.instance.radioSelectedValue
+          .contains((tickets![index].rjtID ?? tickets![index].rjtId))) {
+        RefundPreviewController.instance.radioSelectedValue
+            .remove((tickets![index].rjtID ?? tickets![index].rjtId));
+      } else {
+        RefundPreviewController.instance.radioSelectedValue
+            .add((tickets![index].rjtID ?? tickets![index].rjtId));
+      }
+    } else {
+      if (RefundPreviewController.instance.radioSelectedValue
+          .contains(tickets![index].ticketId)) {
+        RefundPreviewController.instance.radioSelectedValue
+            .remove(tickets![index].ticketId);
+      } else {
+        RefundPreviewController.instance.radioSelectedValue
+            .add(tickets![index].ticketId);
+      }
+    }
   }
 }
