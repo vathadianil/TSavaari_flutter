@@ -58,7 +58,9 @@ class DisplayQrScreen extends StatelessWidget {
                   context: context,
                   builder: (context) {
                     return DisplayQrBottomSheet(
-                      tickets: tickets,
+                      tickets: previousScreenIndication == 'bookQr'
+                          ? getFormatttedTicketData('oneWay')
+                          : tickets,
                     );
                   }).whenComplete(() => Get.delete<RefundPreviewController>());
             },
