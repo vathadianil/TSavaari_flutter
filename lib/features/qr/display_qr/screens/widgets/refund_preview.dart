@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:tsavaari/common/controllers/checkbox_controller.dart';
 import 'package:tsavaari/features/qr/book_qr/screens/widgets/proceed_to_pay_btn.dart';
@@ -176,7 +177,7 @@ class RefundPreview extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                '\u{20B9} ${refundController.refundPreviewData[index].refundAmount ?? '0'}/-',
+                                '\u{20B9} ${refundController.refundPreviewData[index].refundAmount ?? 0}/-',
                                 style:
                                     Theme.of(context).textTheme.headlineSmall,
                               ),
@@ -195,6 +196,30 @@ class RefundPreview extends StatelessWidget {
                 ],
               ),
             ),
+          ),
+          const SizedBox(
+            height: TSizes.spaceBtwItems,
+          ),
+          Obx(
+            () => refundController.radioSelectedValue.isNotEmpty
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: TSizes.defaultSpace),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Total to be Refunded'),
+                        Text(
+                          '\u{20B9}${refundController.totalRefunAmount.value.toString()}/-',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium!
+                              .copyWith(color: TColors.error),
+                        ),
+                      ],
+                    ),
+                  )
+                : const SizedBox(),
           ),
           Obx(
             () => refundController.radioSelectedValue.isNotEmpty
@@ -223,18 +248,30 @@ class RefundPreview extends StatelessWidget {
           .contains((tickets![index].rjtID ?? tickets![index].rjtId))) {
         RefundPreviewController.instance.radioSelectedValue
             .remove((tickets![index].rjtID ?? tickets![index].rjtId));
+        RefundPreviewController.instance.totalRefunAmount.value -=
+            RefundPreviewController
+                .instance.refundPreviewData[index].refundAmount;
       } else {
         RefundPreviewController.instance.radioSelectedValue
             .add((tickets![index].rjtID ?? tickets![index].rjtId));
+        RefundPreviewController.instance.totalRefunAmount.value +=
+            RefundPreviewController
+                .instance.refundPreviewData[index].refundAmount;
       }
     } else {
       if (RefundPreviewController.instance.radioSelectedValue
           .contains(tickets![index].ticketId)) {
         RefundPreviewController.instance.radioSelectedValue
             .remove(tickets![index].ticketId);
+        RefundPreviewController.instance.totalRefunAmount.value -=
+            RefundPreviewController
+                .instance.refundPreviewData[index].refundAmount;
       } else {
         RefundPreviewController.instance.radioSelectedValue
             .add(tickets![index].ticketId);
+        RefundPreviewController.instance.totalRefunAmount.value +=
+            RefundPreviewController
+                .instance.refundPreviewData[index].refundAmount;
       }
     }
   }

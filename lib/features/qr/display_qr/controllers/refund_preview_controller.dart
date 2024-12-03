@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:tsavaari/bottom_navigation/bottom_navigation_menu.dart';
 import 'package:tsavaari/data/repositories/refund_qr/refund_qr_repository.dart';
@@ -23,6 +24,7 @@ class RefundPreviewController extends GetxController {
   final refundPreviewData = [].obs;
   final refundConfirmData = [].obs;
   var apiArray = <Future<dynamic>>[];
+  RxDouble totalRefunAmount = 0.0.obs;
 
   @override
   void onInit() {
@@ -91,6 +93,17 @@ class RefundPreviewController extends GetxController {
             message: 'Your session expired!. Please Login again');
         return;
       }
+
+      //Creating refund order
+
+      // final refundOrderPayload = {
+      //   "order_id": "string",
+      //   "refund_amount": 0,
+      //   "refund_id": "string",
+      //   "refund_note": "string",
+      //   "refund_speed": "STANDARD"
+      // };
+
       var refundQuoteIdList = [];
       for (var index = 0; index < tickets.length; index++) {
         if (tickets[index].ticketType == 'RJT' ||

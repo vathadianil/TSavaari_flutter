@@ -152,6 +152,8 @@ class BookQrController extends GetxController {
         "order_currency": "INR",
         "order_note": "some order note here"
       };
+      print('---------------------------------------------------');
+      print(payload);
 
       final createOrderData =
           await bookQrRepository.createQrPaymentOrder(payload);
