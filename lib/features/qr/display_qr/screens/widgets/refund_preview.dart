@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:tsavaari/common/controllers/checkbox_controller.dart';
 import 'package:tsavaari/features/qr/book_qr/screens/widgets/proceed_to_pay_btn.dart';
@@ -174,7 +172,7 @@ class RefundPreview extends StatelessWidget {
                       children: [
                         const Text('Total to be Refunded'),
                         Text(
-                          '\u{20B9}${refundController.totalRefunAmount.value.toString()}/-',
+                          '\u{20B9}${refundController.totalRefundAmount.value.toString()}/-',
                           style: Theme.of(context)
                               .textTheme
                               .headlineMedium!
@@ -232,16 +230,16 @@ class RefundPreview extends StatelessWidget {
 
   void _toggleTicketSelection(int index) {
     var ticketId = _getTicketId(index);
-    var refundAmount =
-        RefundPreviewController.instance.refundPreviewData[index].refundAmount;
+    int refundAmount =
+        RefundPreviewController.instance.refundPreviewData[index].refundAmount!;
 
     if (RefundPreviewController.instance.radioSelectedValue
         .contains(ticketId)) {
       RefundPreviewController.instance.radioSelectedValue.remove(ticketId);
-      RefundPreviewController.instance.totalRefunAmount.value -= refundAmount;
+      RefundPreviewController.instance.totalRefundAmount.value -= refundAmount;
     } else {
       RefundPreviewController.instance.radioSelectedValue.add(ticketId);
-      RefundPreviewController.instance.totalRefunAmount.value += refundAmount;
+      RefundPreviewController.instance.totalRefundAmount.value += refundAmount;
     }
   }
 

@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:tsavaari/bottom_navigation/bottom_navigation_menu.dart';
 import 'package:tsavaari/data/repositories/refund_qr/refund_qr_repository.dart';
@@ -24,7 +23,7 @@ class RefundPreviewController extends GetxController {
   final refundPreviewData = [].obs;
   final refundConfirmData = [].obs;
   var apiArray = <Future<dynamic>>[];
-  RxDouble totalRefunAmount = 0.0.obs;
+  RxDouble totalRefundAmount = 0.0.obs;
 
   @override
   void onInit() {
