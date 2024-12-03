@@ -58,35 +58,7 @@ class RefundPreview extends StatelessWidget {
                     refundController.refundPreviewData.isNotEmpty)
                   TextButton(
                     onPressed: () {
-                      for (var index = 0; index < tickets!.length; index++) {
-                        if (refundController
-                                .refundPreviewData[index].returnCode ==
-                            '0') {
-                          if (tickets![index].ticketType == 'RJT' ||
-                              tickets![index].ticketTypeId == 20) {
-                            if (refundController.radioSelectedValue.contains(
-                                (tickets![index].rjtID ??
-                                    tickets![index].rjtId))) {
-                              refundController.radioSelectedValue.remove(
-                                  (tickets![index].rjtID ??
-                                      tickets![index].rjtId));
-                            } else {
-                              refundController.radioSelectedValue.add(
-                                  (tickets![index].rjtID ??
-                                      tickets![index].rjtId));
-                            }
-                          } else {
-                            if (refundController.radioSelectedValue
-                                .contains(tickets![index].ticketId)) {
-                              refundController.radioSelectedValue
-                                  .remove(tickets![index].ticketId);
-                            } else {
-                              refundController.radioSelectedValue
-                                  .add(tickets![index].ticketId);
-                            }
-                          }
-                        }
-                      }
+                      onValueChanged(0, isSelectAll: true);
                     },
                     child: const Text('Select All'),
                   ),
@@ -141,15 +113,7 @@ class RefundPreview extends StatelessWidget {
                           leading: Obx(
                             () => Checkbox(
                                 //if the ticket is RJT we are checking for rjtid ortherwise ticketid
-                                value: (tickets![index].ticketType == 'RJT' ||
-                                        tickets![index].ticketTypeId == 20)
-                                    ? refundController.radioSelectedValue
-                                        .contains((tickets![index].rjtID ??
-                                            tickets![index].rjtId))
-                                    : refundController.radioSelectedValue
-                                        .contains(
-                                        tickets![index].ticketId,
-                                      ),
+                                value: isTicketSelected(index),
                                 onChanged: refundController
                                             .refundPreviewData[index]
                                             .returnCode ==
@@ -241,38 +205,58 @@ class RefundPreview extends StatelessWidget {
     );
   }
 
-  void onValueChanged(int index) {
+  bool isTicketSelected(int index) {
+    var ticketId = _getTicketId(index);
+    return RefundPreviewController.instance.radioSelectedValue
+        .contains(ticketId);
+  }
+
+  void onValueChanged(int index, {bool isSelectAll = false}) {
+    if (isSelectAll) {
+      _selectAllTickets();
+    } else {
+      _toggleTicketSelection(index);
+    }
+  }
+
+  void _selectAllTickets() {
+    RefundPreviewController.instance.radioSelectedValue.clear();
+
+    for (var index = 0; index < tickets!.length; index++) {
+      if (_isRefundable(index)) {
+        var ticketId = _getTicketId(index);
+        RefundPreviewController.instance.radioSelectedValue.add(ticketId);
+      }
+    }
+  }
+
+  void _toggleTicketSelection(int index) {
+    var ticketId = _getTicketId(index);
+    var refundAmount =
+        RefundPreviewController.instance.refundPreviewData[index].refundAmount;
+
+    if (RefundPreviewController.instance.radioSelectedValue
+        .contains(ticketId)) {
+      RefundPreviewController.instance.radioSelectedValue.remove(ticketId);
+      RefundPreviewController.instance.totalRefunAmount.value -= refundAmount;
+    } else {
+      RefundPreviewController.instance.radioSelectedValue.add(ticketId);
+      RefundPreviewController.instance.totalRefunAmount.value += refundAmount;
+    }
+  }
+
+  bool _isRefundable(int index) {
+    return RefundPreviewController
+            .instance.refundPreviewData[index].returnCode ==
+        '0';
+  }
+
+  dynamic _getTicketId(int index) {
     if (tickets![index].ticketType == 'RJT' ||
         tickets![index].ticketTypeId == 20) {
-      if (RefundPreviewController.instance.radioSelectedValue
-          .contains((tickets![index].rjtID ?? tickets![index].rjtId))) {
-        RefundPreviewController.instance.radioSelectedValue
-            .remove((tickets![index].rjtID ?? tickets![index].rjtId));
-        RefundPreviewController.instance.totalRefunAmount.value -=
-            RefundPreviewController
-                .instance.refundPreviewData[index].refundAmount;
-      } else {
-        RefundPreviewController.instance.radioSelectedValue
-            .add((tickets![index].rjtID ?? tickets![index].rjtId));
-        RefundPreviewController.instance.totalRefunAmount.value +=
-            RefundPreviewController
-                .instance.refundPreviewData[index].refundAmount;
-      }
+      return tickets![index].rjtID ?? tickets![index].rjtId;
     } else {
-      if (RefundPreviewController.instance.radioSelectedValue
-          .contains(tickets![index].ticketId)) {
-        RefundPreviewController.instance.radioSelectedValue
-            .remove(tickets![index].ticketId);
-        RefundPreviewController.instance.totalRefunAmount.value -=
-            RefundPreviewController
-                .instance.refundPreviewData[index].refundAmount;
-      } else {
-        RefundPreviewController.instance.radioSelectedValue
-            .add(tickets![index].ticketId);
-        RefundPreviewController.instance.totalRefunAmount.value +=
-            RefundPreviewController
-                .instance.refundPreviewData[index].refundAmount;
-      }
+      return tickets![index].ticketId;
     }
   }
 }
