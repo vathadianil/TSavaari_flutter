@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:tsavaari/common/controllers/checkbox_controller.dart';
 import 'package:tsavaari/features/qr/book_qr/screens/widgets/proceed_to_pay_btn.dart';
@@ -19,8 +20,6 @@ class RefundPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final refundController =
         Get.put(RefundPreviewController(tickets: tickets!));
-    print('-----------------------------------------------');
-    print(tickets![0].ticketType);
 
     return SingleChildScrollView(
       child: Column(
@@ -41,15 +40,57 @@ class RefundPreview extends StatelessWidget {
                   style: Theme.of(context).textTheme.headlineSmall),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Select Passengers to Cancel'),
-              TextButton(
-                onPressed: () {},
-                child: const Text('Select All'),
-              ),
-            ],
+          Obx(
+            () => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (!refundController.isLoading.value &&
+                    tickets!.length ==
+                        refundController.refundPreviewData.length &&
+                    refundController.refundPreviewData.isNotEmpty)
+                  const Text('Select Passengers to Cancel'),
+
+                //--Select all button
+                if (!refundController.isLoading.value &&
+                    tickets!.length ==
+                        refundController.refundPreviewData.length &&
+                    refundController.refundPreviewData.isNotEmpty)
+                  TextButton(
+                    onPressed: () {
+                      for (var index = 0; index < tickets!.length; index++) {
+                        if (refundController
+                                .refundPreviewData[index].returnCode ==
+                            '0') {
+                          if (tickets![index].ticketType == 'RJT' ||
+                              tickets![index].ticketTypeId == 20) {
+                            if (refundController.radioSelectedValue.contains(
+                                (tickets![index].rjtID ??
+                                    tickets![index].rjtId))) {
+                              refundController.radioSelectedValue.remove(
+                                  (tickets![index].rjtID ??
+                                      tickets![index].rjtId));
+                            } else {
+                              refundController.radioSelectedValue.add(
+                                  (tickets![index].rjtID ??
+                                      tickets![index].rjtId));
+                            }
+                          } else {
+                            if (refundController.radioSelectedValue
+                                .contains(tickets![index].ticketId)) {
+                              refundController.radioSelectedValue
+                                  .remove(tickets![index].ticketId);
+                            } else {
+                              refundController.radioSelectedValue
+                                  .add(tickets![index].ticketId);
+                            }
+                          }
+                        }
+                      }
+                    },
+                    child: const Text('Select All'),
+                  ),
+              ],
+            ),
           ),
           Container(
             decoration: BoxDecoration(
@@ -206,16 +247,19 @@ class RefundPreview extends StatelessWidget {
             ),
           ),
           Obx(
-            () => ProceedToPayBtn(
-              btnText: 'Proceed to Cancel',
-              onPressed: (CheckBoxController.instance.checkBoxState.value &&
-                      refundController.radioSelectedValue.isNotEmpty)
-                  ? () {
-                      Navigator.pop(context);
-                      refundController.getRefundConfirm();
-                    }
-                  : null,
-            ),
+            () => refundController.radioSelectedValue.isNotEmpty
+                ? ProceedToPayBtn(
+                    btnText: 'Proceed to Cancel',
+                    onPressed:
+                        (CheckBoxController.instance.checkBoxState.value &&
+                                refundController.radioSelectedValue.isNotEmpty)
+                            ? () {
+                                Navigator.pop(context);
+                                refundController.getRefundConfirm();
+                              }
+                            : null,
+                  )
+                : const SizedBox(),
           ),
         ],
       ),
