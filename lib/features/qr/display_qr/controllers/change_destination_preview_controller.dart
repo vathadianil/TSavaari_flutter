@@ -1,10 +1,19 @@
+import 'dart:io';
+
+import 'package:flutter_cashfree_pg_sdk/api/cfpayment/cfwebcheckoutpayment.dart';
+import 'package:flutter_cashfree_pg_sdk/api/cfpaymentgateway/cfpaymentgatewayservice.dart';
+import 'package:flutter_cashfree_pg_sdk/api/cfsession/cfsession.dart';
+import 'package:flutter_cashfree_pg_sdk/utils/cfenums.dart';
+import 'package:flutter_cashfree_pg_sdk/utils/cfexceptions.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:tsavaari/bottom_navigation/bottom_navigation_menu.dart';
-import 'package:tsavaari/data/repositories/refund_qr/refund_qr_repository.dart';
+import 'package:tsavaari/data/repositories/book_qr/book_qr_repository.dart';
+import 'package:tsavaari/data/repositories/change_destination/change_destination_repository.dart';
+import 'package:tsavaari/features/qr/book_qr/models/station_list_model.dart';
 import 'package:tsavaari/features/qr/display_qr/models/qr_code_model.dart';
+import 'package:tsavaari/features/qr/display_qr/screens/display_qr.dart';
 import 'package:tsavaari/utils/constants/image_strings.dart';
-import 'package:tsavaari/utils/constants/merchant_id.dart';
+import 'package:tsavaari/utils/helpers/helper_functions.dart';
 import 'package:tsavaari/utils/helpers/network_manager.dart';
 import 'package:tsavaari/utils/popups/full_screen_loader.dart';
 import 'package:tsavaari/utils/popups/loaders.dart';
@@ -12,45 +21,75 @@ import 'package:tsavaari/utils/popups/loaders.dart';
 class ChangeDestinationPreviewController extends GetxController {
   ChangeDestinationPreviewController({
     required this.tickets,
+    required this.stationList,
   });
   static ChangeDestinationPreviewController get instance => Get.find();
 
-  RxList radioSelectedValue = [].obs;
+  final stationName = ''.obs;
+  RxList checkBoxValue = [].obs;
   List<TicketsListModel> tickets;
+  List<StationListModel> stationList;
   final deviceStorage = GetStorage();
   final isLoading = false.obs;
-  final _refundQrRepository = Get.put(RefundQrRepository());
-  final refundPreviewData = [].obs;
-  final refundConfirmData = [].obs;
+  final _changeDestinationRepository = Get.put(ChangeDestinationRepository());
+  final bookQrRepository = Get.put(BookQrRepository());
+  final changeDestinationPreviewData = [].obs;
+  final changeDestinationConfirmData = [].obs;
   var apiArray = <Future<dynamic>>[];
-  RxDouble totalRefundAmount = 0.0.obs;
+  RxDouble totalAmount = 0.0.obs;
+  final isChangeDestinationPreviewChecked = false.obs;
+  final isChangeDestinationPossible = false.obs;
 
-  Future<void> getRefundPreview() async {
+  Future<void> changeDestinationPreview() async {
     try {
       final token = await deviceStorage.read('token');
-      refundPreviewData.clear();
+      changeDestinationPreviewData.clear();
 
-      for (var index = 0; index < tickets.length; index++) {
+      if (stationName.value == '' || checkBoxValue.isEmpty) {
+        TLoaders.errorSnackBar(
+            title: 'Oh Snap!', message: 'Please select required fields');
+        return;
+      }
+
+      final station = stationName.value != ''
+          ? THelperFunctions.getStationFromStationName(
+              stationName.value, stationList)
+          : null;
+      final stationId = station!.stationId;
+
+      final fromStationName = tickets[0].fromStation ??
+          THelperFunctions.getStationFromStationId(
+                  tickets[0].fromStationId!, stationList)
+              .name;
+      final toStationName = tickets[0].toStation ??
+          THelperFunctions.getStationFromStationId(
+                  tickets[0].toStationId!, stationList)
+              .name;
+
+      if (stationName.value == fromStationName ||
+          stationName.value == toStationName) {
+        TLoaders.errorSnackBar(
+            title: 'Oh Snap!', message: 'Please select New Destination');
+        return;
+      }
+
+      for (var index = 0; index < checkBoxValue.length; index++) {
         Future.delayed(Duration(seconds: index), () async {
           isLoading.value = true;
-          final response = await _refundQrRepository.refundPreview({
+          isChangeDestinationPreviewChecked.value = true;
+          final response =
+              await _changeDestinationRepository.changeDestinationPreview({
             "token": "$token",
-            "ticketId": (tickets[index].ticketType == 'SJT' ||
-                    tickets[index].ticketTypeId == 10)
-                ? tickets[index].ticketId
-                : '',
-            "rjtId": (tickets[index].ticketType == 'RJT' ||
-                    tickets[index].ticketTypeId == 20)
-                ? (tickets[index].rjtID ?? tickets[index].rjtId)
-                : '',
-            "passId": "",
-            "merchantId": MerchantDetails.merchantId,
-            "ltmrhlPurchaseId": "",
-            "transactionType": "",
-            "refundQuoteId": ""
+            "ticketId": checkBoxValue[index],
+            "newDestination": stationId,
           });
-          refundPreviewData.add(response);
-          if (index == tickets.length - 1) {
+          if (response.returnCode == '0') {
+            isChangeDestinationPossible.value = true;
+            totalAmount.value += response.totalFareAdjusted ?? 0.0;
+          }
+          changeDestinationPreviewData.add(response);
+
+          if (index == checkBoxValue.length - 1) {
             isLoading.value = false;
           }
         });
@@ -63,7 +102,7 @@ class ChangeDestinationPreviewController extends GetxController {
     }
   }
 
-  Future<void> getRefundConfirm() async {
+  Future<void> getChangeDestinationConfirm() async {
     try {
       TFullScreenLoader.openLoadingDialog(
           'Processing your request', TImages.trainAnimation);
@@ -87,64 +126,114 @@ class ChangeDestinationPreviewController extends GetxController {
         return;
       }
 
-      //Creating refund order
+      String platformCode = '';
+      if (Platform.isAndroid) {
+        platformCode = 'AND';
+      } else if (Platform.isIOS) {
+        platformCode = 'IOS';
+      }
 
-      // final refundOrderPayload = {
-      //   "order_id": "string",
-      //   "refund_amount": 0,
-      //   "refund_id": "string",
-      //   "refund_note": "string",
-      //   "refund_speed": "STANDARD"
-      // };
+      final payload = {
+        "customer_details": {
+          "customer_id": "CUSTID123",
+          "customer_email": "abc@gmail.com",
+          "customer_phone": "9999999999",
+          "customer_name": "abcds"
+        },
+        "order_meta": {
+          "return_url": "https://www.cashfree.com/devstudio/thankyou",
+          "notify_url":
+              "https://122.252.226.254:5114/api/v1/NotifyUrl/CFPaymentRequest"
+        },
+        "order_id": "CHD$platformCode${DateTime.now().millisecondsSinceEpoch}",
+        "order_amount": totalAmount.value,
+        "order_currency": "INR",
+        "order_note": "some order note here"
+      };
 
-      var refundQuoteIdList = [];
-      for (var index = 0; index < tickets.length; index++) {
-        if (tickets[index].ticketType == 'RJT' ||
-            tickets[index].ticketTypeId == 20) {
-          refundQuoteIdList.addIf(
-              radioSelectedValue.contains(refundPreviewData[index].rjtId),
-              refundPreviewData[index].refundQuoteId);
-        } else {
-          refundQuoteIdList.addIf(
-              radioSelectedValue.contains(refundPreviewData[index].ticketid),
-              refundPreviewData[index].refundQuoteId);
+      final createOrderData =
+          await bookQrRepository.createQrPaymentOrder(payload);
+
+      final session = CFSessionBuilder()
+          .setEnvironment(CFEnvironment.SANDBOX)
+          .setOrderId(createOrderData.orderId!)
+          .setPaymentSessionId(createOrderData.paymentSessionId!)
+          .build();
+
+      final cfWebCheckout =
+          CFWebCheckoutPaymentBuilder().setSession(session).build();
+      final cfPaymentGateWay = CFPaymentGatewayService();
+
+      cfPaymentGateWay.setCallback((orderId) async {
+        try {
+          final verifyPayment = await bookQrRepository.verifyPayment(orderId);
+
+          if (verifyPayment.orderStatus == 'PAID') {
+            final token = await deviceStorage.read('token');
+            final station = stationName.value != ''
+                ? THelperFunctions.getStationFromStationName(
+                    stationName.value, stationList)
+                : null;
+            final stationId = station!.stationId;
+
+            var chaneDestinationQuoteIdList = [];
+            for (var index = 0; index < checkBoxValue.length; index++) {
+              chaneDestinationQuoteIdList.addIf(
+                  checkBoxValue
+                      .contains(changeDestinationPreviewData[index].ticketId),
+                  changeDestinationPreviewData[index].codQuoteId);
+            }
+
+            for (var index = 0; index < checkBoxValue.length; index++) {
+              Future.delayed(Duration(seconds: index), () async {
+                isLoading.value = true;
+
+                final ticketData = await _changeDestinationRepository
+                    .changeDestinationConfirm({
+                  "token": "$token",
+                  "ticketId": checkBoxValue[index],
+                  "newDestinationId": stationId,
+                  "newOrderId": orderId,
+                  "codQuoteId": chaneDestinationQuoteIdList[index]
+                });
+                changeDestinationConfirmData.add(ticketData);
+              });
+            }
+
+            //Navigate to Dispaly QR Page
+            if (changeDestinationConfirmData[0].returnCode == '0' &&
+                changeDestinationConfirmData[0].returnMsg == 'SUCESS') {
+              final tickets = changeDestinationConfirmData
+                  .cast<TicketsListModel>()
+                  .toList();
+
+              //Stop Loading
+              TFullScreenLoader.stopLoading();
+              Get.offAll(
+                () => DisplayQrScreen(
+                  tickets: tickets,
+                  stationList: stationList,
+                ),
+              );
+            } else {
+              throw 'Something went wrong. Please try again later!';
+            }
+          }
+        } catch (e) {
+          TFullScreenLoader.stopLoading();
+          TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
         }
-      }
-      for (var index = 0; index < radioSelectedValue.length; index++) {
-        apiArray.add(_refundQrRepository.refundConfirm({
-          "token": "$token",
-          "ticketId": (tickets[index].ticketType == 'SJT' ||
-                  tickets[index].ticketTypeId == 10)
-              ? radioSelectedValue[index]
-              : '',
-          "rjtId": (tickets[index].ticketType == 'RJT' ||
-                  tickets[index].ticketTypeId == 20)
-              ? radioSelectedValue[index]
-              : '',
-          "passId": "",
-          "merchantId": MerchantDetails.merchantId,
-          "ltmrhlPurchaseId": "",
-          "transactionType": "107",
-          "refundQuoteId": refundQuoteIdList[index]
-        }));
-      }
-
-      final response = await Future.wait(apiArray);
-      refundConfirmData.assignAll(response);
-
+      }, (p0, orderId) {
+        //Stop Loading
+        TFullScreenLoader.stopLoading();
+        TLoaders.errorSnackBar(
+            title: 'Oh Snap!', message: p0.getMessage().toString());
+      });
+      cfPaymentGateWay.doPayment(cfWebCheckout);
+    } on CFException catch (e) {
       //Stop Loading
       TFullScreenLoader.stopLoading();
-      var isSuccess = true;
-      for (var refundStatus in response) {
-        if (refundStatus.returnCode != '0') {
-          isSuccess = false;
-        }
-      }
-      TLoaders.successSnackBar(
-          title: 'Success', message: 'Your tickets have been refunded');
-      if (isSuccess) {
-        Get.offAll(() => const BottomNavigationMenu());
-      }
+      TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
     } catch (e) {
       //Stop Loading
       TFullScreenLoader.stopLoading();

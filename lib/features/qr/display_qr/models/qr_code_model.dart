@@ -60,7 +60,7 @@ class TicketHistory {
   String? fromStation;
   String? toStation;
   int? noOfPersons;
-  int? totalFareAmount;
+  String? totalFareAmount;
   List<TicketsListModel>? tickets;
 
   TicketHistory(
@@ -78,7 +78,7 @@ class TicketHistory {
     fromStation = json['fromStation'];
     toStation = json['toStation'];
     noOfPersons = json['noOfPersons'];
-    totalFareAmount = json['totalFareAmount'];
+    totalFareAmount = json['totalFareAmount'].toString();
     if (json['tickets'] != null) {
       tickets = <TicketsListModel>[];
       json['tickets'].forEach((v) {
@@ -131,11 +131,18 @@ class TicketsListModel {
   String? exitDateTime;
   String? maxAllowdExitTime;
   String? merchantType;
-  int? finalCost;
+  String? finalCost;
   String? ticketType;
   String? relateTicketId;
   String? returnCode;
   String? returnMsg;
+  String? ticketEntryExittype;
+  String? oldTicketId;
+  String? oldTicketStatusId;
+  double? differenceOfFare;
+  int? surCharge;
+  int? gst;
+  double? totalFareAdjusted;
 
   TicketsListModel({
     ticketTypeCode,
@@ -171,11 +178,18 @@ class TicketsListModel {
     relateTicketId,
     returnCode,
     returnMsg,
+    ticketEntryExittype,
+    oldTicketId,
+    oldTicketStatusId,
+    this.differenceOfFare,
+    this.surCharge,
+    this.gst,
+    this.totalFareAdjusted,
   });
 
   TicketsListModel.fromJson(Map<String, dynamic> json) {
     ticketTypeCode = json['ticketTypeCode'];
-    ticketId = json['ticketId'];
+    ticketId = json['ticketId'] ?? json['newticketId'];
     rjtID = json['rjtID'];
     orderID = json['orderID'];
     statusId = json['statusId'];
@@ -203,11 +217,18 @@ class TicketsListModel {
     exitDateTime = json['exitDateTime'];
     maxAllowdExitTime = json['maxAllowdExitTime'];
     merchantType = json['merchantType'];
-    finalCost = json['finalCost'];
+    finalCost = json['finalCost'].toString();
     ticketType = json['ticketType'];
     relateTicketId = json['relateTicketId'];
     returnCode = json['returnCode'];
     returnMsg = json['returnMsg'];
+    ticketEntryExittype = json['ticketEntryExittype'];
+    oldTicketId = json['OldTicketId'];
+    oldTicketStatusId = json['oldTicketStatusId'];
+    differenceOfFare = (json['DifferenceOfFare'] ?? 0) + 0.0;
+    surCharge = json['surCharge'];
+    gst = json['gst'];
+    totalFareAdjusted = (json['totalFareAdjusted'] ?? 0) + 0.0;
   }
 
   Map<String, dynamic> toJson() {

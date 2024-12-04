@@ -19,6 +19,7 @@ class RefundPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final refundController =
         Get.put(RefundPreviewController(tickets: tickets!));
+    Get.put(CheckBoxController());
 
     return SingleChildScrollView(
       child: Column(
@@ -30,6 +31,7 @@ class RefundPreview extends StatelessWidget {
               IconButton(
                   onPressed: () {
                     BottomSheetPageViewController.instace.firstPage(context);
+                    Get.delete<CheckBoxController>();
                   },
                   icon: const Icon(Iconsax.arrow_left)),
               const SizedBox(
@@ -78,20 +80,23 @@ class RefundPreview extends StatelessWidget {
                       refundController.refundPreviewData.isEmpty)
                     const Text('No Data Found'),
                   if (refundController.isLoading.value)
-                    ListView.separated(
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return const ShimmerEffect(
-                            width: double.infinity,
-                            height: 60,
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(
-                            height: TSizes.spaceBtwItems,
-                          );
-                        },
-                        itemCount: 2),
+                    Padding(
+                      padding: const EdgeInsets.all(TSizes.defaultSpace),
+                      child: ListView.separated(
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return const ShimmerEffect(
+                              width: double.infinity,
+                              height: 60,
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return const SizedBox(
+                              height: TSizes.spaceBtwItems,
+                            );
+                          },
+                          itemCount: 2),
+                    ),
                   if (!refundController.isLoading.value &&
                       tickets!.length ==
                           refundController.refundPreviewData.length &&

@@ -23,6 +23,7 @@ class OrdersController extends GetxController {
     try {
       //Show loader while loading categories
       isLoading.value = true;
+      activeTickets.clear();
       final token = await deviceStorage.read('token');
 
       final payload = {
@@ -34,9 +35,6 @@ class OrdersController extends GetxController {
       if (token != null) {
         final activeTicketData =
             await _myOrdersRepository.fetchActiveTickets(payload);
-        if (activeTickets.isNotEmpty) {
-          activeTickets.clear();
-        }
 
         if (activeTicketData.ticketHistory != null) {
           activeTickets.add(activeTicketData);
@@ -54,6 +52,7 @@ class OrdersController extends GetxController {
     try {
       //Show loader while loading categories
       isLoading.value = true;
+      activeTickets.clear();
       final token = await deviceStorage.read('token');
 
       final payload = {
@@ -65,9 +64,6 @@ class OrdersController extends GetxController {
       if (token != null) {
         final activeTicketData =
             await _myOrdersRepository.fetchPastTickets(payload);
-        if (activeTickets.isNotEmpty) {
-          activeTickets.clear();
-        }
 
         if (activeTicketData.ticketHistory != null) {
           activeTickets.add(activeTicketData);

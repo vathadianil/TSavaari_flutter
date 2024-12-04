@@ -15,6 +15,7 @@ class TDropdown extends StatelessWidget {
     required this.labelText,
     required this.onChanged,
     this.showLeadingIcon = false,
+    this.labelColor,
   });
 
   final double width;
@@ -24,6 +25,7 @@ class TDropdown extends StatelessWidget {
   final String labelText;
   final ValueChanged<String?> onChanged;
   final bool showLeadingIcon;
+  final Color? labelColor;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +36,10 @@ class TDropdown extends StatelessWidget {
         return item.toLowerCase().startsWith(filter.toLowerCase());
       },
       selectedItem: value,
-      dropdownButtonProps:
-          const DropdownButtonProps(icon: Icon(Iconsax.arrow_circle_down4)),
+      dropdownButtonProps: DropdownButtonProps(
+        icon: const Icon(Iconsax.arrow_circle_down4),
+        color: dark ? TColors.accent : TColors.primary,
+      ),
       popupProps: PopupProps.dialog(
         showSearchBox: true,
         showSelectedItems: true,
@@ -85,11 +89,13 @@ class TDropdown extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               border: Border(
-                  bottom: BorderSide(
-                      width: .5,
-                      color: dark
-                          ? TColors.darkContainer
-                          : TColors.dark.withOpacity(.1))),
+                bottom: BorderSide(
+                  width: .5,
+                  color: dark
+                      ? TColors.darkContainer
+                      : TColors.dark.withOpacity(.1),
+                ),
+              ),
             ),
             child: Text(
               item,
@@ -123,8 +129,14 @@ class TDropdown extends StatelessWidget {
           Text(
             selectedItem = selectedItem != '' ? selectedItem! : labelText,
             style: selectedItem != ''
-                ? Theme.of(context).textTheme.labelLarge
-                : Theme.of(context).textTheme.labelMedium,
+                ? Theme.of(context)
+                    .textTheme
+                    .labelLarge!
+                    .copyWith(color: labelColor)
+                : Theme.of(context)
+                    .textTheme
+                    .labelMedium!
+                    .copyWith(color: labelColor),
           ),
         ],
       ),

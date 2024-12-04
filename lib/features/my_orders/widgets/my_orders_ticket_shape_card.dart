@@ -212,11 +212,22 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
                                           horizontal: TSizes.sm,
                                         ),
                                       )
-                                    : const TicketStatusChip(
-                                        left: 7,
-                                        bottom: 28,
-                                        ticketStatus: 'New',
-                                      ),
+                                    : (ticketData.tickets![0].statusId == 60)
+                                        ? const TicketStatusChip(
+                                            left: -2,
+                                            bottom: 30,
+                                            textColor: TColors.warning,
+                                            borderColor: TColors.warning,
+                                            ticketStatus: 'Change Dt',
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: TSizes.sm,
+                                            ),
+                                          )
+                                        : const TicketStatusChip(
+                                            left: 7,
+                                            bottom: 28,
+                                            ticketStatus: 'New',
+                                          ),
                       ],
                     ),
                   ],
