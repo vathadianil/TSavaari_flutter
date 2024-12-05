@@ -48,8 +48,9 @@ class QrTicketCard extends StatelessWidget {
                   ),
                   //-- Route and platform info container
 
-                  DisplayrouteContainer(
-                      tickets: tickets, stationList: stationList),
+                  if (tickets[0].platFormNo != null)
+                    DisplayrouteContainer(
+                        tickets: tickets, stationList: stationList),
                 ],
               ),
             ),

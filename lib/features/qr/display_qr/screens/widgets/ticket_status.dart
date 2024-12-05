@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/device/device_utility.dart';
 
 class TicketStatus extends StatelessWidget {
   const TicketStatus({
@@ -30,12 +31,18 @@ class TicketStatus extends StatelessWidget {
             color: TColors.success,
             borderRadius: BorderRadius.circular(TSizes.lg),
           ),
-          child: Text(
-            ticketStatus,
-            style: Theme.of(context)
-                .textTheme
-                .labelSmall!
-                .copyWith(color: TColors.white),
+          child: SizedBox(
+            width: TDeviceUtils.getScreenWidth(context) * .15,
+            child: Text(
+              ticketStatus,
+              maxLines: 1,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context)
+                  .textTheme
+                  .labelSmall!
+                  .copyWith(color: TColors.white),
+            ),
           ),
         ),
       ],

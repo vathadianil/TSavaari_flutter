@@ -123,7 +123,8 @@ class DisplayQrScreen extends StatelessWidget {
                   ),
                 if (tickets![0].ticketTypeId == 10 ||
                     tickets![0].ticketType == 'SJT' ||
-                    tickets![0].ticketType == 'RJT')
+                    tickets![0].ticketType == 'RJT' ||
+                    tickets![0].oldTicketStatusId == '60')
                   QrTicketCard(tickets: tickets!, stationList: stationList),
               ],
             ),

@@ -27,7 +27,7 @@ class ChangeDesinationPreview extends StatelessWidget {
     Get.put(CheckBoxController());
 
     print('-----------------------------------------');
-    print(tickets![0].ticketId);
+    print(tickets![2].ticketId);
 
     return SingleChildScrollView(
       child: Column(
@@ -237,6 +237,7 @@ class ChangeDesinationPreview extends StatelessWidget {
                   ProceedToPayBtn(
                     btnText: 'Proceed to Pay',
                     onPressed: () {
+                      Navigator.pop(context);
                       changeDestinationPreviewController
                           .getChangeDestinationConfirm();
                     },

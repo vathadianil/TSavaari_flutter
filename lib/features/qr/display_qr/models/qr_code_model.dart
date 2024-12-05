@@ -3,9 +3,14 @@ class QrTicketModel {
   String? returnMsg;
   String? ltmrhlPurchaseId;
   List<TicketsListModel>? tickets;
+  String? orderId;
 
   QrTicketModel(
-      {this.returnCode, this.returnMsg, this.ltmrhlPurchaseId, this.tickets});
+      {this.returnCode,
+      this.returnMsg,
+      this.ltmrhlPurchaseId,
+      this.tickets,
+      this.orderId});
 
   QrTicketModel.fromJson(Map<String, dynamic> json) {
     returnCode = json['returnCode'];
@@ -17,6 +22,7 @@ class QrTicketModel {
         tickets!.add(TicketsListModel.fromJson(v));
       });
     }
+    orderId = json['orderId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -27,6 +33,7 @@ class QrTicketModel {
     if (tickets != null) {
       data['tickets'] = tickets!.map((v) => v.toJson()).toList();
     }
+    data['orderId'] = orderId;
     return data;
   }
 }

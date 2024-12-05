@@ -25,7 +25,8 @@ class QrTicketContentContainer extends StatelessWidget {
     final displayQrController = DisplayQrController.instance;
     final isSjtSinglePassenger = (tickets[0].ticketTypeId == 10 ||
             tickets[0].ticketType == 'SJT' ||
-            tickets[0].ticketType == 'RJT')
+            tickets[0].ticketType == 'RJT' ||
+            tickets[0].oldTicketStatusId == '60')
         ? tickets.length == 1
             ? true
             : false
@@ -54,12 +55,16 @@ class QrTicketContentContainer extends StatelessWidget {
 
             //--Ticket Statu
             Obx(
-              () => TicketStatus(
-                ticketStatus:
-                    tickets[displayQrController.carouselCurrentIndex.value]
-                            .ticketStatus ??
-                        '',
-              ),
+              () => tickets[displayQrController.carouselCurrentIndex.value]
+                          .ticketStatus !=
+                      null
+                  ? TicketStatus(
+                      ticketStatus: tickets[displayQrController
+                                  .carouselCurrentIndex.value]
+                              .ticketStatus ??
+                          '',
+                    )
+                  : const SizedBox(),
             ),
           ],
         ),
@@ -131,12 +136,13 @@ class QrTicketContentContainer extends StatelessWidget {
           height: TSizes.spaceBtwItems / 2,
         ),
         //Ticket Expiry
-        TicketExpiry(
-          dateTime: tickets[0].ticketExpiryTime != null
-              ? THelperFunctions.getFormattedDateTimeString(
-                  tickets[0].ticketExpiryTime!)
-              : '',
-        ),
+        if (tickets[0].ticketExpiryTime != null)
+          TicketExpiry(
+            dateTime: tickets[0].ticketExpiryTime != null
+                ? THelperFunctions.getFormattedDateTimeString(
+                    tickets[0].ticketExpiryTime!)
+                : '',
+          ),
 
         if (!isSjtSinglePassenger && !isRjtSinglePassenger)
           const SizedBox(

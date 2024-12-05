@@ -183,40 +183,43 @@ class ChangeDestinationPreviewController extends GetxController {
                       .contains(changeDestinationPreviewData[index].ticketId),
                   changeDestinationPreviewData[index].codQuoteId);
             }
-
+            var isSuccess = true;
             for (var index = 0; index < checkBoxValue.length; index++) {
               Future.delayed(Duration(seconds: index), () async {
-                isLoading.value = true;
-
                 final ticketData = await _changeDestinationRepository
                     .changeDestinationConfirm({
                   "token": "$token",
                   "ticketId": checkBoxValue[index],
                   "newDestinationId": stationId,
-                  "newOrderId": orderId,
+                  "newOrderId": orderId + checkBoxValue[index].substring(14),
                   "codQuoteId": chaneDestinationQuoteIdList[index]
                 });
+
+                if (ticketData.returnCode != '0') {
+                  isSuccess = false;
+                }
                 changeDestinationConfirmData.add(ticketData);
+
+                if (index == checkBoxValue.length - 1) {
+                  //Navigate to Dispaly QR Page
+                  if (isSuccess) {
+                    final tickets = changeDestinationConfirmData
+                        .cast<TicketsListModel>()
+                        .toList();
+
+                    //Stop Loading
+                    TFullScreenLoader.stopLoading();
+                    Get.offAll(
+                      () => DisplayQrScreen(
+                        tickets: tickets,
+                        stationList: stationList,
+                      ),
+                    );
+                  } else {
+                    throw 'Something went wrong. Unable to do Change destination. Please contact customer care!';
+                  }
+                }
               });
-            }
-
-            //Navigate to Dispaly QR Page
-            if (changeDestinationConfirmData[0].returnCode == '0' &&
-                changeDestinationConfirmData[0].returnMsg == 'SUCESS') {
-              final tickets = changeDestinationConfirmData
-                  .cast<TicketsListModel>()
-                  .toList();
-
-              //Stop Loading
-              TFullScreenLoader.stopLoading();
-              Get.offAll(
-                () => DisplayQrScreen(
-                  tickets: tickets,
-                  stationList: stationList,
-                ),
-              );
-            } else {
-              throw 'Something went wrong. Please try again later!';
             }
           }
         } catch (e) {
