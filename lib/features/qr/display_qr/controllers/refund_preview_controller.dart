@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:tsavaari/bottom_navigation/bottom_navigation_menu.dart';
@@ -12,11 +14,13 @@ import 'package:tsavaari/utils/popups/loaders.dart';
 class RefundPreviewController extends GetxController {
   RefundPreviewController({
     required this.tickets,
+    required this.orderId,
   });
   static RefundPreviewController get instance => Get.find();
 
   RxList radioSelectedValue = [].obs;
   List<TicketsListModel> tickets;
+  String orderId;
   final deviceStorage = GetStorage();
   final isLoading = false.obs;
   final _refundQrRepository = Get.put(RefundQrRepository());
@@ -94,62 +98,84 @@ class RefundPreviewController extends GetxController {
       }
 
       //Creating refund order
+      String platformCode = '';
+      if (Platform.isAndroid) {
+        platformCode = 'AND';
+      } else if (Platform.isIOS) {
+        platformCode = 'IOS';
+      }
 
-      // final refundOrderPayload = {
-      //   "order_id": "string",
-      //   "refund_amount": 0,
-      //   "refund_id": "string",
-      //   "refund_note": "string",
-      //   "refund_speed": "STANDARD"
-      // };
+      final refundOrderPayload = {
+        "order_id": orderId,
+        "refund_amount": 1.0, //totalRefundAmount.value,
+        "refund_id": "RFD$platformCode${DateTime.now().millisecondsSinceEpoch}",
+        "refund_note": "string",
+        "refund_speed": "STANDARD"
+      };
 
-      var refundQuoteIdList = [];
-      for (var index = 0; index < tickets.length; index++) {
-        if (tickets[index].ticketType == 'RJT' ||
-            tickets[index].ticketTypeId == 20) {
-          refundQuoteIdList.addIf(
-              radioSelectedValue.contains(refundPreviewData[index].rjtId),
-              refundPreviewData[index].refundQuoteId);
+      final refundOrderResponse =
+          await _refundQrRepository.createRefundOrder(refundOrderPayload);
+
+      if (refundOrderResponse.cfPaymentId != null &&
+          refundOrderResponse.cfRefundId != null) {
+        final getRefundStatus = await _refundQrRepository.getRefundOrderStatus(
+            {"order_id": orderId, "refund_id": refundOrderResponse.refundId});
+        if (getRefundStatus.refundStatus == 'SUCCESS' ||
+            getRefundStatus.refundStatus == 'PENDING') {
+          var refundQuoteIdList = [];
+          for (var index = 0; index < tickets.length; index++) {
+            if (tickets[index].ticketType == 'RJT' ||
+                tickets[index].ticketTypeId == 20) {
+              refundQuoteIdList.addIf(
+                  radioSelectedValue.contains(refundPreviewData[index].rjtId),
+                  refundPreviewData[index].refundQuoteId);
+            } else {
+              refundQuoteIdList.addIf(
+                  radioSelectedValue
+                      .contains(refundPreviewData[index].ticketid),
+                  refundPreviewData[index].refundQuoteId);
+            }
+          }
+          for (var index = 0; index < radioSelectedValue.length; index++) {
+            apiArray.add(_refundQrRepository.refundConfirm({
+              "token": "$token",
+              "ticketId": (tickets[index].ticketType == 'SJT' ||
+                      tickets[index].ticketTypeId == 10)
+                  ? radioSelectedValue[index]
+                  : '',
+              "rjtId": (tickets[index].ticketType == 'RJT' ||
+                      tickets[index].ticketTypeId == 20)
+                  ? radioSelectedValue[index]
+                  : '',
+              "passId": "",
+              "merchantId": MerchantDetails.merchantId,
+              "ltmrhlPurchaseId": "",
+              "transactionType": "107",
+              "refundQuoteId": refundQuoteIdList[index]
+            }));
+          }
+
+          final response = await Future.wait(apiArray);
+          refundConfirmData.assignAll(response);
+
+          //Stop Loading
+          TFullScreenLoader.stopLoading();
+          var isSuccess = true;
+          for (var refundStatus in response) {
+            if (refundStatus.returnCode != '0') {
+              isSuccess = false;
+            }
+          }
+          TLoaders.successSnackBar(
+              title: 'Success', message: 'Your tickets have been refunded');
+          if (isSuccess) {
+            Get.offAll(() => const BottomNavigationMenu());
+          }
         } else {
-          refundQuoteIdList.addIf(
-              radioSelectedValue.contains(refundPreviewData[index].ticketid),
-              refundPreviewData[index].refundQuoteId);
+          throw ('Unable to Process the request!. Please try again');
         }
-      }
-      for (var index = 0; index < radioSelectedValue.length; index++) {
-        apiArray.add(_refundQrRepository.refundConfirm({
-          "token": "$token",
-          "ticketId": (tickets[index].ticketType == 'SJT' ||
-                  tickets[index].ticketTypeId == 10)
-              ? radioSelectedValue[index]
-              : '',
-          "rjtId": (tickets[index].ticketType == 'RJT' ||
-                  tickets[index].ticketTypeId == 20)
-              ? radioSelectedValue[index]
-              : '',
-          "passId": "",
-          "merchantId": MerchantDetails.merchantId,
-          "ltmrhlPurchaseId": "",
-          "transactionType": "107",
-          "refundQuoteId": refundQuoteIdList[index]
-        }));
-      }
-
-      final response = await Future.wait(apiArray);
-      refundConfirmData.assignAll(response);
-
-      //Stop Loading
-      TFullScreenLoader.stopLoading();
-      var isSuccess = true;
-      for (var refundStatus in response) {
-        if (refundStatus.returnCode != '0') {
-          isSuccess = false;
-        }
-      }
-      TLoaders.successSnackBar(
-          title: 'Success', message: 'Your tickets have been refunded');
-      if (isSuccess) {
-        Get.offAll(() => const BottomNavigationMenu());
+      } else {
+        throw ('Unable to Process the request!. Please try again');
       }
     } catch (e) {
       //Stop Loading

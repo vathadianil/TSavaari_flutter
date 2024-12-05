@@ -220,6 +220,7 @@ class BookQrController extends GetxController {
               Get.offAll(() => DisplayQrScreen(
                     tickets: ticketData.tickets!,
                     stationList: stationController.stationList,
+                    orderId: ticketData.orderId!,
                   ));
             } else {
               throw 'Something went wrong. Please try again later!';

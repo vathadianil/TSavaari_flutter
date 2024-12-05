@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:tsavaari/features/qr/display_qr/models/create_refund_model.dart';
 import 'package:tsavaari/features/qr/display_qr/models/refund_confirm_model.dart';
 import 'package:tsavaari/features/qr/display_qr/models/refund_preview_model.dart';
 import 'package:tsavaari/utils/constants/api_constants.dart';
@@ -14,6 +15,36 @@ class RefundQrRepository extends GetxController {
       );
 
       return RefundPreviewModel.fromJson(data);
+    } on PlatformException catch (e) {
+      throw PlatformException(code: e.code).message!;
+    } catch (e) {
+      throw 'Something went wrong. Please try again later!';
+    }
+  }
+
+  Future<CreateRefundModel> createRefundOrder(payload) async {
+    try {
+      final data = await THttpHelper.post(
+        ApiEndPoint.createRefundOrder,
+        payload,
+      );
+
+      return CreateRefundModel.fromJson(data);
+    } on PlatformException catch (e) {
+      throw PlatformException(code: e.code).message!;
+    } catch (e) {
+      throw 'Something went wrong. Please try again later!';
+    }
+  }
+
+  Future<CreateRefundModel> getRefundOrderStatus(payload) async {
+    try {
+      final data = await THttpHelper.post(
+        ApiEndPoint.refundOrderStatus,
+        payload,
+      );
+
+      return CreateRefundModel.fromJson(data);
     } on PlatformException catch (e) {
       throw PlatformException(code: e.code).message!;
     } catch (e) {

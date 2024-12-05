@@ -90,6 +90,21 @@ class MyOrdersScreen extends StatelessWidget {
                                           stationList:
                                               stationController.stationList,
                                           previousScreenIndication: 'myOrders',
+                                          orderId: ordersController
+                                                      .activeTickets
+                                                      .first
+                                                      .ticketHistory![index]
+                                                      .tickets![0]
+                                                      .orderID !=
+                                                  null
+                                              ? ordersController
+                                                  .activeTickets
+                                                  .first
+                                                  .ticketHistory![index]
+                                                  .tickets![0]
+                                                  .orderID!
+                                                  .substring(14, 33)
+                                              : '',
                                         ));
                                   },
                                 );

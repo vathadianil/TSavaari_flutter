@@ -11,15 +11,19 @@ import 'package:tsavaari/utils/constants/sizes.dart';
 import 'package:tsavaari/utils/loaders/shimmer_effect.dart';
 
 class RefundPreview extends StatelessWidget {
-  const RefundPreview({super.key, this.tickets});
+  const RefundPreview({super.key, this.tickets, required this.orderId});
 
   final List<TicketsListModel>? tickets;
+  final String orderId;
 
   @override
   Widget build(BuildContext context) {
     final refundController =
-        Get.put(RefundPreviewController(tickets: tickets!));
+        Get.put(RefundPreviewController(tickets: tickets!, orderId: orderId));
     Get.put(CheckBoxController());
+
+    print('----------------------------------------');
+    print(orderId);
 
     return SingleChildScrollView(
       child: Column(

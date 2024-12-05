@@ -26,8 +26,8 @@ class ChangeDesinationPreview extends StatelessWidget {
             tickets: tickets!, stationList: stationList!));
     Get.put(CheckBoxController());
 
-    print('-----------------------------------------');
-    print(tickets![2].ticketId);
+    // print('---------------------------------------------------');
+    // print(tickets![2].ticketId);
 
     return SingleChildScrollView(
       child: Column(
@@ -130,7 +130,7 @@ class ChangeDesinationPreview extends StatelessWidget {
                                       : 'Change Destination Not Possible',
                                 )
                               : Text(
-                                  'Current Destination ${tickets![index].fromStation ?? THelperFunctions.getStationFromStationId(tickets![index].fromStationId!, stationList!).name}'),
+                                  'Current Destination ${tickets![index].toStation ?? THelperFunctions.getStationFromStationId(tickets![index].toStationId!, stationList!).name}'),
                           subtitleTextStyle: changeDestinationPreviewController
                                   .isChangeDestinationPreviewChecked.value
                               ? TextStyle(

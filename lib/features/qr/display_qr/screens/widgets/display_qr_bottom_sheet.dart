@@ -13,10 +13,12 @@ class DisplayQrBottomSheet extends StatelessWidget {
     super.key,
     this.tickets,
     required this.stationList,
+    required this.orderId,
   });
 
   final List<TicketsListModel>? tickets;
   final List<StationListModel>? stationList;
+  final String orderId;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +36,7 @@ class DisplayQrBottomSheet extends StatelessWidget {
           ),
           RefundPreview(
             tickets: tickets,
+            orderId: orderId,
           ),
         ],
       ),

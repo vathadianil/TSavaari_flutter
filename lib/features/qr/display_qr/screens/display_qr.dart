@@ -21,10 +21,12 @@ class DisplayQrScreen extends StatelessWidget {
       {super.key,
       required this.tickets,
       required this.stationList,
+      this.orderId = '',
       this.previousScreenIndication = 'bookQr'});
   final List<TicketsListModel>? tickets;
   final List<StationListModel> stationList;
   final String previousScreenIndication;
+  final String orderId;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +66,7 @@ class DisplayQrScreen extends StatelessWidget {
                           ? getFormatttedTicketData('oneWay')
                           : tickets,
                       stationList: stationList,
+                      orderId: orderId,
                     );
                   }).whenComplete(() {
                 Get.delete<RefundPreviewController>();
