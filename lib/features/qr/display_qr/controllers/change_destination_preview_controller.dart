@@ -133,106 +133,62 @@ class ChangeDestinationPreviewController extends GetxController {
         platformCode = 'IOS';
       }
 
-      final payload = {
-        "customer_details": {
-          "customer_id": "CUSTID123",
-          "customer_email": "abc@gmail.com",
-          "customer_phone": "9999999999",
-          "customer_name": "abcds"
-        },
-        "order_meta": {
-          "return_url": "https://www.cashfree.com/devstudio/thankyou",
-          "notify_url":
-              "https://122.252.226.254:5114/api/v1/NotifyUrl/CFPaymentRequest"
-        },
-        "order_id": "CHD$platformCode${DateTime.now().millisecondsSinceEpoch}",
-        "order_amount": totalAmount.value,
-        "order_currency": "INR",
-        "order_note": "some order note here"
-      };
+      final orderId =
+          "CHD$platformCode${DateTime.now().millisecondsSinceEpoch}";
 
-      final createOrderData =
-          await bookQrRepository.createQrPaymentOrder(payload);
+      if (totalAmount.value == 0) {
+        generateNewTicket(orderId);
+      } else {
+        final payload = {
+          "customer_details": {
+            "customer_id": "CUSTID123",
+            "customer_email": "abc@gmail.com",
+            "customer_phone": "9999999999",
+            "customer_name": "abcds"
+          },
+          "order_meta": {
+            "return_url": "https://www.cashfree.com/devstudio/thankyou",
+            "notify_url":
+                "https://122.252.226.254:5114/api/v1/NotifyUrl/CFPaymentRequest"
+          },
+          "order_id": orderId,
+          "order_amount": totalAmount.value,
+          "order_currency": "INR",
+          "order_note": "some order note here"
+        };
 
-      final session = CFSessionBuilder()
-          .setEnvironment(CFEnvironment.SANDBOX)
-          .setOrderId(createOrderData.orderId!)
-          .setPaymentSessionId(createOrderData.paymentSessionId!)
-          .build();
+        final createOrderData =
+            await bookQrRepository.createQrPaymentOrder(payload);
 
-      final cfWebCheckout =
-          CFWebCheckoutPaymentBuilder().setSession(session).build();
-      final cfPaymentGateWay = CFPaymentGatewayService();
+        final session = CFSessionBuilder()
+            .setEnvironment(CFEnvironment.SANDBOX)
+            .setOrderId(createOrderData.orderId!)
+            .setPaymentSessionId(createOrderData.paymentSessionId!)
+            .build();
 
-      cfPaymentGateWay.setCallback((orderId) async {
-        try {
-          final verifyPayment = await bookQrRepository.verifyPayment(orderId);
+        final cfWebCheckout =
+            CFWebCheckoutPaymentBuilder().setSession(session).build();
+        final cfPaymentGateWay = CFPaymentGatewayService();
 
-          if (verifyPayment.orderStatus == 'PAID') {
-            final token = await deviceStorage.read('token');
-            final station = stationName.value != ''
-                ? THelperFunctions.getStationFromStationName(
-                    stationName.value, stationList)
-                : null;
-            final stationId = station!.stationId;
+        cfPaymentGateWay.setCallback((orderId) async {
+          try {
+            final verifyPayment = await bookQrRepository.verifyPayment(orderId);
 
-            var chaneDestinationQuoteIdList = [];
-            for (var index = 0; index < checkBoxValue.length; index++) {
-              chaneDestinationQuoteIdList.addIf(
-                  checkBoxValue
-                      .contains(changeDestinationPreviewData[index].ticketId),
-                  changeDestinationPreviewData[index].codQuoteId);
+            if (verifyPayment.orderStatus == 'PAID') {
+              generateNewTicket(orderId);
             }
-            var isSuccess = true;
-            for (var index = 0; index < checkBoxValue.length; index++) {
-              Future.delayed(Duration(seconds: index), () async {
-                final ticketData = await _changeDestinationRepository
-                    .changeDestinationConfirm({
-                  "token": "$token",
-                  "ticketId": checkBoxValue[index],
-                  "newDestinationId": stationId,
-                  "newOrderId": orderId + checkBoxValue[index].substring(14),
-                  "codQuoteId": chaneDestinationQuoteIdList[index]
-                });
-
-                if (ticketData.returnCode != '0') {
-                  isSuccess = false;
-                }
-                changeDestinationConfirmData.add(ticketData);
-
-                if (index == checkBoxValue.length - 1) {
-                  //Navigate to Dispaly QR Page
-                  if (isSuccess) {
-                    final tickets = changeDestinationConfirmData
-                        .cast<TicketsListModel>()
-                        .toList();
-
-                    //Stop Loading
-                    TFullScreenLoader.stopLoading();
-                    Get.offAll(
-                      () => DisplayQrScreen(
-                        tickets: tickets,
-                        stationList: stationList,
-                      ),
-                    );
-                  } else {
-                    throw 'Something went wrong. Unable to do Change destination. Please contact customer care!';
-                  }
-                }
-              });
-            }
+          } catch (e) {
+            TFullScreenLoader.stopLoading();
+            TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
           }
-        } catch (e) {
+        }, (p0, orderId) {
+          //Stop Loading
           TFullScreenLoader.stopLoading();
-          TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
-        }
-      }, (p0, orderId) {
-        //Stop Loading
-        TFullScreenLoader.stopLoading();
-        TLoaders.errorSnackBar(
-            title: 'Oh Snap!', message: p0.getMessage().toString());
-      });
-      cfPaymentGateWay.doPayment(cfWebCheckout);
+          TLoaders.errorSnackBar(
+              title: 'Oh Snap!', message: p0.getMessage().toString());
+        });
+        cfPaymentGateWay.doPayment(cfWebCheckout);
+      }
     } on CFException catch (e) {
       //Stop Loading
       TFullScreenLoader.stopLoading();
@@ -241,6 +197,59 @@ class ChangeDestinationPreviewController extends GetxController {
       //Stop Loading
       TFullScreenLoader.stopLoading();
       TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+    }
+  }
+
+  void generateNewTicket(String orderId) async {
+    final token = await deviceStorage.read('token');
+    final station = stationName.value != ''
+        ? THelperFunctions.getStationFromStationName(
+            stationName.value, stationList)
+        : null;
+    final stationId = station!.stationId;
+
+    var chaneDestinationQuoteIdList = [];
+    for (var index = 0; index < checkBoxValue.length; index++) {
+      chaneDestinationQuoteIdList.addIf(
+          checkBoxValue.contains(changeDestinationPreviewData[index].ticketId),
+          changeDestinationPreviewData[index].codQuoteId);
+    }
+    var isSuccess = true;
+    for (var index = 0; index < checkBoxValue.length; index++) {
+      Future.delayed(Duration(seconds: index), () async {
+        final ticketData =
+            await _changeDestinationRepository.changeDestinationConfirm({
+          "token": "$token",
+          "ticketId": checkBoxValue[index],
+          "newDestinationId": stationId,
+          "newOrderId": orderId + checkBoxValue[index].substring(14),
+          "codQuoteId": chaneDestinationQuoteIdList[index]
+        });
+
+        if (ticketData.returnCode != '0') {
+          isSuccess = false;
+        }
+        changeDestinationConfirmData.add(ticketData);
+
+        if (index == checkBoxValue.length - 1) {
+          //Navigate to Dispaly QR Page
+          if (isSuccess) {
+            final tickets =
+                changeDestinationConfirmData.cast<TicketsListModel>().toList();
+
+            //Stop Loading
+            TFullScreenLoader.stopLoading();
+            Get.offAll(
+              () => DisplayQrScreen(
+                tickets: tickets,
+                stationList: stationList,
+              ),
+            );
+          } else {
+            throw 'Something went wrong. Unable to do Change destination. Please contact customer care!';
+          }
+        }
+      });
     }
   }
 }

@@ -26,9 +26,6 @@ class ChangeDesinationPreview extends StatelessWidget {
             tickets: tickets!, stationList: stationList!));
     Get.put(CheckBoxController());
 
-    // print('---------------------------------------------------');
-    // print(tickets![2].ticketId);
-
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,19 +47,24 @@ class ChangeDesinationPreview extends StatelessWidget {
                   style: Theme.of(context).textTheme.headlineSmall),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Select Passengers '),
+          Obx(
+            () => !changeDestinationPreviewController
+                    .isChangeDestinationPreviewChecked.value
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Select Passengers '),
 
-              // --Select all button
-              TextButton(
-                onPressed: () {
-                  onValueChanged(0, isSelectAll: true);
-                },
-                child: const Text('Select All'),
-              ),
-            ],
+                      // --Select all button
+                      TextButton(
+                        onPressed: () {
+                          onValueChanged(0, isSelectAll: true);
+                        },
+                        child: const Text('Select All'),
+                      ),
+                    ],
+                  )
+                : const SizedBox(),
           ),
           const SizedBox(height: TSizes.sm),
           Container(
