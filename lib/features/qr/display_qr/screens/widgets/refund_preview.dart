@@ -22,9 +22,6 @@ class RefundPreview extends StatelessWidget {
         Get.put(RefundPreviewController(tickets: tickets!, orderId: orderId));
     Get.put(CheckBoxController());
 
-    print('----------------------------------------');
-    print(orderId);
-
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
