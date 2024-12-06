@@ -5,6 +5,7 @@ import 'package:tsavaari/common/widgets/containers/t_ticket_shape_widget.dart';
 import 'package:tsavaari/common/widgets/shapes/circle_shape.dart';
 import 'package:tsavaari/common/widgets/shapes/dashed_horizontal_line.dart';
 import 'package:tsavaari/features/my_orders/widgets/ticket_status.dart';
+import 'package:tsavaari/features/qr/book_qr/models/station_list_model.dart';
 import 'package:tsavaari/features/qr/display_qr/models/qr_code_model.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
@@ -13,9 +14,13 @@ import 'package:tsavaari/utils/helpers/helper_functions.dart';
 
 class MyOrdersTicketShapeCard extends StatelessWidget {
   const MyOrdersTicketShapeCard(
-      {super.key, required this.ticketData, required this.onTap});
+      {super.key,
+      required this.ticketData,
+      required this.onTap,
+      required this.stationList});
 
   final TicketHistory ticketData;
+  final List<StationListModel> stationList;
   final Function() onTap;
   @override
   Widget build(BuildContext context) {
@@ -43,9 +48,33 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                Text(
-                  ticketData.purchaseDate!,
-                  style: Theme.of(context).textTheme.labelSmall,
+                SizedBox(
+                  width: TDeviceUtils.getScreenWidth(context) * .7,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (ticketData.fromStation != null)
+                        Text(
+                          THelperFunctions.getStationFromStationName(
+                                      ticketData.fromStation!, stationList)
+                                  .shortName ??
+                              '',
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                      Text(
+                        ticketData.purchaseDate!,
+                        style: Theme.of(context).textTheme.labelSmall,
+                      ),
+                      if (ticketData.toStation != null)
+                        Text(
+                          THelperFunctions.getStationFromStationName(
+                                      ticketData.toStation!, stationList)
+                                  .shortName ??
+                              '',
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                    ],
+                  ),
                 ),
                 const SizedBox(
                   height: TSizes.sm,
@@ -93,7 +122,7 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
                       child: Text(
                         ticketData.fromStation ?? '',
                         style: Theme.of(context).textTheme.bodyLarge!,
-                        maxLines: 2,
+                        maxLines: 1,
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -113,7 +142,7 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
                       child: Text(
                         ticketData.toStation ?? '',
                         style: Theme.of(context).textTheme.bodyLarge!,
-                        maxLines: 2,
+                        maxLines: 1,
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                       ),

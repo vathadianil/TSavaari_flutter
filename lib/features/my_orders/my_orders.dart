@@ -80,6 +80,7 @@ class MyOrdersScreen extends StatelessWidget {
                                 return MyOrdersTicketShapeCard(
                                   ticketData: ordersController.activeTickets
                                       .first.ticketHistory![index],
+                                  stationList: stationController.stationList,
                                   onTap: () {
                                     Get.to(() => DisplayQrScreen(
                                           tickets: ordersController
@@ -128,6 +129,8 @@ class MyOrdersScreen extends StatelessWidget {
                                     return MyOrdersTicketShapeCard(
                                       ticketData: ordersController.activeTickets
                                           .first.ticketHistory![index],
+                                      stationList:
+                                          stationController.stationList,
                                       onTap: () {
                                         Get.to(
                                           () => DisplayQrScreen(

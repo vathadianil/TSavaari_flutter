@@ -9,9 +9,8 @@ class THttpHelper {
   static Future<Map<String, dynamic>> get(String endpoint,
       {bool newUrl = true}) async {
     final url = newUrl ? _baseUrl : _baseUrlOld;
-    final response = await http
-        .get(Uri.parse('$url/$endpoint'))
-        .timeout(const Duration(seconds: 10));
+    final response = await http.get(Uri.parse('$url/$endpoint'));
+    // .timeout(const Duration(seconds: 10));
 
     return _handleResponse(response);
   }
@@ -21,35 +20,32 @@ class THttpHelper {
       {bool newUrl = true}) async {
     final url = newUrl ? _baseUrl : _baseUrlOld;
 
-    final response = await http
-        .post(
-          Uri.parse('$url/$endpoint'),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: data != null ? json.encode(data) : null,
-        )
-        .timeout(const Duration(seconds: 10));
+    final response = await http.post(
+      Uri.parse('$url/$endpoint'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: data != null ? json.encode(data) : null,
+    );
+    // .timeout(const Duration(seconds: 10));
     return _handleResponse(response);
   }
 
   // Helper method to make a PUT request
   static Future<Map<String, dynamic>> put(String endpoint, dynamic data) async {
-    final response = await http
-        .put(
-          Uri.parse('$_baseUrl/$endpoint'),
-          headers: {'Content-Type': 'application/json'},
-          body: json.encode(data),
-        )
-        .timeout(const Duration(seconds: 10));
+    final response = await http.put(
+      Uri.parse('$_baseUrl/$endpoint'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode(data),
+    );
+    // .timeout(const Duration(seconds: 10));
     return _handleResponse(response);
   }
 
   // Helper method to make a DELETE request
   static Future<Map<String, dynamic>> delete(String endpoint) async {
-    final response = await http
-        .delete(Uri.parse('$_baseUrl/$endpoint'))
-        .timeout(const Duration(seconds: 10));
+    final response = await http.delete(Uri.parse('$_baseUrl/$endpoint'));
+    // .timeout(const Duration(seconds: 10));
     return _handleResponse(response);
   }
 
