@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:tsavaari/utils/constants/text_size.dart';
+import 'package:tsavaari/utils/device/device_utility.dart';
 
 class NavigationBtn extends StatelessWidget {
   const NavigationBtn(
@@ -29,24 +31,24 @@ class NavigationBtn extends StatelessWidget {
           onPressed(index);
         },
         child: Container(
-          padding: const EdgeInsets.symmetric(
-              horizontal: TSizes.sm, vertical: TSizes.sm / 2),
+          padding: EdgeInsets.all(TDeviceUtils.getScreenWidth(context) * .02),
           decoration: (currentIndex == index)
               ? BoxDecoration(
                   borderRadius: BorderRadius.circular(TSizes.borderRadiusXL),
-                  border: Border.all(color: TColors.white, width: 1),
-                  // boxShadow: const [
-                  //   BoxShadow(color: TColors.grey, blurRadius: TSizes.sm)
-                  // ],
-                  // color: TColors.white,
+                  border: Border.all(
+                    color: const Color.fromRGBO(255, 255, 255, 1),
+                    width: TDeviceUtils.getScreenWidth(context) * .003,
+                  ),
                 )
               : null,
           child: Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Icon(icon, color: TColors.white
-                  // (currentIndex == index) ? TColors.primary : TColors.white,
-                  ),
+              Icon(
+                icon,
+                color: TColors.white,
+                size: TDeviceUtils.getScreenWidth(context) * .05,
+              ),
               if (currentIndex == index)
                 const SizedBox(
                   width: TSizes.sm,
@@ -60,16 +62,16 @@ class NavigationBtn extends StatelessWidget {
                         begin: Offset(-.4, 0))
                   ],
                   child: SizedBox(
-                    width: 45,
+                    width: TDeviceUtils.getScreenWidth(context) * .15,
                     child: Text(
                       text,
                       textAlign: TextAlign.center,
                       maxLines: 2,
+                      textScaler: TextScaler.linear(ScaleSize.textScaleFactor(
+                          context,
+                          maxTextScaleFactor: 4)),
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.labelSmall!.apply(
-                            // color: (currentIndex == index)
-                            //     ? TColors.primary
-                            //     : TColors.white,
                             color: TColors.white,
                           ),
                     ),

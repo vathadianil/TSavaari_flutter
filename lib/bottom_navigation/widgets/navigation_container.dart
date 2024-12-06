@@ -39,16 +39,17 @@ class NavigationContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-          left: TSizes.lg, right: TSizes.lg, bottom: TSizes.md),
+      padding: EdgeInsets.only(
+          left: TDeviceUtils.getScreenWidth(context) * .1,
+          right: TDeviceUtils.getScreenWidth(context) * .1,
+          bottom: TSizes.md),
       child: Material(
         color: Colors.transparent,
         elevation: TSizes.sm,
         borderRadius: BorderRadius.circular(TSizes.borderRadiusXL),
         child: Container(
           width: TDeviceUtils.getScreenWidth(context),
-          // height: 60,
-          height: (TDeviceUtils.getScreenHeight() / 100) * 8,
+          height: TDeviceUtils.getScreenWidth(context) * .15,
           decoration: BoxDecoration(
             color: TColors.primary,
             borderRadius: BorderRadius.circular(TSizes.borderRadiusXL),

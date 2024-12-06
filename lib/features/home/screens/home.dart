@@ -119,7 +119,7 @@ class HomeScreen extends StatelessWidget {
                       crossAxisCount: 4,
                       mainAxisSpacing: TSizes.gridViewSpacing,
                       crossAxisSpacing:
-                          TDeviceUtils.getScreenWidth(context) * .09,
+                          TDeviceUtils.getScreenWidth(context) * .06,
                       itemBuilder: (BuildContext context, int index) {
                         return ServiceCards(
                           service: servicesList[index],
