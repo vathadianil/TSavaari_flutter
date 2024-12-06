@@ -106,4 +106,13 @@ class TDeviceUtils {
   static bool isAndroid() {
     return Platform.isAndroid;
   }
+
+  static String getPlatfromString() {
+    if (isAndroid()) {
+      return 'AND';
+    } else if (isIOS()) {
+      return 'IOS';
+    }
+    return '';
+  }
 }

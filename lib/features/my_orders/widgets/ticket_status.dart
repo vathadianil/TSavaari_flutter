@@ -16,6 +16,7 @@ class TicketStatusChip extends StatelessWidget {
     this.padding = const EdgeInsets.symmetric(
       horizontal: TSizes.md,
     ),
+    this.isSmall = true,
   });
 
   final String ticketStatus;
@@ -25,6 +26,7 @@ class TicketStatusChip extends StatelessWidget {
   final Color textColor;
   final Color backgroundColor;
   final EdgeInsets padding;
+  final bool isSmall;
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +48,15 @@ class TicketStatusChip extends StatelessWidget {
           ),
           child: Text(
             ticketStatus,
-            style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                  color: textColor,
-                  fontWeight: FontWeight.bold,
-                ),
+            style: isSmall
+                ? Theme.of(context).textTheme.labelLarge!.copyWith(
+                      color: textColor,
+                      fontWeight: FontWeight.bold,
+                    )
+                : Theme.of(context).textTheme.headlineMedium!.copyWith(
+                      color: textColor,
+                      fontWeight: FontWeight.bold,
+                    ),
           ),
         ),
       ),

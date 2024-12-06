@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:tsavaari/features/authentication/models/user_model.dart';
+import 'package:tsavaari/utils/exceptions/format_exceptions.dart';
 import 'package:tsavaari/utils/exceptions/platform_exceptions.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -13,10 +14,12 @@ class UserRepository extends GetxController {
     try {
       // code call api service to fecth data
       return null;
+    } on FormatException catch (_) {
+      throw const TFormatException();
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please Try again later!';
+      throw 'Something went wrong. Please try again later!';
     }
   }
 
@@ -24,10 +27,12 @@ class UserRepository extends GetxController {
   Future<void> updateUserDetails(UserModel updatedUser) async {
     try {
 // code call api service to update data
+    } on FormatException catch (_) {
+      throw const TFormatException();
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please Try again later!';
+      throw 'Something went wrong. Please try again later!';
     }
   }
 
@@ -36,10 +41,12 @@ class UserRepository extends GetxController {
     try {
       //code to upload image
       return null;
+    } on FormatException catch (_) {
+      throw const TFormatException();
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please Try again later!';
+      throw 'Something went wrong. Please try again later!';
     }
   }
 }

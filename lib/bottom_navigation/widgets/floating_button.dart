@@ -11,8 +11,9 @@ import 'package:tsavaari/utils/helpers/helper_functions.dart';
 class FloatingButton extends StatelessWidget {
   const FloatingButton({
     super.key,
+    required this.onTap,
   });
-
+  final Function() onTap;
   @override
   Widget build(BuildContext context) {
     final controller = NavigationController.instance;
@@ -29,7 +30,7 @@ class FloatingButton extends StatelessWidget {
             controller.top.value =
                 max(0, controller.top.value + details.delta.dy);
           },
-          onTap: () {},
+          onTap: onTap,
           child: Container(
             width: 70,
             height: 70,

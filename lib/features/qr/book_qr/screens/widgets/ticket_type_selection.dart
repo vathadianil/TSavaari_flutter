@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tsavaari/features/qr/book_qr/controllers/book_qr_controller.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
+import 'package:tsavaari/utils/constants/text_strings.dart';
 import 'package:tsavaari/utils/helpers/helper_functions.dart';
 
 class TicketTypeSlection extends StatelessWidget {
@@ -21,7 +22,8 @@ class TicketTypeSlection extends StatelessWidget {
             controller.ticketType.value = false;
             controller.getFare();
           },
-          child: Text('One Way', style: Theme.of(context).textTheme.bodyLarge),
+          child:
+              Text(TTexts.oneWay, style: Theme.of(context).textTheme.bodyLarge),
         ),
         Transform.scale(
           scale: .7,
@@ -54,8 +56,8 @@ class TicketTypeSlection extends StatelessWidget {
             controller.ticketType.value = true;
             controller.getFare();
           },
-          child:
-              Text('Round Trip', style: Theme.of(context).textTheme.bodyLarge),
+          child: Text(TTexts.roundTrip,
+              style: Theme.of(context).textTheme.bodyLarge),
         )
       ],
     );

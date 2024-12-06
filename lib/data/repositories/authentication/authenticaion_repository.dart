@@ -8,7 +8,10 @@ import 'package:tsavaari/bottom_navigation/bottom_navigation_menu.dart';
 import 'package:tsavaari/features/authentication/models/token_model.dart';
 import 'package:tsavaari/features/authentication/screens/login/login.dart';
 import 'package:tsavaari/utils/constants/api_constants.dart';
+import 'package:tsavaari/utils/exceptions/format_exceptions.dart';
+import 'package:tsavaari/utils/exceptions/platform_exceptions.dart';
 import 'package:tsavaari/utils/http/http_client.dart';
+import 'package:tsavaari/utils/local_storage/storage_utility.dart';
 
 class AuthenticationRepository extends GetxController {
   static AuthenticationRepository get instance => Get.find();
@@ -28,7 +31,7 @@ class AuthenticationRepository extends GetxController {
 
   //Function show relevant screen
   screenRedirect() async {
-    final token = await deviceStorage.read('token') ?? '';
+    final token = await TLocalStorage().readData('token') ?? '';
     if (token != '') {
       Get.offAll(() => const BottomNavigationMenu());
     } else {
@@ -42,8 +45,10 @@ class AuthenticationRepository extends GetxController {
         ApiEndPoint.getToken,
       );
       return TokenModel.fromJson(data);
+    } on FormatException catch (_) {
+      throw const TFormatException();
     } on PlatformException catch (e) {
-      throw PlatformException(code: e.code).message!;
+      throw TPlatformException(e.code).message;
     } catch (e) {
       throw 'Something went wrong. Please try again later!';
     }

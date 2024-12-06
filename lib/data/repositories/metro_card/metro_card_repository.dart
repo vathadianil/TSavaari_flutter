@@ -1,6 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:tsavaari/features/card_reacharge/models/card_travel_history_model.dart';
+import 'package:tsavaari/utils/exceptions/format_exceptions.dart';
+import 'package:tsavaari/utils/exceptions/platform_exceptions.dart';
 
 class MetroCardRepository extends GetxController {
   static MetroCardRepository get instance => Get.find();
@@ -23,8 +25,10 @@ class MetroCardRepository extends GetxController {
       ].toList();
 
       return list;
+    } on FormatException catch (_) {
+      throw const TFormatException();
     } on PlatformException catch (e) {
-      throw PlatformException(code: e.code).message!;
+      throw TPlatformException(e.code).message;
     } catch (e) {
       throw 'Something went wrong. Please try again later!';
     }

@@ -11,6 +11,7 @@ import 'package:tsavaari/features/qr/book_qr/screens/widgets/ticket_type_selecti
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/image_strings.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_strings.dart';
 
 class BookQrScreen extends StatelessWidget {
   const BookQrScreen({super.key});
@@ -23,7 +24,7 @@ class BookQrScreen extends StatelessWidget {
     return Scaffold(
       appBar: const TAppBar(
         showBackArrow: true,
-        title: Text('Plan Your Journey'),
+        title: Text(TTexts.bookTicketTitle),
       ),
       body: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,

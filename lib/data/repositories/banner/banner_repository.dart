@@ -2,6 +2,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:tsavaari/features/home/models/banner_model.dart';
 import 'package:tsavaari/utils/constants/image_strings.dart';
+import 'package:tsavaari/utils/exceptions/format_exceptions.dart';
+import 'package:tsavaari/utils/exceptions/platform_exceptions.dart';
 
 class BannerRepository extends GetxController {
   static BannerRepository get instance => Get.find();
@@ -55,8 +57,10 @@ class BannerRepository extends GetxController {
       ].toList();
       // .map((data) => BannerModel.fromJson(data))
       return list;
+    } on FormatException catch (_) {
+      throw const TFormatException();
     } on PlatformException catch (e) {
-      throw PlatformException(code: e.code).message!;
+      throw TPlatformException(e.code).message;
     } catch (e) {
       throw 'Something went wrong. Please try again later!';
     }

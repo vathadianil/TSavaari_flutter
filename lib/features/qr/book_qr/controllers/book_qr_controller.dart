@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter_cashfree_pg_sdk/api/cfpayment/cfwebcheckoutpayment.dart';
 import 'package:flutter_cashfree_pg_sdk/api/cfpaymentgateway/cfpaymentgatewayservice.dart';
 import 'package:flutter_cashfree_pg_sdk/api/cfsession/cfsession.dart';
@@ -15,8 +13,11 @@ import 'package:tsavaari/features/qr/display_qr/screens/display_qr.dart';
 import 'package:tsavaari/routes/routes.dart';
 import 'package:tsavaari/utils/constants/image_strings.dart';
 import 'package:tsavaari/utils/constants/merchant_id.dart';
+import 'package:tsavaari/utils/constants/ticket_status.dart';
+import 'package:tsavaari/utils/device/device_utility.dart';
 import 'package:tsavaari/utils/helpers/helper_functions.dart';
 import 'package:tsavaari/utils/helpers/network_manager.dart';
+import 'package:tsavaari/utils/local_storage/storage_utility.dart';
 import 'package:tsavaari/utils/popups/full_screen_loader.dart';
 import 'package:tsavaari/utils/popups/loaders.dart';
 
@@ -37,9 +38,11 @@ class BookQrController extends GetxController {
 
   Future<void> getFare() async {
     try {
-      final token = await deviceStorage.read('token');
+      final token = await TLocalStorage().readData('token');
 
-      final ticketTypeId = ticketType.value ? '20' : '10';
+      final ticketTypeId = ticketType.value
+          ? TicketStatus.ticketTypeRjt.toString()
+          : TicketStatus.ticketTypeSjt.toString();
 
       final fromStation = source.value != ''
           ? THelperFunctions.getStationFromStationName(
@@ -65,7 +68,7 @@ class BookQrController extends GetxController {
 
       if (fromStationId == toStationId) {
         TLoaders.errorSnackBar(
-            title: 'Oh Snap!',
+            title: 'Invalid Inut!',
             message: 'Origin and Desitnation station should be diffrent');
         return;
       }
@@ -128,12 +131,7 @@ class BookQrController extends GetxController {
         return;
       }
 
-      String platformCode = '';
-      if (Platform.isAndroid) {
-        platformCode = 'AND';
-      } else if (Platform.isIOS) {
-        platformCode = 'IOS';
-      }
+      String platformCode = TDeviceUtils.getPlatfromString();
 
       final payload = {
         "customer_details": {
@@ -171,7 +169,9 @@ class BookQrController extends GetxController {
 
           if (verifyPayment.orderStatus == 'PAID') {
             final token = await deviceStorage.read('token');
-            final ticketTypeId = ticketType.value ? '20' : '10';
+            final ticketTypeId = ticketType.value
+                ? TicketStatus.ticketTypeRjt.toString()
+                : TicketStatus.ticketTypeSjt.toString();
 
             final fromStation = source.value != ''
                 ? stationController.stationList

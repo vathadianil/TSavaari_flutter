@@ -118,7 +118,7 @@ class DisplayQrScreen extends StatelessWidget {
                         text: 'Inward',
                       ),
                       Tab(
-                        text: 'Retrun',
+                        text: 'Return',
                       ),
                     ],
                     onWayData: getFormatttedTicketData('oneWay'),

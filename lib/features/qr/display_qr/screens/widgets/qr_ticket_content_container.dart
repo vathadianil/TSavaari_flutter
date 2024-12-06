@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tsavaari/common/widgets/containers/t_circular_container.dart';
+import 'package:tsavaari/features/my_orders/widgets/ticket_status.dart';
 import 'package:tsavaari/features/qr/display_qr/controllers/display_qr_controller.dart';
 import 'package:tsavaari/features/qr/display_qr/models/qr_code_model.dart';
 import 'package:tsavaari/features/qr/display_qr/screens/widgets/carbon_emission_message.dart';
@@ -37,6 +38,8 @@ class QrTicketContentContainer extends StatelessWidget {
             ? true
             : false
         : false;
+    print('---------------------------------------------');
+    print(tickets[0].ticketStatus);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -86,9 +89,54 @@ class QrTicketContentContainer extends StatelessWidget {
           ),
           items: tickets
               .map(
-                (ticket) => QrImageView(
-                  data: ticket.ticketContent!,
-                  version: QrVersions.auto,
+                (ticket) => Stack(
+                  children: [
+                    QrImageView(
+                      data: ticket.ticketContent!,
+                      version: QrVersions.auto,
+                      dataModuleStyle: QrDataModuleStyle(
+                        dataModuleShape: QrDataModuleShape.square,
+                        color: (ticket.statusId != 10 &&
+                                ticket.ticketStatus != 'NEW' &&
+                                ticket.statusId != 20)
+                            ? TColors.darkGrey
+                            : TColors.black,
+                      ),
+                      eyeStyle: QrEyeStyle(
+                        eyeShape: QrEyeShape.square,
+                        color: (ticket.statusId != 10 &&
+                                ticket.ticketStatus != 'NEW' &&
+                                ticket.statusId != 20)
+                            ? TColors.darkGrey
+                            : TColors.black,
+                      ),
+                    ),
+                    if (ticket.statusId == 40)
+                      const TicketStatusChip(
+                        left: -6,
+                        bottom: 62,
+                        textColor: TColors.error,
+                        borderColor: TColors.error,
+                        ticketStatus: 'Refunded',
+                        isSmall: false,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: TSizes.lg,
+                        ),
+                      ),
+                    if (ticket.statusId == 60)
+                      const TicketStatusChip(
+                        left: -12,
+                        bottom: 60,
+                        textColor: TColors.warning,
+                        borderColor: TColors.warning,
+                        ticketStatus: 'Change Destination',
+                        isSmall: true,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: TSizes.lg,
+                          vertical: TSizes.sm,
+                        ),
+                      )
+                  ],
                 ),
               )
               .toList(),

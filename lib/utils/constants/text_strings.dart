@@ -31,6 +31,8 @@ class TTexts {
   //Home
   static const String homeAppbarTitle = "Enjoy Hasslefree Journey";
 
-  //Metro Services
-  static const String bookQr = "Book QR";
+  //Book Ticket
+  static const String bookTicketTitle = 'Plan Your Journey';
+  static const String oneWay = 'One Way';
+  static const String roundTrip = 'Round Trip';
 }

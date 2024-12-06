@@ -2,6 +2,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:tsavaari/features/qr/book_qr/models/station_list_model.dart';
 import 'package:tsavaari/utils/constants/api_constants.dart';
+import 'package:tsavaari/utils/exceptions/format_exceptions.dart';
+import 'package:tsavaari/utils/exceptions/platform_exceptions.dart';
 import 'package:tsavaari/utils/http/http_client.dart';
 
 class StationListRepository extends GetxController {
@@ -13,8 +15,10 @@ class StationListRepository extends GetxController {
       );
 
       return StationDataModel.fromJson(data);
+    } on FormatException catch (_) {
+      throw const TFormatException();
     } on PlatformException catch (e) {
-      throw PlatformException(code: e.code).message!;
+      throw TPlatformException(e.code).message;
     } catch (e) {
       throw 'Something went wrong. Please try again later!';
     }

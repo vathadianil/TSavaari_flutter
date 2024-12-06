@@ -1,10 +1,9 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:tsavaari/data/repositories/book_qr/station_list_repository.dart';
 import 'package:tsavaari/features/authentication/screens/login/login.dart';
 import 'package:tsavaari/features/qr/book_qr/models/station_list_model.dart';
+import 'package:tsavaari/utils/local_storage/storage_utility.dart';
 import 'package:tsavaari/utils/popups/loaders.dart';
 
 class StationListController extends GetxController {
@@ -26,24 +25,37 @@ class StationListController extends GetxController {
     try {
       //Show loader while loading categories
       isLoading.value = true;
-      final token = await deviceStorage.read('token') ?? '';
+      final token = await TLocalStorage().readData('token') ?? '';
 
-      if (token != '') {
-        final stationsData =
-            await stationListRepository.fetchStationList(token);
-        stationList
-            .assignAll(stationsData.stations as Iterable<StationListModel>);
-        final stationListMap =
-            stationList.map((station) => station.toJson()).toList();
-        String jsonStringStationListMap = jsonEncode(stationListMap);
-        await deviceStorage.write('stationList', jsonStringStationListMap);
+      // Retrieve station list from local storage
+      final storedData = await TLocalStorage().readData('stationList') ?? [];
+
+      List<StationListModel> storedStationList = (storedData as List)
+          .map((item) => StationListModel.fromJson(item))
+          .toList();
+
+      if (storedStationList.isNotEmpty) {
+        stationList.assignAll(storedStationList);
       } else {
-        TLoaders.errorSnackBar(
-            title: 'Oh Snap!',
-            message: 'Your Session has expired!. Please Login Again.');
-        Get.offAll(
-          () => const LoginScreen(),
-        );
+        if (token != '') {
+          final stationsData =
+              await stationListRepository.fetchStationList(token);
+          stationList
+              .assignAll(stationsData.stations as Iterable<StationListModel>);
+
+          // Save fetched data to local storage
+          await TLocalStorage().saveData(
+            'stationList',
+            stationsData.stations!.map((item) => item.toJson()).toList(),
+          );
+        } else {
+          TLoaders.errorSnackBar(
+              title: 'Oh Snap!',
+              message: 'Your Session has expired!. Please Login Again.');
+          Get.offAll(
+            () => const LoginScreen(),
+          );
+        }
       }
     } catch (e) {
       TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
