@@ -7,6 +7,7 @@ import 'package:tsavaari/features/qr/book_qr/screens/widgets/proceed_to_pay_btn.
 import 'package:tsavaari/features/qr/book_qr/screens/widgets/qr_shimmer_container.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_strings.dart';
 
 class DisplayFarePayBtnContainer extends StatelessWidget {
   const DisplayFarePayBtnContainer({
@@ -36,7 +37,7 @@ class DisplayFarePayBtnContainer extends StatelessWidget {
                   //-- Proceed to pay button
                   ProceedToPayBtn(
                     btnText:
-                        'Proceed to Pay  \u{20B9}${BookQrController.instance.passengerCount.value * BookQrController.instance.qrFareData.first.finalFare!}/-',
+                        '${TTexts.proccedToPay}  ${TTexts.rupeeSymbol}${BookQrController.instance.passengerCount.value * BookQrController.instance.qrFareData.first.finalFare!}/-',
                     onPressed: CheckBoxController.instance.checkBoxState.value
                         ? () {
                             BookQrController.instance.generateTicket();

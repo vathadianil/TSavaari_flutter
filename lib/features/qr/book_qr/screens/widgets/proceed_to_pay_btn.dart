@@ -4,6 +4,7 @@ import 'package:tsavaari/common/controllers/checkbox_controller.dart';
 import 'package:tsavaari/features/qr/book_qr/screens/widgets/terms_and_conditions_popup.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_strings.dart';
 import 'package:tsavaari/utils/device/device_utility.dart';
 import 'package:tsavaari/utils/helpers/helper_functions.dart';
 
@@ -36,7 +37,7 @@ class ProceedToPayBtn extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  'I Agree to these',
+                  TTexts.iAgree,
                   style: Theme.of(context).textTheme.labelSmall,
                 ),
                 TextButton(
@@ -60,7 +61,7 @@ class ProceedToPayBtn extends StatelessWidget {
                       width: TDeviceUtils.getScreenWidth(context) * .32,
                       child: Text(
                         maxLines: 1,
-                        'Terms & Conditions',
+                        TTexts.termsConditions,
                         style: Theme.of(context).textTheme.labelSmall!.copyWith(
                               fontWeight: FontWeight.bold,
                               overflow: TextOverflow.ellipsis,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tsavaari/features/qr/book_qr/controllers/book_qr_controller.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_strings.dart';
 
 class DisplayFare extends StatelessWidget {
   const DisplayFare({super.key});
@@ -28,7 +29,7 @@ class DisplayFare extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Total Fare',
+                        TTexts.totalFare,
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       Row(
@@ -49,7 +50,7 @@ class DisplayFare extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    'Per ticket fare Rs. ${bookQrController.qrFareData.first.finalFare}/- (${bookQrController.ticketType.value ? 'Round Trip' : 'One way'})',
+                    '${TTexts.perTicket} ${bookQrController.qrFareData.first.finalFare}/- (${bookQrController.ticketType.value ? TTexts.roundTrip : TTexts.oneWay})',
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   const Divider(),

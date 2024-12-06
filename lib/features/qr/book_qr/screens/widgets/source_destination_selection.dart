@@ -8,6 +8,8 @@ import 'package:tsavaari/features/qr/book_qr/controllers/station_list_controller
 import 'package:tsavaari/routes/routes.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_strings.dart';
+import 'package:tsavaari/utils/device/device_utility.dart';
 import 'package:tsavaari/utils/loaders/shimmer_effect.dart';
 import 'package:tsavaari/common/widgets/shapes/dashed_vertical_line.dart';
 
@@ -26,8 +28,8 @@ class SourceDestinationSelection extends StatelessWidget {
         Obx(
           () => Row(
             children: [
-              const SizedBox(
-                width: 30,
+              SizedBox(
+                width: TDeviceUtils.getScreenWidth(context) * .1,
               ),
               Expanded(
                 child: Column(
@@ -38,7 +40,7 @@ class SourceDestinationSelection extends StatelessWidget {
                         height: TSizes.spaceBtwItems / 2,
                       ),
                     Text(
-                      'Origin',
+                      TTexts.origin,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     const SizedBox(
@@ -55,7 +57,7 @@ class SourceDestinationSelection extends StatelessWidget {
                           items: controller.stationList
                               .map((item) => item.name!)
                               .toList(),
-                          labelText: 'Starting from',
+                          labelText: TTexts.originLabel,
                           onChanged: (value) {
                             bookQrController.source.value = value!;
                             bookQrController.getFare();
@@ -64,7 +66,7 @@ class SourceDestinationSelection extends StatelessWidget {
                       height: TSizes.spaceBtwItems,
                     ),
                     Text(
-                      'Destination',
+                      TTexts.destination,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     const SizedBox(
@@ -81,7 +83,7 @@ class SourceDestinationSelection extends StatelessWidget {
                         items: controller.stationList
                             .map((item) => item.name!)
                             .toList(),
-                        labelText: 'Going to',
+                        labelText: TTexts.destinatioLabel,
                         onChanged: (value) {
                           bookQrController.destination.value = value!;
                           bookQrController.getFare();

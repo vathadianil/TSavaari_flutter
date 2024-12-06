@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:tsavaari/features/qr/book_qr/controllers/book_qr_controller.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_strings.dart';
 import 'package:tsavaari/utils/helpers/helper_functions.dart';
 
 class TicketCountSelection extends StatelessWidget {
@@ -27,7 +28,8 @@ class TicketCountSelection extends StatelessWidget {
             const SizedBox(
               width: TSizes.spaceBtwItems / 2,
             ),
-            Text('Passengers', style: Theme.of(context).textTheme.bodyLarge),
+            Text(TTexts.passengers,
+                style: Theme.of(context).textTheme.bodyLarge),
           ],
         ),
         Obx(

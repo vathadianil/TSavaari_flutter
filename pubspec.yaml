@@ -45,6 +45,7 @@ dependencies:
   #Http Package
   http: ^1.2.2
   cached_network_image: ^3.4.0
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:

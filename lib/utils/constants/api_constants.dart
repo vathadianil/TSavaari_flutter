@@ -19,4 +19,7 @@ class ApiEndPoint {
   static String refundConfirm = "qr/refunConfirmed";
   static String changeDestinationPreview = "qr/changeDestinationPreview";
   static String changeDestinationConfirm = "qr/changeDestination";
+
+  //Hyd Metro Website Url
+  static String hydMetroWebsiteUrl = 'https://www.ltmetro.com/penalty-charter/';
 }
