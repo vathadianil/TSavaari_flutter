@@ -6,6 +6,7 @@ import 'package:tsavaari/common/widgets/images/rounded_corner_image.dart';
 import 'package:tsavaari/features/home/controllers/banner_controller.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/device/device_utility.dart';
 
 import 'package:tsavaari/utils/loaders/shimmer_effect.dart';
 
@@ -68,8 +69,8 @@ class ImageSlider extends StatelessWidget {
             children: [
               for (int i = 0; i < controller.bannersList.length; i++)
                 TCircularContainer(
-                  width: 20,
-                  height: 4,
+                  width: TDeviceUtils.getScreenWidth(context) * .04,
+                  height: TDeviceUtils.getScreenWidth(context) * .01,
                   backgroundColor: controller.carouselCurrentIndex.value == i
                       ? TColors.primary
                       : TColors.grey,

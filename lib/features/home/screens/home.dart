@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tsavaari/common/widgets/layout/max_width_container.dart';
 import 'package:tsavaari/common/widgets/layout/t_grid_layout.dart';
 import 'package:tsavaari/common/widgets/text/t_section_heading.dart';
 import 'package:tsavaari/features/home/models/metro_services_model.dart';
@@ -7,6 +8,8 @@ import 'package:tsavaari/features/home/screens/widgets/home_app_bar.dart';
 import 'package:tsavaari/features/home/screens/widgets/image_slider.dart';
 import 'package:tsavaari/features/home/screens/widgets/service_cards.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_strings.dart';
+import 'package:tsavaari/utils/device/device_utility.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -85,46 +88,49 @@ class HomeScreen extends StatelessWidget {
             ),
 
             //Body
-            Padding(
-              padding: const EdgeInsets.all(TSizes.defaultSpace),
-              child: Column(
-                children: [
-                  const ImageSlider(
-                    autoPlay: true,
-                  ),
-                  const SizedBox(
-                    height: TSizes.spaceBtwSections,
-                  ),
+            MaxWidthContaiiner(
+              child: Padding(
+                padding: const EdgeInsets.all(TSizes.defaultSpace),
+                child: Column(
+                  children: [
+                    const ImageSlider(
+                      autoPlay: true,
+                    ),
+                    const SizedBox(
+                      height: TSizes.spaceBtwSections,
+                    ),
 
-                  //Heading
+                    //Heading
 
-                  const TSectionHeading(
-                    title: 'Metro Services',
-                    showActionBtn: false,
-                    padding: EdgeInsets.only(left: 0),
-                  ),
+                    const TSectionHeading(
+                      title: TTexts.metroServicesSectionHeading,
+                      showActionBtn: false,
+                      padding: EdgeInsets.only(left: 0),
+                    ),
 
-                  const SizedBox(
-                    height: TSizes.spaceBtwItems,
-                  ),
+                    const SizedBox(
+                      height: TSizes.spaceBtwItems,
+                    ),
 
-                  // Services Grid
-                  GridLayout(
-                    itemCount: servicesList.length,
-                    mainAxisExtent: 120,
-                    crossAxisCount: 4,
-                    mainAxisSpacing: TSizes.gridViewSpacing,
-                    crossAxisSpacing: TSizes.gridViewSpacing + 10,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ServiceCards(
-                        service: servicesList[index],
-                      );
-                    },
-                  ),
-                  const SizedBox(
-                    height: TSizes.spaceBtwSections * 2,
-                  ),
-                ],
+                    // Services Grid
+                    GridLayout(
+                      itemCount: servicesList.length,
+                      mainAxisExtent: TDeviceUtils.getScreenHeight() * .15,
+                      crossAxisCount: 4,
+                      mainAxisSpacing: TSizes.gridViewSpacing,
+                      crossAxisSpacing:
+                          TDeviceUtils.getScreenWidth(context) * .09,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ServiceCards(
+                          service: servicesList[index],
+                        );
+                      },
+                    ),
+                    const SizedBox(
+                      height: TSizes.spaceBtwSections * 2,
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

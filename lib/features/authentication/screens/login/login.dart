@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tsavaari/common/widgets/images/rounded_corner_image.dart';
+import 'package:tsavaari/common/widgets/layout/max_width_container.dart';
 import 'package:tsavaari/features/authentication/controllers/login_controller.dart';
 import 'package:tsavaari/features/authentication/screens/login/widgets/form_divider.dart';
 import 'package:tsavaari/features/authentication/screens/login/widgets/redirect_to_signup.dart';
@@ -25,8 +26,7 @@ class LoginScreen extends StatelessWidget {
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: SafeArea(
             child: Center(
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: TSizes.tabletSize),
+              child: MaxWidthContaiiner(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -42,9 +42,9 @@ class LoginScreen extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           // -- Logo
-                          const Image(
-                            width: 100,
-                            image: AssetImage(TImages.appLogo),
+                          Image(
+                            width: TDeviceUtils.getScreenWidth(context) * .3,
+                            image: const AssetImage(TImages.appLogo),
                           ),
 
                           const SizedBox(

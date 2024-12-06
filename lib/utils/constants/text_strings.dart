@@ -30,6 +30,8 @@ class TTexts {
 
   //Home
   static const String homeAppbarTitle = "Enjoy Hasslefree Journey";
+  static const String share = 'Share';
+  static const String metroServicesSectionHeading = 'Metro Services';
 
   //Book Ticket
   static const String bookTicketTitle = 'Plan Your Journey';

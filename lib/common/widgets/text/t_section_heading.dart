@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_size.dart';
 
 class TSectionHeading extends StatelessWidget {
   const TSectionHeading({
@@ -33,6 +34,9 @@ class TSectionHeading extends StatelessWidget {
               children: [
                 Text(
                   title,
+                  textScaler: TextScaler.linear(ScaleSize.textScaleFactor(
+                      context,
+                      maxTextScaleFactor: 2.5)),
                   style: Theme.of(context)
                       .textTheme
                       .headlineSmall!

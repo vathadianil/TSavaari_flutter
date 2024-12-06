@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
+import 'package:tsavaari/utils/constants/text_size.dart';
+import 'package:tsavaari/utils/device/device_utility.dart';
 
 class NotificationIcon extends StatelessWidget {
   const NotificationIcon({
@@ -12,37 +14,48 @@ class NotificationIcon extends StatelessWidget {
   final Color? iconColor;
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        IconButton(
-          onPressed: onPressed,
-          icon: const Icon(
-            Iconsax.notification,
-            color: TColors.white,
-          ),
-        ),
-        Positioned(
-          top: 5,
-          right: 5,
-          child: Container(
-            width: 18,
-            height: 18,
-            decoration: BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.circular(100),
-            ),
-            child: Center(
-              child: Text(
-                '2',
-                style: Theme.of(context)
-                    .textTheme
-                    .labelLarge!
-                    .apply(color: TColors.white, fontSizeFactor: .8),
+    return LayoutBuilder(
+      builder: (_, constraints) {
+        return Stack(
+          children: [
+            IconButton(
+              onPressed: onPressed,
+              icon: Icon(
+                Iconsax.notification,
+                color: TColors.white,
+                size: TDeviceUtils.getScreenWidth(context) * .05,
               ),
             ),
-          ),
-        )
-      ],
+            Positioned(
+              top: 5,
+              right: 5,
+              child: Container(
+                width: TDeviceUtils.getScreenWidth(context) * .04,
+                height: TDeviceUtils.getScreenWidth(context) * .04,
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Center(
+                  child: Text(
+                    '2',
+                    textScaler: TextScaler.linear(
+                      ScaleSize.textScaleFactor(
+                        context,
+                        maxTextScaleFactor: 3,
+                      ),
+                    ),
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelLarge!
+                        .apply(color: TColors.white, fontSizeFactor: .8),
+                  ),
+                ),
+              ),
+            )
+          ],
+        );
+      },
     );
   }
 }

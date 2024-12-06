@@ -25,9 +25,10 @@ class HomeAppBar extends StatelessWidget {
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const CircleAvatar(
+          CircleAvatar(
+            radius: TDeviceUtils.getScreenWidth(context) * .035,
             backgroundColor: TColors.white,
-            backgroundImage: AssetImage(TImages.appLogo),
+            backgroundImage: const AssetImage(TImages.appLogo),
           ),
           const SizedBox(
             width: TSizes.spaceBtwItems,
@@ -70,7 +71,7 @@ class HomeAppBar extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textScaler: TextScaler.linear(
-                    ScaleSize.textScaleFactor(context),
+                    ScaleSize.textScaleFactor(context, maxTextScaleFactor: 2.7),
                   ),
                 ),
               ),
@@ -84,12 +85,16 @@ class HomeAppBar extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
+              Icon(
                 Icons.share,
                 color: TColors.white,
+                size: TDeviceUtils.getScreenWidth(context) * .04,
               ),
               Text(
-                'Share',
+                TTexts.share,
+                textScaler: TextScaler.linear(
+                  ScaleSize.textScaleFactor(context, maxTextScaleFactor: 2.2),
+                ),
                 style: Theme.of(context)
                     .textTheme
                     .labelSmall!
