@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tsavaari/common/controllers/checkbox_controller.dart';
+import 'package:tsavaari/common/widgets/button/underlined_text_button.dart';
 import 'package:tsavaari/features/qr/book_qr/screens/widgets/terms_and_conditions_popup.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
 import 'package:tsavaari/utils/constants/text_strings.dart';
-import 'package:tsavaari/utils/device/device_utility.dart';
-import 'package:tsavaari/utils/helpers/helper_functions.dart';
 
 class ProceedToPayBtn extends StatelessWidget {
   const ProceedToPayBtn({
@@ -21,7 +20,7 @@ class ProceedToPayBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final checkBoxController = CheckBoxController.instance;
-    final dark = THelperFunctions.isDarkMode(context);
+
     return Column(
       children: [
         Row(
@@ -40,36 +39,13 @@ class ProceedToPayBtn extends StatelessWidget {
                   TTexts.iAgree,
                   style: Theme.of(context).textTheme.labelSmall,
                 ),
-                TextButton(
+                UnderLinedTextButton(
+                  btnText: TTexts.termsConditions,
                   onPressed: () {
                     Get.dialog(const Dialog(
                       child: TermsandConditionsPopup(),
                     ));
                   },
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.only(left: TSizes.sm),
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                            color: dark ? TColors.accent : TColors.primary,
-                            width: 1),
-                      ),
-                    ),
-                    child: SizedBox(
-                      width: TDeviceUtils.getScreenWidth(context) * .32,
-                      child: Text(
-                        maxLines: 1,
-                        TTexts.termsConditions,
-                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                              fontWeight: FontWeight.bold,
-                              overflow: TextOverflow.ellipsis,
-                              color: dark ? TColors.accent : TColors.primary,
-                            ),
-                      ),
-                    ),
-                  ),
                 ),
               ],
             )

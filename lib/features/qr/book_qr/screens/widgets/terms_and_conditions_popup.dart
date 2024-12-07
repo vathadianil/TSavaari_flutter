@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:tsavaari/common/widgets/button/underlined_text_button.dart';
 import 'package:tsavaari/utils/constants/api_constants.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/image_strings.dart';
@@ -84,28 +85,12 @@ class TermsandConditionsPopup extends StatelessWidget {
                 height: TSizes.spaceBtwSections,
               ),
               const Text(TTexts.termsAndConditionsText),
-              TextButton(
+              UnderLinedTextButton(
+                btnText: TTexts.webSiteText,
                 onPressed: () {
                   launchURL();
                 },
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: isDark ? TColors.accent : TColors.primary,
-                        width: 1,
-                      ),
-                    ),
-                  ),
-                  child: Text(
-                    TTexts.webSiteText,
-                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: isDark ? TColors.accent : TColors.primary,
-                        ),
-                  ),
-                ),
-              ),
+              )
             ],
           ),
         ),
