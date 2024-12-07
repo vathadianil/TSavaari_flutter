@@ -4,17 +4,21 @@ import 'package:iconsax/iconsax.dart';
 import 'package:tsavaari/bottom_navigation/bottom_navigation_menu.dart';
 import 'package:tsavaari/common/controllers/checkbox_controller.dart';
 import 'package:tsavaari/common/widgets/appbar/t_appbar.dart';
+import 'package:tsavaari/common/widgets/layout/max_width_container.dart';
 import 'package:tsavaari/features/qr/display_qr/controllers/change_destination_preview_controller.dart';
 import 'package:tsavaari/features/qr/display_qr/controllers/display_qr_controller.dart';
 import 'package:tsavaari/features/qr/display_qr/controllers/refund_preview_controller.dart';
 import 'package:tsavaari/features/qr/display_qr/models/qr_code_model.dart';
 import 'package:tsavaari/features/qr/display_qr/screens/widgets/display_qr_bottom_sheet.dart';
+import 'package:tsavaari/features/qr/display_qr/screens/widgets/need_help_button.dart';
 import 'package:tsavaari/features/qr/display_qr/screens/widgets/qr_ticket_card.dart';
 import 'package:tsavaari/features/qr/display_qr/screens/widgets/qr_tab_container.dart';
-import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
 import 'package:tsavaari/features/qr/book_qr/models/station_list_model.dart';
-import 'package:tsavaari/utils/helpers/helper_functions.dart';
+import 'package:tsavaari/utils/constants/text_size.dart';
+import 'package:tsavaari/utils/constants/text_strings.dart';
+import 'package:tsavaari/utils/constants/ticket_status_codes.dart';
+import 'package:tsavaari/utils/device/device_utility.dart';
 
 class DisplayQrScreen extends StatelessWidget {
   const DisplayQrScreen(
@@ -30,6 +34,7 @@ class DisplayQrScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = TDeviceUtils.getScreenWidth(context);
     final displayQrController = Get.put(DisplayQrController());
     Get.put(CheckBoxController());
     List<TicketsListModel> getFormatttedTicketData(String indicator) {
@@ -52,43 +57,29 @@ class DisplayQrScreen extends StatelessWidget {
     return Scaffold(
       appBar: TAppBar(
         showBackArrow: false,
-        title: const Text('Your Tickets'),
+        title: Text(
+          TTexts.yourTickets,
+          textScaler: TextScaleUtil.getScaledText(context, maxScale: 3),
+        ),
         actions: [
-          OutlinedButton(
-            onPressed: () {
-              displayQrController.resetScreenBrightness();
-              showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return DisplayQrBottomSheet(
-                      tickets: (tickets![0].ticketTypeId == 20 &&
-                              previousScreenIndication == 'bookQr')
-                          ? getFormatttedTicketData('oneWay')
-                          : tickets,
-                      stationList: stationList,
-                      orderId: orderId,
-                    );
-                  }).whenComplete(() {
-                Get.delete<RefundPreviewController>();
-                Get.delete<ChangeDestinationPreviewController>();
-              });
-            },
-            style: OutlinedButton.styleFrom(
-              side: BorderSide(
-                  color: THelperFunctions.isDarkMode(context)
-                      ? TColors.light
-                      : TColors.dark),
-              minimumSize: const Size(TSizes.sm, TSizes.lg),
-              padding: const EdgeInsets.symmetric(
-                horizontal: TSizes.sm,
-                vertical: 0,
-              ),
-            ),
-            child: Text(
-              'Need Help ?',
-              style: Theme.of(context).textTheme.labelSmall,
-            ),
-          ),
+          NeedHelpButton(onPressed: () {
+            displayQrController.resetScreenBrightness();
+            showModalBottomSheet(
+                context: context,
+                builder: (context) {
+                  return DisplayQrBottomSheet(
+                    tickets: (tickets![0].ticketTypeId == 20 &&
+                            previousScreenIndication == 'bookQr')
+                        ? getFormatttedTicketData('oneWay')
+                        : tickets,
+                    stationList: stationList,
+                    orderId: orderId,
+                  );
+                }).whenComplete(() {
+              Get.delete<RefundPreviewController>();
+              Get.delete<ChangeDestinationPreviewController>();
+            });
+          }),
           IconButton(
               onPressed: () {
                 if (previousScreenIndication == 'bookQr') {
@@ -97,39 +88,53 @@ class DisplayQrScreen extends StatelessWidget {
                   Get.back();
                 }
               },
-              icon: const Icon(
+              icon: Icon(
                 Iconsax.close_circle,
-                size: TSizes.iconLg,
+                size: screenWidth * .06,
               ))
         ],
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(TSizes.defaultSpace),
+        child: SafeArea(
           child: Center(
-            child: Column(
-              children: [
-                //-- Qr Ticket Card
-                if (tickets![0].ticketTypeId == 20)
-                  QrTabContainer(
-                    stationList: stationList,
-                    tabChildren: const [
-                      Tab(
-                        text: 'Inward',
-                      ),
-                      Tab(
-                        text: 'Return',
-                      ),
+            child: MaxWidthContaiiner(
+              child: Padding(
+                padding: const EdgeInsets.all(TSizes.defaultSpace),
+                child: Center(
+                  child: Column(
+                    children: [
+                      //-- Qr Ticket Card
+                      if (tickets![0].ticketTypeId ==
+                          TicketStatusCodes.ticketTypeRjt)
+                        QrTabContainer(
+                          stationList: stationList,
+                          tabChildren: const [
+                            Tab(
+                              text: TTexts.inward,
+                            ),
+                            Tab(
+                              text: TTexts.outWard,
+                            ),
+                          ],
+                          onWayData: getFormatttedTicketData('oneWay'),
+                          roundTripData: getFormatttedTicketData('roundTrip'),
+                        ),
+                      if (tickets![0].ticketTypeId ==
+                              TicketStatusCodes.ticketTypeSjt ||
+                          tickets![0].ticketType ==
+                              TicketStatusCodes.ticketTypeSjtString ||
+                          tickets![0].ticketType ==
+                              TicketStatusCodes.ticketTypeRjtString ||
+                          tickets![0].oldTicketStatusId ==
+                              TicketStatusCodes.changeDestination.toString())
+                        QrTicketCard(
+                          tickets: tickets!,
+                          stationList: stationList,
+                        ),
                     ],
-                    onWayData: getFormatttedTicketData('oneWay'),
-                    roundTripData: getFormatttedTicketData('roundTrip'),
                   ),
-                if (tickets![0].ticketTypeId == 10 ||
-                    tickets![0].ticketType == 'SJT' ||
-                    tickets![0].ticketType == 'RJT' ||
-                    tickets![0].oldTicketStatusId == '60')
-                  QrTicketCard(tickets: tickets!, stationList: stationList),
-              ],
+                ),
+              ),
             ),
           ),
         ),

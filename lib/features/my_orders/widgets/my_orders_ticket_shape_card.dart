@@ -29,241 +29,225 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      child: PhysicalModel(
-        color: isDark
-            ? TColors.dark.withOpacity(.5)
-            : TColors.grey.withOpacity(.01),
-        shape: BoxShape.rectangle,
-        elevation: TSizes.sm,
-        shadowColor: isDark ? TColors.white.withOpacity(.2) : TColors.grey,
-        borderRadius: BorderRadius.circular(TSizes.md),
-        child: TTicketShapeWidget(
-          child: Container(
-            decoration: BoxDecoration(
-                color: isDark ? TColors.dark : TColors.light,
-                borderRadius: BorderRadius.circular(TSizes.md)),
-            padding: const EdgeInsets.all(
-              TSizes.defaultSpace,
+      child: TTicketShapeWidget(
+        backgroundColor: isDark ? TColors.dark.withOpacity(.7) : TColors.white,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            SizedBox(
+              width: TDeviceUtils.getScreenWidth(context) * .7,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (ticketData.fromStation != null)
+                    Text(
+                      THelperFunctions.getStationFromStationName(
+                                  ticketData.fromStation!, stationList)
+                              .shortName ??
+                          '',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                  Text(
+                    ticketData.purchaseDate!,
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                  if (ticketData.toStation != null)
+                    Text(
+                      THelperFunctions.getStationFromStationName(
+                                  ticketData.toStation!, stationList)
+                              .shortName ??
+                          '',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                ],
+              ),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
+            const SizedBox(
+              height: TSizes.sm,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const CircleShape(
+                  width: TSizes.sm,
+                  height: TSizes.sm,
+                  darkModeBorderColor: TColors.primary,
+                  lightModeBorderColor: TColors.primary,
+                  fillColor: TColors.primary,
+                ),
+                SizedBox(
+                    width: TDeviceUtils.getScreenWidth(context) * .25,
+                    child: const DashedHorizontalLine(
+                      dashWidth: 4,
+                      color: TColors.primary,
+                    )),
+                const Icon(
+                  Icons.train,
+                  color: TColors.primary,
+                ),
+                SizedBox(
+                    width: TDeviceUtils.getScreenWidth(context) * .25,
+                    child: const DashedHorizontalLine(
+                      dashWidth: 4,
+                      color: TColors.primary,
+                    )),
+                const CircleShape(
+                  width: TSizes.sm,
+                  height: TSizes.sm,
+                  darkModeBorderColor: TColors.primary,
+                  lightModeBorderColor: TColors.primary,
+                  fillColor: TColors.primary,
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: TDeviceUtils.getScreenWidth(context) * .7,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      if (ticketData.fromStation != null)
-                        Text(
-                          THelperFunctions.getStationFromStationName(
-                                      ticketData.fromStation!, stationList)
-                                  .shortName ??
-                              '',
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                      Text(
-                        ticketData.purchaseDate!,
-                        style: Theme.of(context).textTheme.labelSmall,
-                      ),
-                      if (ticketData.toStation != null)
-                        Text(
-                          THelperFunctions.getStationFromStationName(
-                                      ticketData.toStation!, stationList)
-                                  .shortName ??
-                              '',
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                    ],
+                  width: TDeviceUtils.getScreenWidth(context) * .2,
+                  child: Text(
+                    ticketData.fromStation ?? '',
+                    style: Theme.of(context).textTheme.bodyLarge!,
+                    maxLines: 1,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const SizedBox(
-                  height: TSizes.sm,
+                SizedBox(
+                  width: TDeviceUtils.getScreenWidth(context) * .1,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const CircleShape(
-                      width: TSizes.sm,
-                      height: TSizes.sm,
-                      darkModeBorderColor: TColors.primary,
-                      lightModeBorderColor: TColors.primary,
-                      fillColor: TColors.primary,
-                    ),
-                    SizedBox(
-                        width: TDeviceUtils.getScreenWidth(context) * .25,
-                        child: const DashedHorizontalLine(
-                          dashWidth: 4,
-                          color: TColors.primary,
-                        )),
-                    const Icon(
-                      Icons.train,
-                      color: TColors.primary,
-                    ),
-                    SizedBox(
-                        width: TDeviceUtils.getScreenWidth(context) * .25,
-                        child: const DashedHorizontalLine(
-                          dashWidth: 4,
-                          color: TColors.primary,
-                        )),
-                    const CircleShape(
-                      width: TSizes.sm,
-                      height: TSizes.sm,
-                      darkModeBorderColor: TColors.primary,
-                      lightModeBorderColor: TColors.primary,
-                      fillColor: TColors.primary,
-                    ),
-                  ],
+                Text(
+                  ticketData.purchaseTime!,
+                  style: Theme.of(context).textTheme.labelSmall!,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                SizedBox(
+                  width: TDeviceUtils.getScreenWidth(context) * .1,
+                ),
+                SizedBox(
+                  width: TDeviceUtils.getScreenWidth(context) * .18,
+                  child: Text(
+                    ticketData.toStation ?? '',
+                    style: Theme.of(context).textTheme.bodyLarge!,
+                    maxLines: 1,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: TSizes.spaceBtwItems,
+            ),
+            const DashedHorizontalLine(
+              color: TColors.darkGrey,
+            ),
+            const SizedBox(
+              height: TSizes.spaceBtwItems,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(
                   children: [
-                    SizedBox(
-                      width: TDeviceUtils.getScreenWidth(context) * .2,
-                      child: Text(
-                        ticketData.fromStation ?? '',
-                        style: Theme.of(context).textTheme.bodyLarge!,
-                        maxLines: 1,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    SizedBox(
-                      width: TDeviceUtils.getScreenWidth(context) * .1,
+                    Text(
+                      'Passengers',
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
                     Text(
-                      ticketData.purchaseTime!,
-                      style: Theme.of(context).textTheme.labelSmall!,
-                    ),
-                    SizedBox(
-                      width: TDeviceUtils.getScreenWidth(context) * .1,
-                    ),
-                    SizedBox(
-                      width: TDeviceUtils.getScreenWidth(context) * .2,
-                      child: Text(
-                        ticketData.toStation ?? '',
-                        style: Theme.of(context).textTheme.bodyLarge!,
-                        maxLines: 1,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      '${ticketData.noOfPersons} Adults',
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: TSizes.spaceBtwItems,
-                ),
-                const DashedHorizontalLine(
-                  color: TColors.darkGrey,
-                ),
-                const SizedBox(
-                  height: TSizes.spaceBtwItems,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                Column(
                   children: [
-                    Column(
-                      children: [
-                        Text(
-                          'Passengers',
-                          style: Theme.of(context).textTheme.labelLarge,
-                        ),
-                        Text(
-                          '${ticketData.noOfPersons} Adults',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ],
+                    Text(
+                      'Total Fare',
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
-                    Column(
-                      children: [
-                        Text(
-                          'Total Fare',
-                          style: Theme.of(context).textTheme.labelLarge,
-                        ),
-                        Text(
-                          '${ticketData.totalFareAmount}/-',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ],
+                    Text(
+                      '${ticketData.totalFareAmount}/-',
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                    Stack(
-                      children: [
-                        SizedBox(
-                          width: TDeviceUtils.getScreenWidth(context) * .2,
-                          child: QrImageView(
-                            data: 'https://www.ltmetro.com',
-                            version: QrVersions.auto,
-                            eyeStyle: QrEyeStyle(
-                              color: tabController.tabIndex.value == 1
-                                  ? TColors.darkGrey
-                                  : isDark
-                                      ? TColors.light
-                                      : TColors.dark,
-                              eyeShape: QrEyeShape.square,
-                            ),
-                            dataModuleStyle: QrDataModuleStyle(
-                              color: tabController.tabIndex.value == 1
-                                  ? TColors.darkGrey
-                                  : isDark
-                                      ? TColors.light
-                                      : TColors.dark,
-                            ),
-                          ),
+                  ],
+                ),
+                Stack(
+                  children: [
+                    SizedBox(
+                      width: TDeviceUtils.getScreenWidth(context) * .2,
+                      child: QrImageView(
+                        data: 'https://www.ltmetro.com',
+                        version: QrVersions.auto,
+                        eyeStyle: QrEyeStyle(
+                          color: tabController.tabIndex.value == 1
+                              ? TColors.darkGrey
+                              : isDark
+                                  ? TColors.light
+                                  : TColors.dark,
+                          eyeShape: QrEyeShape.square,
                         ),
-                        (tabController.tabIndex.value == 1)
+                        dataModuleStyle: QrDataModuleStyle(
+                          color: tabController.tabIndex.value == 1
+                              ? TColors.darkGrey
+                              : isDark
+                                  ? TColors.light
+                                  : TColors.dark,
+                        ),
+                      ),
+                    ),
+                    (tabController.tabIndex.value == 1)
+                        ? const TicketStatusChip(
+                            left: 0,
+                            bottom: 30,
+                            ticketStatus: 'Expired',
+                            borderColor: TColors.error,
+                            textColor: TColors.error,
+                          )
+                        : (ticketData.tickets![0].statusId == 20)
                             ? const TicketStatusChip(
-                                left: 0,
+                                left: -2,
                                 bottom: 30,
-                                ticketStatus: 'Expired',
-                                borderColor: TColors.error,
-                                textColor: TColors.error,
+                                textColor: TColors.secondary,
+                                borderColor: TColors.secondary,
+                                backgroundColor: TColors.dark,
+                                ticketStatus: 'In Transit',
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: TSizes.sm,
+                                ),
                               )
-                            : (ticketData.tickets![0].statusId == 20)
+                            : (ticketData.tickets![0].statusId == 40)
                                 ? const TicketStatusChip(
                                     left: -2,
                                     bottom: 30,
-                                    textColor: TColors.secondary,
-                                    borderColor: TColors.secondary,
-                                    backgroundColor: TColors.dark,
-                                    ticketStatus: 'In Transit',
+                                    textColor: TColors.error,
+                                    borderColor: TColors.error,
+                                    ticketStatus: 'Refunded',
                                     padding: EdgeInsets.symmetric(
                                       horizontal: TSizes.sm,
                                     ),
                                   )
-                                : (ticketData.tickets![0].statusId == 40)
+                                : (ticketData.tickets![0].statusId == 60)
                                     ? const TicketStatusChip(
                                         left: -2,
                                         bottom: 30,
-                                        textColor: TColors.error,
-                                        borderColor: TColors.error,
-                                        ticketStatus: 'Refunded',
+                                        textColor: TColors.warning,
+                                        borderColor: TColors.warning,
+                                        ticketStatus: 'Change Dt',
                                         padding: EdgeInsets.symmetric(
                                           horizontal: TSizes.sm,
                                         ),
                                       )
-                                    : (ticketData.tickets![0].statusId == 60)
-                                        ? const TicketStatusChip(
-                                            left: -2,
-                                            bottom: 30,
-                                            textColor: TColors.warning,
-                                            borderColor: TColors.warning,
-                                            ticketStatus: 'Change Dt',
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: TSizes.sm,
-                                            ),
-                                          )
-                                        : const TicketStatusChip(
-                                            left: 7,
-                                            bottom: 28,
-                                            ticketStatus: 'New',
-                                          ),
-                      ],
-                    ),
+                                    : const TicketStatusChip(
+                                        left: 7,
+                                        bottom: 28,
+                                        ticketStatus: 'New',
+                                      ),
                   ],
                 ),
               ],
             ),
-          ),
+          ],
         ),
       ),
     );

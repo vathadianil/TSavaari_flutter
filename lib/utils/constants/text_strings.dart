@@ -45,6 +45,13 @@ class TTexts {
   static const String totalFare = 'Total Fare';
   static const String perTicket = 'Per ticket fare Rs.';
 
+  //Display Qr
+  static const String yourTickets = 'Your Tickets';
+  static const String inward = 'Inward';
+  static const String outWard = 'Return';
+  static const String passenger = 'Passenger';
+  static const String status = 'Status';
+
   //T & C
   static const String iAgree = 'I Agree to these';
   static const String termsConditions = 'Terms & Conditions';

@@ -13,7 +13,7 @@ import 'package:tsavaari/features/qr/display_qr/screens/display_qr.dart';
 import 'package:tsavaari/routes/routes.dart';
 import 'package:tsavaari/utils/constants/image_strings.dart';
 import 'package:tsavaari/utils/constants/merchant_id.dart';
-import 'package:tsavaari/utils/constants/ticket_status.dart';
+import 'package:tsavaari/utils/constants/ticket_status_codes.dart';
 import 'package:tsavaari/utils/device/device_utility.dart';
 import 'package:tsavaari/utils/helpers/helper_functions.dart';
 import 'package:tsavaari/utils/helpers/network_manager.dart';
@@ -41,8 +41,8 @@ class BookQrController extends GetxController {
       final token = await TLocalStorage().readData('token');
 
       final ticketTypeId = ticketType.value
-          ? TicketStatus.ticketTypeRjt.toString()
-          : TicketStatus.ticketTypeSjt.toString();
+          ? TicketStatusCodes.ticketTypeRjt.toString()
+          : TicketStatusCodes.ticketTypeSjt.toString();
 
       final fromStation = source.value != ''
           ? THelperFunctions.getStationFromStationName(
@@ -170,8 +170,8 @@ class BookQrController extends GetxController {
           if (verifyPayment.orderStatus == 'PAID') {
             final token = await deviceStorage.read('token');
             final ticketTypeId = ticketType.value
-                ? TicketStatus.ticketTypeRjt.toString()
-                : TicketStatus.ticketTypeSjt.toString();
+                ? TicketStatusCodes.ticketTypeRjt.toString()
+                : TicketStatusCodes.ticketTypeSjt.toString();
 
             final fromStation = source.value != ''
                 ? stationController.stationList

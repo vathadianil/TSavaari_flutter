@@ -12,6 +12,7 @@ import 'package:tsavaari/features/qr/display_qr/screens/widgets/ticket_expiry.da
 import 'package:tsavaari/features/qr/display_qr/screens/widgets/ticket_status.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/ticket_status_codes.dart';
 import 'package:tsavaari/utils/helpers/helper_functions.dart';
 
 class QrTicketContentContainer extends StatelessWidget {
@@ -24,22 +25,24 @@ class QrTicketContentContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final displayQrController = DisplayQrController.instance;
-    final isSjtSinglePassenger = (tickets[0].ticketTypeId == 10 ||
-            tickets[0].ticketType == 'SJT' ||
-            tickets[0].ticketType == 'RJT' ||
-            tickets[0].oldTicketStatusId == '60')
+    final isSjtSinglePassenger = (tickets[0].ticketTypeId ==
+                TicketStatusCodes.ticketTypeSjt ||
+            tickets[0].ticketType == TicketStatusCodes.ticketTypeSjtString ||
+            tickets[0].ticketType == TicketStatusCodes.ticketTypeRjtString ||
+            tickets[0].oldTicketStatusId ==
+                TicketStatusCodes.changeDestination.toString())
         ? tickets.length == 1
             ? true
             : false
         : false;
 
-    final isRjtSinglePassenger = tickets[0].ticketTypeId == 20
-        ? tickets.length == 1
-            ? true
-            : false
-        : false;
-    print('---------------------------------------------');
-    print(tickets[0].ticketStatus);
+    final isRjtSinglePassenger =
+        tickets[0].ticketTypeId == TicketStatusCodes.ticketTypeRjt
+            ? tickets.length == 1
+                ? true
+                : false
+            : false;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -47,7 +50,6 @@ class QrTicketContentContainer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             //-- Ticket Count
-
             Obx(
               () => PassengerCount(
                 totalTicketCount: tickets.length,
@@ -56,11 +58,26 @@ class QrTicketContentContainer extends StatelessWidget {
               ),
             ),
 
-            //--Ticket Statu
+            //--Ticket Status
             Obx(
               () => tickets[displayQrController.carouselCurrentIndex.value]
-                          .ticketStatus !=
-                      null
+                              .ticketStatus !=
+                          null &&
+                      (tickets[displayQrController.carouselCurrentIndex.value]
+                                  .ticketStatus ==
+                              TicketStatusCodes.newTicketString ||
+                          tickets[displayQrController
+                                      .carouselCurrentIndex.value]
+                                  .ticketTypeId ==
+                              TicketStatusCodes.newTicket ||
+                          tickets[displayQrController
+                                      .carouselCurrentIndex.value]
+                                  .ticketStatus ==
+                              TicketStatusCodes.entryUsedString ||
+                          tickets[displayQrController
+                                      .carouselCurrentIndex.value]
+                                  .ticketTypeId ==
+                              TicketStatusCodes.entryUsed)
                   ? TicketStatus(
                       ticketStatus: tickets[displayQrController
                                   .carouselCurrentIndex.value]

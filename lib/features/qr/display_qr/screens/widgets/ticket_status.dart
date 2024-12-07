@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
-import 'package:tsavaari/utils/device/device_utility.dart';
+import 'package:tsavaari/utils/constants/text_size.dart';
+import 'package:tsavaari/utils/constants/ticket_status_codes.dart';
 
 class TicketStatus extends StatelessWidget {
   const TicketStatus({
@@ -15,34 +16,25 @@ class TicketStatus extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(
-          'Status',
-          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                color: TColors.dark,
-              ),
-        ),
-        const SizedBox(
-          width: TSizes.sm,
-        ),
         Container(
           padding: const EdgeInsets.symmetric(
               horizontal: TSizes.md, vertical: TSizes.sm / 2),
           decoration: BoxDecoration(
-            color: TColors.success,
+            color: ticketStatus == TicketStatusCodes.newTicketString
+                ? TColors.success
+                : TColors.secondary,
             borderRadius: BorderRadius.circular(TSizes.lg),
           ),
-          child: SizedBox(
-            width: TDeviceUtils.getScreenWidth(context) * .15,
-            child: Text(
-              ticketStatus,
-              maxLines: 1,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context)
-                  .textTheme
-                  .labelSmall!
-                  .copyWith(color: TColors.white),
-            ),
+          child: Text(
+            ticketStatus == TicketStatusCodes.entryUsedString
+                ? 'In Transit'
+                : ticketStatus,
+            textAlign: TextAlign.center,
+            textScaler: TextScaleUtil.getScaledText(context, maxScale: 3),
+            style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                color: ticketStatus == TicketStatusCodes.newTicketString
+                    ? TColors.white
+                    : TColors.dark),
           ),
         ),
       ],

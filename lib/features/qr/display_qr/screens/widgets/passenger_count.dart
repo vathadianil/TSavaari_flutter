@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_size.dart';
+import 'package:tsavaari/utils/constants/text_strings.dart';
 
 class PassengerCount extends StatelessWidget {
   const PassengerCount({
@@ -12,9 +14,11 @@ class PassengerCount extends StatelessWidget {
   final int currentValue;
   @override
   Widget build(BuildContext context) {
+    final textScaler = TextScaleUtil.getScaledText(context, maxScale: 3);
     return Row(
       children: [
-        Text('Passenger',
+        Text(TTexts.passenger,
+            textScaler: textScaler,
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color: TColors.dark,
                 )),
@@ -23,6 +27,7 @@ class PassengerCount extends StatelessWidget {
         ),
         Text(
           '$currentValue/$totalTicketCount',
+          textScaler: textScaler,
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                 color: TColors.dark,
               ),

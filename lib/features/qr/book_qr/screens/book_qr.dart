@@ -12,6 +12,7 @@ import 'package:tsavaari/features/qr/book_qr/screens/widgets/ticket_type_selecti
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/image_strings.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_size.dart';
 import 'package:tsavaari/utils/constants/text_strings.dart';
 import 'package:tsavaari/utils/device/device_utility.dart';
 
@@ -25,9 +26,12 @@ class BookQrScreen extends StatelessWidget {
     Get.put(CheckBoxController());
     final screenHeight = TDeviceUtils.getScreenHeight();
     return Scaffold(
-      appBar: const TAppBar(
+      appBar: TAppBar(
         showBackArrow: true,
-        title: Text(TTexts.bookTicketTitle),
+        title: Text(
+          TTexts.bookTicketTitle,
+          textScaler: TextScaleUtil.getScaledText(context),
+        ),
       ),
       body: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
