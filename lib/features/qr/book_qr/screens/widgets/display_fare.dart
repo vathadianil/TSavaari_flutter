@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tsavaari/features/qr/book_qr/controllers/book_qr_controller.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_size.dart';
 import 'package:tsavaari/utils/constants/text_strings.dart';
 
 class DisplayFare extends StatelessWidget {
@@ -30,12 +31,14 @@ class DisplayFare extends StatelessWidget {
                     children: [
                       Text(
                         TTexts.totalFare,
+                        textScaler: TextScaleUtil.getScaledText(context),
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       Row(
                         children: [
                           Text(
                             '${bookQrController.passengerCount.value} X ${bookQrController.qrFareData.first.finalFare.toString()} = ',
+                            textScaler: TextScaleUtil.getScaledText(context),
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                           const SizedBox(
@@ -43,6 +46,7 @@ class DisplayFare extends StatelessWidget {
                           ),
                           Text(
                             '${bookQrController.passengerCount.value * bookQrController.qrFareData.first.finalFare!}/-',
+                            textScaler: TextScaleUtil.getScaledText(context),
                             style: Theme.of(context).textTheme.headlineMedium,
                           ),
                         ],
@@ -51,6 +55,8 @@ class DisplayFare extends StatelessWidget {
                   ),
                   Text(
                     '${TTexts.perTicket} ${bookQrController.qrFareData.first.finalFare}/- (${bookQrController.ticketType.value ? TTexts.roundTrip : TTexts.oneWay})',
+                    textScaler:
+                        TextScaleUtil.getScaledText(context, maxScale: 2.5),
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   const Divider(),

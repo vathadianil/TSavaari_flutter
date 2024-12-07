@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tsavaari/features/qr/book_qr/controllers/book_qr_controller.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
+import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_size.dart';
 import 'package:tsavaari/utils/constants/text_strings.dart';
+import 'package:tsavaari/utils/device/device_utility.dart';
 import 'package:tsavaari/utils/helpers/helper_functions.dart';
 
 class TicketTypeSlection extends StatelessWidget {
@@ -14,6 +17,8 @@ class TicketTypeSlection extends StatelessWidget {
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
     final controller = BookQrController.instance;
+    final textScaler = TextScaleUtil.getScaledText(context, maxScale: 2);
+    final screenWidth = TDeviceUtils.getScreenWidth(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -22,11 +27,19 @@ class TicketTypeSlection extends StatelessWidget {
             controller.ticketType.value = false;
             controller.getFare();
           },
-          child:
-              Text(TTexts.oneWay, style: Theme.of(context).textTheme.bodyLarge),
+          child: Text(
+            TTexts.oneWay,
+            style: Theme.of(context).textTheme.bodyLarge,
+            textScaler: textScaler,
+          ),
+        ),
+        SizedBox(
+          width: (screenWidth > TSizes.smallSceenSize)
+              ? screenWidth * 0.02
+              : screenWidth * 0.001,
         ),
         Transform.scale(
-          scale: .7,
+          scale: screenWidth * 0.0019,
           child: Obx(
             () => Switch(
               value: controller.ticketType.value,
@@ -51,13 +64,21 @@ class TicketTypeSlection extends StatelessWidget {
             ),
           ),
         ),
+        SizedBox(
+          width: (screenWidth > TSizes.smallSceenSize)
+              ? screenWidth * 0.02
+              : screenWidth * 0.001,
+        ),
         TextButton(
           onPressed: () {
             controller.ticketType.value = true;
             controller.getFare();
           },
-          child: Text(TTexts.roundTrip,
-              style: Theme.of(context).textTheme.bodyLarge),
+          child: Text(
+            TTexts.roundTrip,
+            style: Theme.of(context).textTheme.bodyLarge,
+            textScaler: textScaler,
+          ),
         )
       ],
     );

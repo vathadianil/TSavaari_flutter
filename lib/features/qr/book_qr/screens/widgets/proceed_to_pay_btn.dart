@@ -5,6 +5,7 @@ import 'package:tsavaari/common/widgets/button/underlined_text_button.dart';
 import 'package:tsavaari/features/qr/book_qr/screens/widgets/terms_and_conditions_popup.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_size.dart';
 import 'package:tsavaari/utils/constants/text_strings.dart';
 
 class ProceedToPayBtn extends StatelessWidget {
@@ -37,6 +38,8 @@ class ProceedToPayBtn extends StatelessWidget {
               children: [
                 Text(
                   TTexts.iAgree,
+                  textScaler:
+                      TextScaleUtil.getScaledText(context, maxScale: 2.5),
                   style: Theme.of(context).textTheme.labelSmall,
                 ),
                 UnderLinedTextButton(

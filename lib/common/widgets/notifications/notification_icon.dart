@@ -19,41 +19,48 @@ class NotificationIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     final double screenWidth = TDeviceUtils.getScreenWidth(context);
     final double iconSize = screenWidth * 0.06;
-    final double badgeSize = screenWidth > 400 ? iconSize * .6 : iconSize * 0.8;
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        IconButton(
-          onPressed: onPressed,
-          icon: Icon(
-            Iconsax.notification,
-            color: iconColor ?? TColors.white,
-            size: iconSize,
-          ),
-        ),
-        // Notification Badge
-        Positioned(
-          top: iconSize * 0.15,
-          right: iconSize * 0.15,
-          child: Container(
-            width: badgeSize,
-            height: badgeSize,
-            decoration: BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.circular(badgeSize / 2),
-            ),
-            child: Center(
-              child: Text(
-                notificationCount,
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: TColors.white,
-                      fontSize: badgeSize * 0.5,
-                    ),
+    final double badgeSize = iconSize * .8;
+    return Container(
+      alignment: Alignment.center,
+      width: screenWidth * .1,
+      height: screenWidth * .1,
+      child: LayoutBuilder(
+        builder: (context, constraints) => Stack(
+          clipBehavior: Clip.none,
+          children: [
+            IconButton(
+              onPressed: onPressed,
+              icon: Icon(
+                Iconsax.notification,
+                color: iconColor ?? TColors.white,
+                size: iconSize,
               ),
             ),
-          ),
+            // Notification Badge
+            Positioned(
+              top: constraints.maxHeight * 0.03,
+              right: constraints.maxWidth * 0.03,
+              child: Container(
+                width: badgeSize,
+                height: badgeSize,
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(badgeSize / 2),
+                ),
+                child: Center(
+                  child: Text(
+                    notificationCount,
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: TColors.white,
+                          fontSize: badgeSize * 0.5,
+                        ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

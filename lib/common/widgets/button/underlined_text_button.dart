@@ -24,9 +24,7 @@ class UnderLinedTextButton extends StatelessWidget {
         ),
         child: Text(
           btnText,
-          textScaler: TextScaler.linear(ScaleSize.textScaleFactor(
-            context,
-          )),
+          textScaler: TextScaleUtil.getScaledText(context, maxScale: 2.5),
           style: Theme.of(context).textTheme.labelLarge!.copyWith(
                 fontWeight: FontWeight.bold,
                 color: dark ? TColors.accent : TColors.primary,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tsavaari/common/controllers/checkbox_controller.dart';
 import 'package:tsavaari/common/widgets/appbar/t_appbar.dart';
+import 'package:tsavaari/common/widgets/layout/max_width_container.dart';
 import 'package:tsavaari/features/qr/book_qr/controllers/book_qr_controller.dart';
 import 'package:tsavaari/features/qr/book_qr/controllers/station_list_controller.dart';
 import 'package:tsavaari/features/qr/book_qr/screens/widgets/display_fare_and_pay_btn_container.dart';
@@ -12,6 +13,7 @@ import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/image_strings.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
 import 'package:tsavaari/utils/constants/text_strings.dart';
+import 'package:tsavaari/utils/device/device_utility.dart';
 
 class BookQrScreen extends StatelessWidget {
   const BookQrScreen({super.key});
@@ -21,6 +23,7 @@ class BookQrScreen extends StatelessWidget {
     Get.put(StationListController());
     Get.put(BookQrController());
     Get.put(CheckBoxController());
+    final screenHeight = TDeviceUtils.getScreenHeight();
     return Scaffold(
       appBar: const TAppBar(
         showBackArrow: true,
@@ -29,49 +32,55 @@ class BookQrScreen extends StatelessWidget {
       body: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         padding: const EdgeInsets.all(TSizes.defaultSpace),
-        child: Column(
-          children: [
-            Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(TSizes.md),
-                border: Border.all(
-                  width: 1,
-                  color: TColors.grey,
-                ),
-              ),
-              child: const Column(
+        child: SafeArea(
+          child: Center(
+            child: MaxWidthContaiiner(
+              child: Column(
                 children: [
-                  //-- Ticket type Selection
-                  TicketTypeSlection(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: TSizes.defaultSpace),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(TSizes.md),
+                      border: Border.all(
+                        width: 1,
+                        color: TColors.grey,
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        //-- Ticket type Selection
+                        const TicketTypeSlection(),
 
-                  SizedBox(
-                    height: TSizes.spaceBtwItems / 2,
+                        SizedBox(
+                          height: screenHeight * .015,
+                        ),
+
+                        //-- No. of Tickets selection
+                        const TicketCountSelection(),
+
+                        SizedBox(
+                          height: screenHeight * .015,
+                        ),
+
+                        //-- Source and Destination station selection
+                        const SourceDestinationSelection(),
+
+                        const SizedBox(
+                          height: TSizes.spaceBtwItems,
+                        ),
+                      ],
+                    ),
                   ),
-
-                  //-- No. of Tickets selection
-                  TicketCountSelection(),
-
-                  SizedBox(
-                    height: TSizes.spaceBtwItems / 2,
+                  const SizedBox(
+                    height: TSizes.spaceBtwSections,
                   ),
-
-                  //-- Source and Destination station selection
-                  SourceDestinationSelection(),
-
-                  SizedBox(
-                    height: TSizes.spaceBtwItems,
-                  ),
+                  //-- Display Total Fare and Route
+                  const DisplayFarePayBtnContainer(),
                 ],
               ),
             ),
-            const SizedBox(
-              height: TSizes.spaceBtwSections,
-            ),
-            //-- Display Total Fare and Route
-            const DisplayFarePayBtnContainer(),
-          ],
+          ),
         ),
       ),
       bottomNavigationBar: const Image(

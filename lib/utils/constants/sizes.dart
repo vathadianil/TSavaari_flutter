@@ -70,5 +70,8 @@ class TSizes {
   static const double gridViewSpacing = 16.0;
 
   //Device Sizes
-  static const double tabletSize = 720;
+  static const double largeScreenSize = 1366;
+  static const double mediumScreenSize = 768;
+  static const double smallSceenSize = 360;
+  static const double customScreenSize = 1100;
 }

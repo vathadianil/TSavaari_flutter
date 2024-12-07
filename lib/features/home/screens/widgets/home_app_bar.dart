@@ -31,8 +31,8 @@ class HomeAppBar extends StatelessWidget {
             backgroundColor: TColors.white,
             backgroundImage: const AssetImage(TImages.appLogo),
           ),
-          const SizedBox(
-            width: TSizes.spaceBtwItems,
+          SizedBox(
+            width: screenWidth * 0.02,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +43,7 @@ class HomeAppBar extends StatelessWidget {
                     return const ShimmerEffect(width: 80, height: 15);
                   }
                   return SizedBox(
-                    width: screenWidth * .4,
+                    width: screenWidth * .45,
                     child: Text(
                       // controller.user.value.fullname,
                       'Hi, Sam',
@@ -61,7 +61,7 @@ class HomeAppBar extends StatelessWidget {
                 height: TSizes.spaceBtwItems / 4,
               ),
               SizedBox(
-                width: screenWidth * .43,
+                width: screenWidth * .45,
                 child: Text(TTexts.homeAppbarTitle,
                     style: Theme.of(context)
                         .textTheme

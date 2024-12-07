@@ -3,6 +3,8 @@ import 'package:iconsax/iconsax.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_size.dart';
+import 'package:tsavaari/utils/device/device_utility.dart';
 import 'package:tsavaari/utils/helpers/helper_functions.dart';
 
 class TDropdown extends StatelessWidget {
@@ -108,9 +110,12 @@ class TDropdown extends StatelessWidget {
       dropdownDecoratorProps: DropDownDecoratorProps(
         textAlignVertical: TextAlignVertical.center,
         textAlign: TextAlign.left,
-        dropdownSearchDecoration: InputDecoration.collapsed(
-          hintText: labelText,
-        ),
+        dropdownSearchDecoration:
+            TDeviceUtils.getScreenWidth(context) > TSizes.smallSceenSize
+                ? InputDecoration(hintText: labelText)
+                : InputDecoration.collapsed(
+                    hintText: labelText,
+                  ),
       ),
       dropdownBuilder: (context, selectedItem) => Row(
         children: [
@@ -128,6 +133,7 @@ class TDropdown extends StatelessWidget {
             ),
           Text(
             selectedItem = selectedItem != '' ? selectedItem! : labelText,
+            textScaler: TextScaleUtil.getScaledText(context, maxScale: 3),
             style: selectedItem != ''
                 ? Theme.of(context)
                     .textTheme
