@@ -1,6 +1,14 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
+class TextScaleUtil {
+  static TextScaler getScaledText(BuildContext context, {double maxScale = 2}) {
+    return TextScaler.linear(
+      ScaleSize.textScaleFactor(context, maxTextScaleFactor: maxScale),
+    );
+  }
+}
+
 class ScaleSize {
   static double textScaleFactor(BuildContext context,
       {double maxTextScaleFactor = 2}) {

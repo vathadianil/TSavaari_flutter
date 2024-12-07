@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
+import 'package:tsavaari/utils/device/device_utility.dart';
 
 class FormDivider extends StatelessWidget {
   const FormDivider({
@@ -11,13 +12,14 @@ class FormDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = TDeviceUtils.getScreenWidth(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Flexible(
+        Flexible(
           child: Divider(
             color: TColors.darkGrey,
-            thickness: 0.5,
+            thickness: screenWidth * 0.001,
             indent: 60,
             endIndent: 10,
           ),
@@ -26,10 +28,10 @@ class FormDivider extends StatelessWidget {
           dividerText,
           style: Theme.of(context).textTheme.labelMedium,
         ),
-        const Flexible(
+        Flexible(
           child: Divider(
             color: TColors.darkGrey,
-            thickness: 0.5,
+            thickness: screenWidth * 0.001,
             indent: 10,
             endIndent: 60,
           ),

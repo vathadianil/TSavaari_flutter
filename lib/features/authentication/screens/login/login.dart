@@ -19,9 +19,12 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(LoginController());
+    final textScaler = TextScaleUtil.getScaledText(context);
+    final screenHeight = TDeviceUtils.getScreenHeight();
+    final screenWidth = TDeviceUtils.getScreenWidth(context);
     return Scaffold(
       body: SizedBox(
-        height: TDeviceUtils.getScreenHeight(),
+        height: screenHeight,
         child: SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: SafeArea(
@@ -43,7 +46,7 @@ class LoginScreen extends StatelessWidget {
                         children: [
                           // -- Logo
                           Image(
-                            width: TDeviceUtils.getScreenWidth(context) * .3,
+                            width: screenWidth * .3,
                             image: const AssetImage(TImages.appLogo),
                           ),
 
@@ -66,8 +69,7 @@ class LoginScreen extends StatelessWidget {
                           Text(
                             TTexts.loginSubTitle,
                             style: Theme.of(context).textTheme.bodyMedium,
-                            textScaler: TextScaler.linear(
-                                ScaleSize.textScaleFactor(context)),
+                            textScaler: textScaler,
                           ),
 
                           const SizedBox(
@@ -77,9 +79,13 @@ class LoginScreen extends StatelessWidget {
 
                           TextFormField(
                             keyboardType: TextInputType.phone,
-                            decoration: const InputDecoration(
-                              labelText: TTexts.phoneNo,
-                              prefixIcon: Icon(
+                            decoration: InputDecoration(
+                              label: Text(
+                                TTexts.phoneNo,
+                                style: Theme.of(context).textTheme.bodyMedium,
+                                textScaler: textScaler,
+                              ),
+                              prefixIcon: const Icon(
                                 Icons.call,
                                 color: TColors.primary,
                               ),
@@ -98,8 +104,7 @@ class LoginScreen extends StatelessWidget {
                               },
                               child: Text(
                                 TTexts.signIn,
-                                textScaler: TextScaler.linear(
-                                    ScaleSize.textScaleFactor(context)),
+                                textScaler: textScaler,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodySmall!
