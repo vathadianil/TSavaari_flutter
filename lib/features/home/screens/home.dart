@@ -52,28 +52,20 @@ class HomeScreen extends StatelessWidget {
         title: 'Metro\nMap',
         targetScreen: '/metro-network-map',
       ),
-      // MetroServicesModel(
-      //   id: '6',
-      //   active: true,
-      //   icon: 'dosanddonts',
-      //   title: 'Do\'s &\nDont\'s',
-      //   targetScreen: '/',
-      // ),
-      // MetroServicesModel(
-      //   id: '7',
-      //   active: true,
-      //   icon: 'offers',
-      //   title: 'Refer a\nFriend',
-      //   targetScreen: '/',
-      // ),
       MetroServicesModel(
-        id: '8',
+        id: '6',
         active: true,
         icon: 'media',
         title: 'Follow\nUs',
         targetScreen: '/media',
       ),
     ];
+
+    List<MetroServicesModel> getActiveServiceList() {
+      final activeServices =
+          servicesList.where((service) => service.active).toList();
+      return activeServices;
+    }
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -114,15 +106,16 @@ class HomeScreen extends StatelessWidget {
 
                     // Services Grid
                     GridLayout(
-                      itemCount: servicesList.length,
+                      itemCount: getActiveServiceList().length,
                       mainAxisExtent: TDeviceUtils.getScreenHeight() * .15,
                       crossAxisCount: 4,
                       mainAxisSpacing: TSizes.gridViewSpacing,
                       crossAxisSpacing:
                           TDeviceUtils.getScreenWidth(context) * .06,
                       itemBuilder: (BuildContext context, int index) {
+                        final activeServiceList = getActiveServiceList();
                         return ServiceCards(
-                          service: servicesList[index],
+                          service: activeServiceList[index],
                         );
                       },
                     ),
