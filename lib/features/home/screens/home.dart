@@ -16,6 +16,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = TDeviceUtils.getScreenHeight();
+    final screenWidth = TDeviceUtils.getScreenWidth(context);
     final List<MetroServicesModel> servicesList = [
       MetroServicesModel(
         id: '1',
@@ -107,11 +109,10 @@ class HomeScreen extends StatelessWidget {
                     // Services Grid
                     GridLayout(
                       itemCount: getActiveServiceList().length,
-                      mainAxisExtent: TDeviceUtils.getScreenHeight() * .15,
+                      mainAxisExtent: screenHeight * .15,
                       crossAxisCount: 4,
                       mainAxisSpacing: TSizes.gridViewSpacing,
-                      crossAxisSpacing:
-                          TDeviceUtils.getScreenWidth(context) * .06,
+                      crossAxisSpacing: screenWidth * .06,
                       itemBuilder: (BuildContext context, int index) {
                         final activeServiceList = getActiveServiceList();
                         return ServiceCards(

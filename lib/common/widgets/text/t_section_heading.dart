@@ -34,9 +34,8 @@ class TSectionHeading extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  textScaler: TextScaler.linear(ScaleSize.textScaleFactor(
-                      context,
-                      maxTextScaleFactor: 2.5)),
+                  textScaler:
+                      TextScaleUtil.getScaledText(context, maxScale: 2.5),
                   style: Theme.of(context)
                       .textTheme
                       .headlineSmall!

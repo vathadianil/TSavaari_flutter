@@ -38,21 +38,22 @@ class NavigationContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = TDeviceUtils.getScreenWidth(context);
     return Padding(
       padding: EdgeInsets.only(
-          left: TDeviceUtils.getScreenWidth(context) * .1,
-          right: TDeviceUtils.getScreenWidth(context) * .1,
-          bottom: TSizes.md),
+          left: screenWidth * .1,
+          right: screenWidth * .1,
+          bottom: screenWidth * .04),
       child: Material(
         color: Colors.transparent,
         elevation: TSizes.sm,
-        borderRadius: BorderRadius.circular(TSizes.borderRadiusXL),
+        borderRadius: BorderRadius.circular(screenWidth * 0.1),
         child: Container(
-          width: TDeviceUtils.getScreenWidth(context),
-          height: TDeviceUtils.getScreenWidth(context) * .15,
+          width: screenWidth,
+          height: screenWidth * .15,
           decoration: BoxDecoration(
             color: TColors.primary,
-            borderRadius: BorderRadius.circular(TSizes.borderRadiusXL),
+            borderRadius: BorderRadius.circular(screenWidth * 0.1),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

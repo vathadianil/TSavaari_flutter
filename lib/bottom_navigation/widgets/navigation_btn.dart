@@ -21,6 +21,7 @@ class NavigationBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = TDeviceUtils.getScreenWidth(context);
     return Container(
       alignment: Alignment.center,
       decoration: const BoxDecoration(
@@ -31,13 +32,13 @@ class NavigationBtn extends StatelessWidget {
           onPressed(index);
         },
         child: Container(
-          padding: EdgeInsets.all(TDeviceUtils.getScreenWidth(context) * .02),
+          padding: EdgeInsets.all(screenWidth * .02),
           decoration: (currentIndex == index)
               ? BoxDecoration(
-                  borderRadius: BorderRadius.circular(TSizes.borderRadiusXL),
+                  borderRadius: BorderRadius.circular(screenWidth * .1),
                   border: Border.all(
                     color: const Color.fromRGBO(255, 255, 255, 1),
-                    width: TDeviceUtils.getScreenWidth(context) * .003,
+                    width: screenWidth * .003,
                   ),
                 )
               : null,
@@ -47,7 +48,7 @@ class NavigationBtn extends StatelessWidget {
               Icon(
                 icon,
                 color: TColors.white,
-                size: TDeviceUtils.getScreenWidth(context) * .05,
+                size: screenWidth * .05,
               ),
               if (currentIndex == index)
                 const SizedBox(
@@ -62,14 +63,13 @@ class NavigationBtn extends StatelessWidget {
                         begin: Offset(-.4, 0))
                   ],
                   child: SizedBox(
-                    width: TDeviceUtils.getScreenWidth(context) * .15,
+                    width: screenWidth * .15,
                     child: Text(
                       text,
                       textAlign: TextAlign.center,
                       maxLines: 2,
-                      textScaler: TextScaler.linear(ScaleSize.textScaleFactor(
-                          context,
-                          maxTextScaleFactor: 4)),
+                      textScaler:
+                          TextScaleUtil.getScaledText(context, maxScale: 4),
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.labelSmall!.apply(
                             color: TColors.white,

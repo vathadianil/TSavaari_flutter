@@ -16,6 +16,7 @@ class ServiceCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
+    final screenWidth = TDeviceUtils.getScreenWidth(context);
     return InkWell(
       onTap: () {
         if (service.targetScreen == '/media') {
@@ -31,16 +32,17 @@ class ServiceCards extends StatelessWidget {
         children: [
           Expanded(
             child: TCircularContainer(
-                applyBoxShadow: true,
-                backgroundColor: dark ? TColors.dark : TColors.white,
-                boxShadowColor:
-                    dark ? TColors.accent.withOpacity(.3) : TColors.accent,
-                radius: TSizes.borderRadiusMd,
-                child: Icon(
-                  TIcons.getIcon(service.icon),
-                  size: TDeviceUtils.getScreenWidth(context) * .1,
-                  color: dark ? TColors.accent : TColors.primary,
-                )),
+              applyBoxShadow: true,
+              backgroundColor: dark ? TColors.dark : TColors.white,
+              boxShadowColor:
+                  dark ? TColors.accent.withOpacity(.3) : TColors.accent,
+              radius: TSizes.borderRadiusMd,
+              child: Icon(
+                TIcons.getIcon(service.icon),
+                size: screenWidth * .1,
+                color: dark ? TColors.accent : TColors.primary,
+              ),
+            ),
           ),
           const SizedBox(
             height: TSizes.spaceBtwItems / 2,
@@ -48,8 +50,7 @@ class ServiceCards extends StatelessWidget {
           Expanded(
             child: Text(
               service.title,
-              textScaler: TextScaler.linear(
-                  ScaleSize.textScaleFactor(context, maxTextScaleFactor: 3)),
+              textScaler: TextScaleUtil.getScaledText(context, maxScale: 3),
               style: Theme.of(context).textTheme.labelSmall,
               textAlign: TextAlign.center,
               maxLines: 2,

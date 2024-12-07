@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:tsavaari/common/widgets/appbar/t_appbar.dart';
 import 'package:tsavaari/common/widgets/notifications/notification_icon.dart';
@@ -19,6 +18,8 @@ class HomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textScaler = TextScaleUtil.getScaledText(context);
+    final screenWidth = TDeviceUtils.getScreenWidth(context);
     final controller = Get.put(UserController());
     return TAppBar(
       showBackArrow: false,
@@ -26,7 +27,7 @@ class HomeAppBar extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CircleAvatar(
-            radius: TDeviceUtils.getScreenWidth(context) * .035,
+            radius: screenWidth * .035,
             backgroundColor: TColors.white,
             backgroundImage: const AssetImage(TImages.appLogo),
           ),
@@ -42,14 +43,13 @@ class HomeAppBar extends StatelessWidget {
                     return const ShimmerEffect(width: 80, height: 15);
                   }
                   return SizedBox(
-                    width: TDeviceUtils.getScreenWidth(context) * .4,
+                    width: screenWidth * .4,
                     child: Text(
                       // controller.user.value.fullname,
                       'Hi, Sam',
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
-                      textScaler:
-                          TextScaler.linear(ScaleSize.textScaleFactor(context)),
+                      textScaler: textScaler,
                       style: Theme.of(context).textTheme.headlineSmall!.apply(
                             color: TColors.white,
                           ),
@@ -61,19 +61,16 @@ class HomeAppBar extends StatelessWidget {
                 height: TSizes.spaceBtwItems / 4,
               ),
               SizedBox(
-                width: TDeviceUtils.getScreenWidth(context) * .43,
-                child: Text(
-                  TTexts.homeAppbarTitle,
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelMedium!
-                      .apply(color: TColors.grey),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textScaler: TextScaler.linear(
-                    ScaleSize.textScaleFactor(context, maxTextScaleFactor: 2.7),
-                  ),
-                ),
+                width: screenWidth * .43,
+                child: Text(TTexts.homeAppbarTitle,
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelMedium!
+                        .apply(color: TColors.grey),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textScaler:
+                        TextScaleUtil.getScaledText(context, maxScale: 2.7)),
               ),
             ],
           ),
@@ -88,13 +85,11 @@ class HomeAppBar extends StatelessWidget {
               Icon(
                 Icons.share,
                 color: TColors.white,
-                size: TDeviceUtils.getScreenWidth(context) * .04,
+                size: screenWidth * .04,
               ),
               Text(
                 TTexts.share,
-                textScaler: TextScaler.linear(
-                  ScaleSize.textScaleFactor(context, maxTextScaleFactor: 2.2),
-                ),
+                textScaler: TextScaleUtil.getScaledText(context, maxScale: 2.2),
                 style: Theme.of(context)
                     .textTheme
                     .labelSmall!
