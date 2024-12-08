@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:tsavaari/common/controllers/checkbox_controller.dart';
+import 'package:tsavaari/common/widgets/containers/t_circular_container.dart';
 import 'package:tsavaari/features/qr/book_qr/screens/widgets/proceed_to_pay_btn.dart';
 import 'package:tsavaari/features/qr/display_qr/controllers/bottom_sheet_pageview_controller.dart';
 import 'package:tsavaari/features/qr/display_qr/controllers/refund_preview_controller.dart';
@@ -10,7 +11,9 @@ import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
 import 'package:tsavaari/utils/constants/text_size.dart';
 import 'package:tsavaari/utils/constants/text_strings.dart';
+import 'package:tsavaari/utils/constants/ticket_status_codes.dart';
 import 'package:tsavaari/utils/device/device_utility.dart';
+import 'package:tsavaari/utils/helpers/helper_functions.dart';
 import 'package:tsavaari/utils/loaders/shimmer_effect.dart';
 
 class RefundPreview extends StatelessWidget {
@@ -21,10 +24,13 @@ class RefundPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(tickets![0].ticketId);
     final screenWidth = TDeviceUtils.getScreenWidth(context);
     final refundController =
         Get.put(RefundPreviewController(tickets: tickets!, orderId: orderId));
     Get.put(CheckBoxController());
+
+    final dark = THelperFunctions.isDarkMode(context);
 
     return SingleChildScrollView(
       child: Column(
@@ -163,25 +169,77 @@ class RefundPreview extends StatelessWidget {
                           trailing: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                '${TTexts.rupeeSymbol} ${refundController.refundPreviewData[index].refundAmount ?? 0}/-',
-                                textScaler: TextScaleUtil.getScaledText(context,
-                                    maxScale: 2.4),
-                                style:
-                                    Theme.of(context).textTheme.headlineSmall,
-                              ),
-                              Text(
-                                TTexts.refundAmt,
-                                textScaler: TextScaleUtil.getScaledText(context,
-                                    maxScale: 2.4),
-                              ),
+                              if (refundController
+                                      .refundPreviewData[index].returnCode ==
+                                  '0')
+                                Column(
+                                  children: [
+                                    Text(
+                                      '${TTexts.rupeeSymbol} ${refundController.refundPreviewData[index].refundAmount ?? 0}/-',
+                                      textScaler: TextScaleUtil.getScaledText(
+                                          context,
+                                          maxScale: 2.4),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall,
+                                    ),
+                                    Text(
+                                      TTexts.refundAmt,
+                                      textScaler: TextScaleUtil.getScaledText(
+                                          context,
+                                          maxScale: 2.4),
+                                    ),
+                                  ],
+                                )
+                              else
+                                Tooltip(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: TSizes.sm,
+                                      horizontal: TSizes.md),
+                                  decoration: BoxDecoration(
+                                      color: TColors.error,
+                                      borderRadius:
+                                          BorderRadius.circular(TSizes.sm),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                            color: TColors.error,
+                                            blurRadius: TSizes.sm)
+                                      ]),
+                                  message: getRefundStatusMessage(
+                                    refundController
+                                        .refundPreviewData[index].returnMsg
+                                        .toString()
+                                        .split(':')[1],
+                                  ),
+                                  showDuration: const Duration(seconds: 5),
+                                  triggerMode: TooltipTriggerMode.tap,
+                                  child: TCircularContainer(
+                                    width: screenWidth * .07,
+                                    height: screenWidth * .07,
+                                    applyBoxShadow: true,
+                                    backgroundColor:
+                                        dark ? TColors.dark : TColors.white,
+                                    boxShadowColor: dark
+                                        ? TColors.accent.withOpacity(.3)
+                                        : TColors.accent,
+                                    radius: screenWidth * .1,
+                                    child: Icon(
+                                      Iconsax.info_circle,
+                                      color: dark
+                                          ? TColors.accent
+                                          : TColors.primary,
+                                    ),
+                                  ),
+                                ),
                             ],
                           ),
                         );
                       },
                       separatorBuilder: (context, index) {
-                        return const SizedBox(
-                          height: TSizes.spaceBtwItems,
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: TSizes.defaultSpace),
+                          child: Divider(),
                         );
                       },
                       itemCount: tickets!.length,
@@ -225,7 +283,7 @@ class RefundPreview extends StatelessWidget {
           Obx(
             () => refundController.radioSelectedValue.isNotEmpty
                 ? ProceedToPayBtn(
-                    btnText: 'Proceed to Cancel',
+                    btnText: TTexts.proccedToCancel,
                     onPressed:
                         (CheckBoxController.instance.checkBoxState.value &&
                                 refundController.radioSelectedValue.isNotEmpty)
@@ -240,6 +298,22 @@ class RefundPreview extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String getRefundStatusMessage(String statusCode) {
+    var message = TTexts.rfdGeneralMsg;
+    if (statusCode == TicketStatusCodes.entryUsed.toString()) {
+      message = TTexts.rfdEntryUsedMsg;
+    } else if (statusCode == TicketStatusCodes.changeDestination.toString()) {
+      message = TTexts.rfdChgDtMsg;
+    } else if (statusCode == TicketStatusCodes.exitUsed.toString()) {
+      message = TTexts.rfdExitUsedMsg;
+    } else if (statusCode == TicketStatusCodes.refunded.toString()) {
+      message = TTexts.rfdRefundStatusMsg;
+    } else if (statusCode == TicketStatusCodes.expired.toString()) {
+      message = TTexts.rfdTicketExpireddMsg;
+    }
+    return message;
   }
 
   bool isTicketSelected(int index) {

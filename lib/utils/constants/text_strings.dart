@@ -6,6 +6,7 @@ class TTexts {
 
   //Button Texts
   static const String proccedToPay = 'Proceed to Pay';
+  static const String proccedToCancel = 'Proceed to Cancel';
   static const String done = "Done";
   static const String submit = "Submit";
 
@@ -54,6 +55,8 @@ class TTexts {
   static const String validUpto = 'Valid Upto';
   static const String platformInfo = 'Paltform Info';
   static const String interchageText = 'Interchange here';
+
+  //Refund and Change Destination
   static const String hereToHelp = 'We are here to help!';
   static const String changeDest = 'Change Destination';
   static const String changeDestDesc =
@@ -61,10 +64,41 @@ class TTexts {
   static const String cancelTicket = 'Cancel Ticket';
   static const String cancelTicketDesc =
       'Want to Canel your Journey!. Press here for Refund.';
-  static const String selectPassengers = 'Select Passengers to Cancel';
+  static const String selectPassengers = 'Select Passengers';
   static const String selectAll = 'Select All';
   static const String refundAmt = 'Refund Amount';
   static const String totalToBeRefund = 'Total to be Refunded';
+  static const String updatedDstWillbe = 'Updated destination will be ';
+  static const String changeDstNotPossible = 'Change Destination Not Possible';
+  static const String currDst = 'Current Destination ';
+  static const String payableAmt = 'Payable Amount';
+  static const String selectDstLabelText = 'Select New Destination';
+  static const String totalTobePaid = 'Total to be Paid';
+
+  //Refund messages
+  static const String rfdGeneralMsg =
+      'Refund/cancel Eligibility criteria not matched';
+  static const String rfdEntryUsedMsg = 'Entry Used Tickets are not Refunded.';
+  static const String rfdChgDtMsg =
+      'Change Destination Tickets are not Refunded.';
+  static const String rfdExitUsedMsg = 'Exit Used Tickets are not Refunded.';
+  static const String rfdRefundStatusMsg = 'Ticket is already Refunded.';
+  static const String rfdTicketExpireddMsg =
+      'Expired Tickets are not refunded.';
+
+//Change Destination Messages
+  static const String chdGeneralMsg =
+      'Change Destination Eligibility criteria not matched';
+  static const String chdNewMsg =
+      'New Tickets are not eligible for Change Destination';
+  static const String chdStatustMsg =
+      'Ticket is already marked as Change Destination';
+  static const String chdExitUsedMsg =
+      'Exit Used Tickets are not eligible for Change Destination.';
+  static const String chdRefundMsg =
+      'Refunded Tickets are not eligible for Change Destination.';
+  static const String chdTicketExpireddMsg =
+      'Expired Tickets are not eligible for Change Destination.';
 
   //T & C
   static const String iAgree = 'I Agree to these';

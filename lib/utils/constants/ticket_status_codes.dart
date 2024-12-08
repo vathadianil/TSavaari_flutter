@@ -7,7 +7,7 @@ class TicketStatusCodes {
   static const newTicketString = 'NEW';
   static const entryUsed = 20;
   static const entryUsedString = 'ENTRY_USED';
-  static const exitUserd = 30;
+  static const exitUsed = 30;
   static const refunded = 40;
   static const expired = 50;
   static const changeDestination = 60;

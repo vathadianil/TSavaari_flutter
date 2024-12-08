@@ -211,11 +211,12 @@ class ChangeDestinationPreviewController extends GetxController {
     var chaneDestinationQuoteIdList = [];
     for (var index = 0; index < checkBoxValue.length; index++) {
       chaneDestinationQuoteIdList.addIf(
-          checkBoxValue.contains(changeDestinationPreviewData[index].ticketId),
+          (checkBoxValue
+              .contains(changeDestinationPreviewData[index].ticketId)),
           changeDestinationPreviewData[index].codQuoteId);
     }
     var isSuccess = true;
-    for (var index = 0; index < checkBoxValue.length; index++) {
+    for (var index = 0; index < chaneDestinationQuoteIdList.length; index++) {
       Future.delayed(Duration(seconds: index), () async {
         final ticketData =
             await _changeDestinationRepository.changeDestinationConfirm({
@@ -231,7 +232,7 @@ class ChangeDestinationPreviewController extends GetxController {
         }
         changeDestinationConfirmData.add(ticketData);
 
-        if (index == checkBoxValue.length - 1) {
+        if (index == chaneDestinationQuoteIdList.length - 1) {
           //Navigate to Dispaly QR Page
           if (isSuccess) {
             final tickets =
@@ -246,7 +247,11 @@ class ChangeDestinationPreviewController extends GetxController {
               ),
             );
           } else {
-            throw 'Something went wrong. Unable to do Change destination. Please contact customer care!';
+            TFullScreenLoader.stopLoading();
+            TLoaders.errorSnackBar(
+                title: 'Oh Snap!',
+                message:
+                    'Something went wrong. Unable to do Change destination. Please contact customer care!');
           }
         }
       });

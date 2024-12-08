@@ -69,8 +69,7 @@ class QrTicketContentContainer extends StatelessWidget {
                       (tickets[displayQrController.carouselCurrentIndex.value]
                                   .ticketStatus ==
                               TicketStatusCodes.newTicketString ||
-                          tickets[displayQrController
-                                      .carouselCurrentIndex.value]
+                          tickets[displayQrController.carouselCurrentIndex.value]
                                   .ticketTypeId ==
                               TicketStatusCodes.newTicket ||
                           tickets[displayQrController
@@ -80,7 +79,11 @@ class QrTicketContentContainer extends StatelessWidget {
                           tickets[displayQrController
                                       .carouselCurrentIndex.value]
                                   .ticketTypeId ==
-                              TicketStatusCodes.entryUsed)
+                              TicketStatusCodes.entryUsed ||
+                          tickets[displayQrController
+                                      .carouselCurrentIndex.value]
+                                  .oldTicketStatusId ==
+                              TicketStatusCodes.changeDestination.toString())
                   ? TicketStatus(
                       ticketStatus: tickets[displayQrController
                                   .carouselCurrentIndex.value]
@@ -116,19 +119,31 @@ class QrTicketContentContainer extends StatelessWidget {
                       version: QrVersions.auto,
                       dataModuleStyle: QrDataModuleStyle(
                         dataModuleShape: QrDataModuleShape.square,
-                        color: (ticket.statusId != 10 &&
-                                ticket.ticketStatus != 'NEW' &&
-                                ticket.statusId != 20)
-                            ? TColors.darkGrey
-                            : TColors.black,
+                        color:
+                            (ticket.statusId != TicketStatusCodes.newTicket &&
+                                    ticket.ticketStatus !=
+                                        TicketStatusCodes.newTicketString &&
+                                    ticket.statusId !=
+                                        TicketStatusCodes.entryUsed &&
+                                    ticket.oldTicketStatusId !=
+                                        TicketStatusCodes.changeDestination
+                                            .toString())
+                                ? TColors.darkGrey
+                                : TColors.black,
                       ),
                       eyeStyle: QrEyeStyle(
                         eyeShape: QrEyeShape.square,
-                        color: (ticket.statusId != 10 &&
-                                ticket.ticketStatus != 'NEW' &&
-                                ticket.statusId != 20)
-                            ? TColors.darkGrey
-                            : TColors.black,
+                        color:
+                            (ticket.statusId != TicketStatusCodes.newTicket &&
+                                    ticket.ticketStatus !=
+                                        TicketStatusCodes.newTicketString &&
+                                    ticket.statusId !=
+                                        TicketStatusCodes.entryUsed &&
+                                    ticket.oldTicketStatusId !=
+                                        TicketStatusCodes.changeDestination
+                                            .toString())
+                                ? TColors.darkGrey
+                                : TColors.black,
                       ),
                     ),
                     if (ticket.statusId == 40)
