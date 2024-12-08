@@ -3,6 +3,9 @@ import 'package:iconsax/iconsax.dart';
 import 'package:tsavaari/features/qr/display_qr/controllers/bottom_sheet_pageview_controller.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_size.dart';
+import 'package:tsavaari/utils/constants/text_strings.dart';
+import 'package:tsavaari/utils/device/device_utility.dart';
 import 'package:tsavaari/utils/helpers/helper_functions.dart';
 
 class BottomSheetMainPage extends StatelessWidget {
@@ -12,15 +15,17 @@ class BottomSheetMainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = TDeviceUtils.getScreenWidth(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'We are here to help!',
+          TTexts.hereToHelp,
+          textScaler: TextScaleUtil.getScaledText(context),
           style: Theme.of(context).textTheme.headlineMedium,
         ),
-        const SizedBox(
-          height: TSizes.spaceBtwItems,
+        SizedBox(
+          height: screenWidth * .05,
         ),
         Container(
           decoration: BoxDecoration(
@@ -46,20 +51,22 @@ class BottomSheetMainPage extends StatelessWidget {
                   : TColors.primary,
             ),
             title: Text(
-              'Change Destination',
+              TTexts.changeDest,
+              textScaler: TextScaleUtil.getScaledText(context),
               style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                   color: THelperFunctions.isDarkMode(context)
                       ? TColors.accent
                       : TColors.primary),
             ),
             subtitle: Text(
-              'Want to change your destination station?. Press here.',
+              TTexts.changeDestDesc,
+              textScaler: TextScaleUtil.getScaledText(context, maxScale: 2.5),
               style: Theme.of(context).textTheme.labelLarge,
             ),
           ),
         ),
-        const SizedBox(
-          height: TSizes.spaceBtwItems,
+        SizedBox(
+          height: screenWidth * .04,
         ),
         Container(
           decoration: BoxDecoration(
@@ -75,14 +82,16 @@ class BottomSheetMainPage extends StatelessWidget {
               color: TColors.error,
             ),
             title: Text(
-              'Cancel Ticket',
+              TTexts.cancelTicket,
+              textScaler: TextScaleUtil.getScaledText(context),
               style: Theme.of(context)
                   .textTheme
                   .headlineSmall!
                   .copyWith(color: TColors.error),
             ),
             subtitle: Text(
-              'Want to Canel your Journey!. Press here for Refund.',
+              TTexts.cancelTicketDesc,
+              textScaler: TextScaleUtil.getScaledText(context, maxScale: 2.5),
               style: Theme.of(context).textTheme.labelLarge,
             ),
           ),

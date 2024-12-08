@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_size.dart';
+import 'package:tsavaari/utils/constants/text_strings.dart';
 
 class TicketExpiry extends StatelessWidget {
   const TicketExpiry({
@@ -16,7 +18,8 @@ class TicketExpiry extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'Valid Upto',
+          TTexts.validUpto,
+          textScaler: TextScaleUtil.getScaledText(context, maxScale: 3),
           style: Theme.of(context)
               .textTheme
               .labelSmall!
@@ -27,6 +30,7 @@ class TicketExpiry extends StatelessWidget {
         ),
         Text(
           dateTime,
+          textScaler: TextScaleUtil.getScaledText(context, maxScale: 3),
           style: Theme.of(context)
               .textTheme
               .labelSmall!

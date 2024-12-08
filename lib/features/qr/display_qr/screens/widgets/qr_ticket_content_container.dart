@@ -12,8 +12,10 @@ import 'package:tsavaari/features/qr/display_qr/screens/widgets/ticket_expiry.da
 import 'package:tsavaari/features/qr/display_qr/screens/widgets/ticket_status.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_size.dart';
 import 'package:tsavaari/utils/constants/ticket_status_codes.dart';
 import 'package:tsavaari/utils/helpers/helper_functions.dart';
+import 'package:tsavaari/utils/device/device_utility.dart';
 
 class QrTicketContentContainer extends StatelessWidget {
   const QrTicketContentContainer({
@@ -24,6 +26,7 @@ class QrTicketContentContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = TDeviceUtils.getScreenWidth(context);
     final displayQrController = DisplayQrController.instance;
     final isSjtSinglePassenger = (tickets[0].ticketTypeId ==
                 TicketStatusCodes.ticketTypeSjt ||
@@ -171,13 +174,13 @@ class QrTicketContentContainer extends StatelessWidget {
               children: [
                 for (int i = 0; i < tickets.length; i++)
                   TCircularContainer(
-                    width: 10,
-                    height: 10,
+                    width: screenWidth * 0.03,
+                    height: screenWidth * 0.03,
                     backgroundColor:
                         displayQrController.carouselCurrentIndex.value == i
                             ? TColors.primary
                             : TColors.grey,
-                    margin: const EdgeInsets.only(right: TSizes.sm),
+                    margin: EdgeInsets.only(right: screenWidth * 0.02),
                   ),
               ],
             ),
@@ -191,6 +194,7 @@ class QrTicketContentContainer extends StatelessWidget {
           () => Text(
             'TKID ${tickets[displayQrController.carouselCurrentIndex.value].ticketId}',
             softWrap: true,
+            textScaler: TextScaleUtil.getScaledText(context, maxScale: 3),
             style: Theme.of(context)
                 .textTheme
                 .labelSmall!

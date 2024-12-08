@@ -8,6 +8,9 @@ import 'package:tsavaari/features/qr/display_qr/controllers/refund_preview_contr
 import 'package:tsavaari/features/qr/display_qr/models/qr_code_model.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_size.dart';
+import 'package:tsavaari/utils/constants/text_strings.dart';
+import 'package:tsavaari/utils/device/device_utility.dart';
 import 'package:tsavaari/utils/loaders/shimmer_effect.dart';
 
 class RefundPreview extends StatelessWidget {
@@ -18,6 +21,7 @@ class RefundPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = TDeviceUtils.getScreenWidth(context);
     final refundController =
         Get.put(RefundPreviewController(tickets: tickets!, orderId: orderId));
     Get.put(CheckBoxController());
@@ -38,7 +42,8 @@ class RefundPreview extends StatelessWidget {
               const SizedBox(
                 width: TSizes.md,
               ),
-              Text('Cancel Ticket',
+              Text(TTexts.cancelTicket,
+                  textScaler: TextScaleUtil.getScaledText(context),
                   style: Theme.of(context).textTheme.headlineSmall),
             ],
           ),
@@ -50,7 +55,11 @@ class RefundPreview extends StatelessWidget {
                     tickets!.length ==
                         refundController.refundPreviewData.length &&
                     refundController.refundPreviewData.isNotEmpty)
-                  const Text('Select Passengers to Cancel'),
+                  Text(
+                    TTexts.selectPassengers,
+                    textScaler:
+                        TextScaleUtil.getScaledText(context, maxScale: 2.4),
+                  ),
 
                 //--Select all button
                 if (!refundController.isLoading.value &&
@@ -61,7 +70,11 @@ class RefundPreview extends StatelessWidget {
                     onPressed: () {
                       onValueChanged(0, isSelectAll: true);
                     },
-                    child: const Text('Select All'),
+                    child: Text(
+                      TTexts.selectAll,
+                      textScaler:
+                          TextScaleUtil.getScaledText(context, maxScale: 2.4),
+                    ),
                   ),
               ],
             ),
@@ -79,7 +92,7 @@ class RefundPreview extends StatelessWidget {
                 children: [
                   if (!refundController.isLoading.value &&
                       refundController.refundPreviewData.isEmpty)
-                    const Text('No Data Found'),
+                    const Text(TTexts.noDataFound),
                   if (refundController.isLoading.value)
                     Padding(
                       padding: const EdgeInsets.all(TSizes.defaultSpace),
@@ -127,13 +140,19 @@ class RefundPreview extends StatelessWidget {
                                       }
                                     : null),
                           ),
-                          title: Text('Passenger ${(index + 1).toString()}'),
+                          title: Text(
+                            '${TTexts.passenger} ${(index + 1).toString()}',
+                            textScaler: TextScaleUtil.getScaledText(context,
+                                maxScale: 2.4),
+                          ),
                           subtitle: Text(
                             refundController
                                         .refundPreviewData[index].returnCode ==
                                     '0'
-                                ? 'Refund Possble'
-                                : 'Refund Not Possible',
+                                ? TTexts.refundPossible
+                                : TTexts.refundNotPossible,
+                            textScaler: TextScaleUtil.getScaledText(context,
+                                maxScale: 2.4),
                           ),
                           subtitleTextStyle: TextStyle(
                               color: refundController.refundPreviewData[index]
@@ -145,11 +164,17 @@ class RefundPreview extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                '\u{20B9} ${refundController.refundPreviewData[index].refundAmount ?? 0}/-',
+                                '${TTexts.rupeeSymbol} ${refundController.refundPreviewData[index].refundAmount ?? 0}/-',
+                                textScaler: TextScaleUtil.getScaledText(context,
+                                    maxScale: 2.4),
                                 style:
                                     Theme.of(context).textTheme.headlineSmall,
                               ),
-                              const Text('Refund Amount'),
+                              Text(
+                                TTexts.refundAmt,
+                                textScaler: TextScaleUtil.getScaledText(context,
+                                    maxScale: 2.4),
+                              ),
                             ],
                           ),
                         );
@@ -176,9 +201,14 @@ class RefundPreview extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Total to be Refunded'),
                         Text(
-                          '\u{20B9}${refundController.totalRefundAmount.value.toString()}/-',
+                          TTexts.totalToBeRefund,
+                          textScaler: TextScaleUtil.getScaledText(context,
+                              maxScale: 2.5),
+                        ),
+                        Text(
+                          '${TTexts.rupeeSymbol}${refundController.totalRefundAmount.value.toString()}/-',
+                          textScaler: TextScaleUtil.getScaledText(context),
                           style: Theme.of(context)
                               .textTheme
                               .headlineMedium!
@@ -188,6 +218,9 @@ class RefundPreview extends StatelessWidget {
                     ),
                   )
                 : const SizedBox(),
+          ),
+          SizedBox(
+            height: screenWidth * 0.05,
           ),
           Obx(
             () => refundController.radioSelectedValue.isNotEmpty

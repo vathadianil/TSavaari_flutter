@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
-// import 'package:tsavaari/utils/constants/image_strings.dart';
-import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_size.dart';
 
 class CarbonEmissionMessage extends StatelessWidget {
   const CarbonEmissionMessage({
@@ -15,16 +14,10 @@ class CarbonEmissionMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        // const CircleAvatar(
-        //   backgroundImage: AssetImage(TImages.appLogo),
-        //   backgroundColor: TColors.white,
-        // ),
-        const SizedBox(
-          width: TSizes.spaceBtwItems,
-        ),
         Expanded(
           child: Text(
             message,
+            textScaler: TextScaleUtil.getScaledText(context, maxScale: 3),
             style: Theme.of(context)
                 .textTheme
                 .labelSmall!

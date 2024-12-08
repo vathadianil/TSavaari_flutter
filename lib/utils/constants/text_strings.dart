@@ -51,6 +51,20 @@ class TTexts {
   static const String outWard = 'Return';
   static const String passenger = 'Passenger';
   static const String status = 'Status';
+  static const String validUpto = 'Valid Upto';
+  static const String platformInfo = 'Paltform Info';
+  static const String interchageText = 'Interchange here';
+  static const String hereToHelp = 'We are here to help!';
+  static const String changeDest = 'Change Destination';
+  static const String changeDestDesc =
+      'Want to change your destination station?. Press here.';
+  static const String cancelTicket = 'Cancel Ticket';
+  static const String cancelTicketDesc =
+      'Want to Canel your Journey!. Press here for Refund.';
+  static const String selectPassengers = 'Select Passengers to Cancel';
+  static const String selectAll = 'Select All';
+  static const String refundAmt = 'Refund Amount';
+  static const String totalToBeRefund = 'Total to be Refunded';
 
   //T & C
   static const String iAgree = 'I Agree to these';
@@ -68,4 +82,9 @@ class TTexts {
   c)	Penalty/fee for overstay is Rs 15/hour maximum up to Rs 60.\n
 For a detailed and final travel time limit policy and penalties, please refer to""";
   static const webSiteText = 'Hyderabad Metro Official Website';
+
+  //messages
+  static const String noDataFound = 'No Data Found';
+  static const String refundPossible = 'Refund Possble';
+  static const String refundNotPossible = 'Refund Not Possible';
 }

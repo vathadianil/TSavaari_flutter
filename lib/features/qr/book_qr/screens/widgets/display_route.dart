@@ -6,6 +6,8 @@ import 'package:tsavaari/features/qr/book_qr/models/dummy_platform_info_model.da
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/image_strings.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_size.dart';
+import 'package:tsavaari/utils/constants/text_strings.dart';
 // import 'package:tsavaari/utils/helpers/helper_functions.dart';
 
 class DisplayRoute extends StatelessWidget {
@@ -21,8 +23,6 @@ class DisplayRoute extends StatelessWidget {
     return TCircularContainer(
       width: double.infinity,
       radius: TSizes.sm,
-      // backgroundColor:
-      //     THelperFunctions.isDarkMode(context) ? TColors.dark : TColors.light,
       height: routeData.isInterChange ? 70 : 50,
       boxShadow: getBoxShadow(routeData.color),
       applyBoxShadow: true,
@@ -52,6 +52,7 @@ class DisplayRoute extends StatelessWidget {
               ),
         title: Text(
           routeData.stationName ?? '',
+          textScaler: TextScaleUtil.getScaledText(context, maxScale: 2.5),
           style: Theme.of(context)
               .textTheme
               .bodyLarge!
@@ -62,7 +63,8 @@ class DisplayRoute extends StatelessWidget {
         ),
         subtitle: routeData.isInterChange
             ? Text(
-                'Interchange here',
+                TTexts.interchageText,
+                textScaler: TextScaleUtil.getScaledText(context, maxScale: 2.5),
                 style: Theme.of(context)
                     .textTheme
                     .labelSmall!

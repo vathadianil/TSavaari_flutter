@@ -40,12 +40,14 @@ class DisplayQrScreen extends StatelessWidget {
     List<TicketsListModel> getFormatttedTicketData(String indicator) {
       List<TicketsListModel> copiedtickets = [];
 
-      if (tickets![0].ticketTypeId == 20 && indicator == 'oneWay') {
+      if (tickets![0].ticketTypeId == TicketStatusCodes.ticketTypeRjt &&
+          indicator == 'oneWay') {
         copiedtickets = [];
         for (var i = 0; i < tickets!.length; i++) {
           copiedtickets.addIf(i.isEven, tickets![i]);
         }
-      } else if (tickets![0].ticketTypeId == 20 && indicator == 'roundTrip') {
+      } else if (tickets![0].ticketTypeId == TicketStatusCodes.ticketTypeRjt &&
+          indicator == 'roundTrip') {
         copiedtickets = [];
         for (var i = 0; i < tickets!.length; i++) {
           copiedtickets.addIf(i.isOdd, tickets![i]);

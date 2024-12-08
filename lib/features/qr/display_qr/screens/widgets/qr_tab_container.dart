@@ -6,10 +6,8 @@ import 'package:tsavaari/features/qr/book_qr/screens/widgets/display_route_conta
 import 'package:tsavaari/features/qr/display_qr/controllers/display_qr_controller.dart';
 import 'package:tsavaari/features/qr/display_qr/models/qr_code_model.dart';
 import 'package:tsavaari/features/qr/display_qr/screens/widgets/qr_ticket_content_container.dart';
-import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
 import 'package:tsavaari/utils/device/device_utility.dart';
-import 'package:tsavaari/utils/helpers/helper_functions.dart';
 
 class QrTabContainer extends StatefulWidget {
   const QrTabContainer(
@@ -42,7 +40,8 @@ class _QrTabContainerState extends State<QrTabContainer>
 
   @override
   Widget build(BuildContext context) {
-    final isDark = THelperFunctions.isDarkMode(context);
+    final screenHeight = TDeviceUtils.getScreenHeight();
+    final screenWidth = TDeviceUtils.getScreenWidth(context);
     return Column(
       children: [
         TTabbar(
@@ -54,59 +53,46 @@ class _QrTabContainerState extends State<QrTabContainer>
         ),
         SizedBox(
           width: double.maxFinite,
-          height: TDeviceUtils.getScreenHeight(),
-          child: PhysicalModel(
-            color: isDark ? TColors.dark : TColors.grey,
-            shape: BoxShape.rectangle,
-            elevation: isDark ? TSizes.sm : TSizes.lg,
-            shadowColor: isDark ? TColors.white : TColors.grey,
-            borderRadius: BorderRadius.circular(TSizes.md),
-            child: TTicketShapeWidget(
-              child: Container(
-                decoration: BoxDecoration(
-                    color: TColors.white,
-                    borderRadius: BorderRadius.circular(TSizes.md)),
-                padding: const EdgeInsets.all(
-                  TSizes.defaultSpace,
-                ),
-                child: TabBarView(
-                  controller: _tabBarController,
+          height: screenWidth <= TSizes.smallSceenSize
+              ? screenHeight * 1.02
+              : screenHeight * .82,
+          child: TTicketShapeWidget(
+            child: TabBarView(
+              controller: _tabBarController,
+              children: [
+                Column(
                   children: [
-                    Column(
-                      children: [
-                        QrTicketContentContainer(
-                          tickets: widget.onWayData,
-                        ),
-                        const SizedBox(
-                          height: TSizes.spaceBtwSections,
-                        ),
-                        //-- Route and platform info container
-
-                        DisplayrouteContainer(
-                          tickets: widget.onWayData,
-                          stationList: widget.stationList,
-                        ),
-                      ],
+                    QrTicketContentContainer(
+                      tickets: widget.onWayData,
                     ),
-                    Column(
-                      children: [
-                        QrTicketContentContainer(
-                          tickets: widget.roundTripData,
-                        ),
-                        const SizedBox(
-                          height: TSizes.spaceBtwSections,
-                        ),
-                        //-- Route and platform info container
+                    const SizedBox(
+                      height: TSizes.spaceBtwSections,
+                    ),
+                    //-- Route and platform info container
 
-                        DisplayrouteContainer(
-                          tickets: widget.roundTripData,
-                          stationList: widget.stationList,
-                        ),
-                      ],
+                    DisplayrouteContainer(
+                      tickets: widget.onWayData,
+                      stationList: widget.stationList,
                     ),
                   ],
                 ),
-              ),
+                Column(
+                  children: [
+                    QrTicketContentContainer(
+                      tickets: widget.roundTripData,
+                    ),
+                    const SizedBox(
+                      height: TSizes.spaceBtwSections,
+                    ),
+                    //-- Route and platform info container
+
+                    DisplayrouteContainer(
+                      tickets: widget.roundTripData,
+                      stationList: widget.stationList,
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),

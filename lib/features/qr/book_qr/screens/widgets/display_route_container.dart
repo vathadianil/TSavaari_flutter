@@ -7,6 +7,7 @@ import 'package:tsavaari/features/qr/book_qr/screens/widgets/display_route.dart'
 import 'package:tsavaari/features/qr/display_qr/models/qr_code_model.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_strings.dart';
 import 'package:tsavaari/utils/helpers/helper_functions.dart';
 
 class DisplayrouteContainer extends StatelessWidget {
@@ -93,7 +94,7 @@ class DisplayrouteContainer extends StatelessWidget {
                 color: TColors.dark,
               ),
               TSectionHeading(
-                title: 'Platform Info',
+                title: TTexts.platformInfo,
                 showActionBtn: false,
                 textColor: TColors.dark,
                 padding: EdgeInsets.only(left: TSizes.xs),
