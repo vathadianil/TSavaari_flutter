@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:tsavaari/common/controllers/button_tabbar_controller.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_size.dart';
+import 'package:tsavaari/utils/device/device_utility.dart';
 import 'package:tsavaari/utils/helpers/helper_functions.dart';
 
 class ButtonTabbar extends StatelessWidget {
@@ -19,8 +21,9 @@ class ButtonTabbar extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = ButtonTabbarController.instance;
     final isDark = THelperFunctions.isDarkMode(context);
+    final screenWidth = TDeviceUtils.getScreenWidth(context);
     return SizedBox(
-      height: TSizes.xl,
+      height: screenWidth * .08,
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
@@ -52,17 +55,21 @@ class ButtonTabbar extends StatelessWidget {
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(TSizes.md),
                   ),
-                  child: Text(
-                    buttonTexts[index],
-                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                          color: index == controller.tabIndex.value
-                              ? isDark
-                                  ? TColors.black
-                                  : TColors.white
-                              : isDark
-                                  ? TColors.white
-                                  : TColors.black,
-                        ),
+                  child: Center(
+                    child: Text(
+                      buttonTexts[index],
+                      textScaler:
+                          TextScaleUtil.getScaledText(context, maxScale: 3),
+                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                            color: index == controller.tabIndex.value
+                                ? isDark
+                                    ? TColors.black
+                                    : TColors.white
+                                : isDark
+                                    ? TColors.white
+                                    : TColors.black,
+                          ),
+                    ),
                   ),
                 ),
               ),

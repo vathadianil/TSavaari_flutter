@@ -3,21 +3,19 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_size.dart';
 
 class TicketStatusChip extends StatelessWidget {
-  const TicketStatusChip({
-    super.key,
-    required this.ticketStatus,
-    this.left = 0,
-    this.bottom = 25,
-    this.borderColor = TColors.success,
-    this.textColor = TColors.success,
-    this.backgroundColor = TColors.light,
-    this.padding = const EdgeInsets.symmetric(
-      horizontal: TSizes.md,
-    ),
-    this.isSmall = true,
-  });
+  const TicketStatusChip(
+      {super.key,
+      required this.ticketStatus,
+      this.left = 0,
+      this.bottom = 25,
+      this.borderColor = TColors.success,
+      this.textColor = TColors.success,
+      this.backgroundColor = TColors.light,
+      required this.consttrains,
+      this.padding = const EdgeInsets.all(0)});
 
   final String ticketStatus;
   final double left;
@@ -25,8 +23,8 @@ class TicketStatusChip extends StatelessWidget {
   final Color borderColor;
   final Color textColor;
   final Color backgroundColor;
+  final BoxConstraints consttrains;
   final EdgeInsets padding;
-  final bool isSmall;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +34,7 @@ class TicketStatusChip extends StatelessWidget {
       child: Transform.rotate(
         angle: -math.pi / 4,
         child: Container(
+          width: consttrains.maxWidth,
           padding: padding,
           decoration: BoxDecoration(
             color: backgroundColor,
@@ -46,17 +45,15 @@ class TicketStatusChip extends StatelessWidget {
               ),
             ),
           ),
-          child: Text(
-            ticketStatus,
-            style: isSmall
-                ? Theme.of(context).textTheme.labelLarge!.copyWith(
-                      color: textColor,
-                      fontWeight: FontWeight.bold,
-                    )
-                : Theme.of(context).textTheme.headlineMedium!.copyWith(
-                      color: textColor,
-                      fontWeight: FontWeight.bold,
-                    ),
+          child: Center(
+            child: Text(
+              ticketStatus,
+              textScaler: TextScaleUtil.getScaledText(context, maxScale: 3),
+              style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                    color: textColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
           ),
         ),
       ),

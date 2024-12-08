@@ -100,6 +100,11 @@ class TTexts {
   static const String chdTicketExpireddMsg =
       'Expired Tickets are not eligible for Change Destination.';
 
+//My Orders
+  static const String activeTickets = 'Active Tickets';
+  static const String pastTickets = 'Past Tickets';
+  static const String adults = 'Adults';
+
   //T & C
   static const String iAgree = 'I Agree to these';
   static const String termsConditions = 'Terms & Conditions';

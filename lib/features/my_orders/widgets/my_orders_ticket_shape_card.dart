@@ -9,6 +9,8 @@ import 'package:tsavaari/features/qr/book_qr/models/station_list_model.dart';
 import 'package:tsavaari/features/qr/display_qr/models/qr_code_model.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_size.dart';
+import 'package:tsavaari/utils/constants/text_strings.dart';
 import 'package:tsavaari/utils/device/device_utility.dart';
 import 'package:tsavaari/utils/helpers/helper_functions.dart';
 
@@ -26,6 +28,7 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
     final tabController = ButtonTabbarController.instance;
+    final screenWidth = TDeviceUtils.getScreenWidth(context);
 
     return InkWell(
       onTap: onTap,
@@ -35,7 +38,7 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             SizedBox(
-              width: TDeviceUtils.getScreenWidth(context) * .7,
+              width: screenWidth * .7,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -45,10 +48,13 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
                                   ticketData.fromStation!, stationList)
                               .shortName ??
                           '',
+                      textScaler: TextScaleUtil.getScaledText(context),
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
                   Text(
                     ticketData.purchaseDate!,
+                    textScaler:
+                        TextScaleUtil.getScaledText(context, maxScale: 3),
                     style: Theme.of(context).textTheme.labelSmall,
                   ),
                   if (ticketData.toStation != null)
@@ -57,6 +63,7 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
                                   ticketData.toStation!, stationList)
                               .shortName ??
                           '',
+                      textScaler: TextScaleUtil.getScaledText(context),
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
                 ],
@@ -76,7 +83,7 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
                   fillColor: TColors.primary,
                 ),
                 SizedBox(
-                    width: TDeviceUtils.getScreenWidth(context) * .25,
+                    width: screenWidth * .25,
                     child: const DashedHorizontalLine(
                       dashWidth: 4,
                       color: TColors.primary,
@@ -86,7 +93,7 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
                   color: TColors.primary,
                 ),
                 SizedBox(
-                    width: TDeviceUtils.getScreenWidth(context) * .25,
+                    width: screenWidth * .25,
                     child: const DashedHorizontalLine(
                       dashWidth: 4,
                       color: TColors.primary,
@@ -104,9 +111,11 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: TDeviceUtils.getScreenWidth(context) * .2,
+                  width: screenWidth * .2,
                   child: Text(
                     ticketData.fromStation ?? '',
+                    textScaler:
+                        TextScaleUtil.getScaledText(context, maxScale: 3),
                     style: Theme.of(context).textTheme.bodyLarge!,
                     maxLines: 1,
                     textAlign: TextAlign.center,
@@ -114,19 +123,22 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  width: TDeviceUtils.getScreenWidth(context) * .1,
+                  width: screenWidth * .1,
                 ),
                 Text(
                   ticketData.purchaseTime!,
+                  textScaler: TextScaleUtil.getScaledText(context, maxScale: 3),
                   style: Theme.of(context).textTheme.labelSmall!,
                 ),
                 SizedBox(
-                  width: TDeviceUtils.getScreenWidth(context) * .1,
+                  width: screenWidth * .1,
                 ),
                 SizedBox(
-                  width: TDeviceUtils.getScreenWidth(context) * .18,
+                  width: screenWidth * .18,
                   child: Text(
                     ticketData.toStation ?? '',
+                    textScaler:
+                        TextScaleUtil.getScaledText(context, maxScale: 3),
                     style: Theme.of(context).textTheme.bodyLarge!,
                     maxLines: 1,
                     textAlign: TextAlign.center,
@@ -151,11 +163,15 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      'Passengers',
+                      TTexts.passengers,
+                      textScaler:
+                          TextScaleUtil.getScaledText(context, maxScale: 3),
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     Text(
-                      '${ticketData.noOfPersons} Adults',
+                      '${ticketData.noOfPersons} ${TTexts.adults}',
+                      textScaler:
+                          TextScaleUtil.getScaledText(context, maxScale: 3),
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ],
@@ -163,87 +179,89 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      'Total Fare',
+                      TTexts.totalFare,
+                      textScaler:
+                          TextScaleUtil.getScaledText(context, maxScale: 3),
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     Text(
                       '${ticketData.totalFareAmount}/-',
+                      textScaler:
+                          TextScaleUtil.getScaledText(context, maxScale: 3),
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ],
                 ),
-                Stack(
-                  children: [
-                    SizedBox(
-                      width: TDeviceUtils.getScreenWidth(context) * .2,
-                      child: QrImageView(
-                        data: 'https://www.ltmetro.com',
-                        version: QrVersions.auto,
-                        eyeStyle: QrEyeStyle(
-                          color: tabController.tabIndex.value == 1
-                              ? TColors.darkGrey
-                              : isDark
-                                  ? TColors.light
-                                  : TColors.dark,
-                          eyeShape: QrEyeShape.square,
+                SizedBox(
+                  width: screenWidth * .2,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) => Stack(
+                      children: [
+                        QrImageView(
+                          data: 'https://www.ltmetro.com',
+                          version: QrVersions.auto,
+                          eyeStyle: QrEyeStyle(
+                            color: tabController.tabIndex.value == 1
+                                ? TColors.darkGrey
+                                : isDark
+                                    ? TColors.light
+                                    : TColors.dark,
+                            eyeShape: QrEyeShape.square,
+                          ),
+                          dataModuleStyle: QrDataModuleStyle(
+                            color: tabController.tabIndex.value == 1
+                                ? TColors.darkGrey
+                                : isDark
+                                    ? TColors.light
+                                    : TColors.dark,
+                          ),
                         ),
-                        dataModuleStyle: QrDataModuleStyle(
-                          color: tabController.tabIndex.value == 1
-                              ? TColors.darkGrey
-                              : isDark
-                                  ? TColors.light
-                                  : TColors.dark,
-                        ),
-                      ),
-                    ),
-                    (tabController.tabIndex.value == 1)
-                        ? const TicketStatusChip(
-                            left: 0,
-                            bottom: 30,
-                            ticketStatus: 'Expired',
-                            borderColor: TColors.error,
-                            textColor: TColors.error,
-                          )
-                        : (ticketData.tickets![0].statusId == 20)
-                            ? const TicketStatusChip(
-                                left: -2,
-                                bottom: 30,
-                                textColor: TColors.secondary,
-                                borderColor: TColors.secondary,
-                                backgroundColor: TColors.dark,
-                                ticketStatus: 'In Transit',
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: TSizes.sm,
-                                ),
+                        (tabController.tabIndex.value == 1)
+                            ? TicketStatusChip(
+                                left: 0,
+                                bottom: constraints.maxWidth * .4,
+                                ticketStatus: 'Expired',
+                                borderColor: TColors.error,
+                                textColor: TColors.error,
+                                consttrains: constraints,
                               )
-                            : (ticketData.tickets![0].statusId == 40)
-                                ? const TicketStatusChip(
-                                    left: -2,
-                                    bottom: 30,
-                                    textColor: TColors.error,
-                                    borderColor: TColors.error,
-                                    ticketStatus: 'Refunded',
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: TSizes.sm,
-                                    ),
+                            : (ticketData.tickets![0].statusId == 20)
+                                ? TicketStatusChip(
+                                    left: 0,
+                                    bottom: constraints.maxWidth * .4,
+                                    textColor: TColors.secondary,
+                                    borderColor: TColors.secondary,
+                                    backgroundColor: TColors.dark,
+                                    ticketStatus: 'In Transit',
+                                    consttrains: constraints,
                                   )
-                                : (ticketData.tickets![0].statusId == 60)
-                                    ? const TicketStatusChip(
-                                        left: -2,
-                                        bottom: 30,
-                                        textColor: TColors.warning,
-                                        borderColor: TColors.warning,
-                                        ticketStatus: 'Change Dt',
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: TSizes.sm,
-                                        ),
+                                : (ticketData.tickets![0].statusId == 40)
+                                    ? TicketStatusChip(
+                                        left: 0,
+                                        bottom: constraints.maxWidth * .4,
+                                        textColor: TColors.error,
+                                        borderColor: TColors.error,
+                                        ticketStatus: 'Refunded',
+                                        consttrains: constraints,
                                       )
-                                    : const TicketStatusChip(
-                                        left: 7,
-                                        bottom: 28,
-                                        ticketStatus: 'New',
-                                      ),
-                  ],
+                                    : (ticketData.tickets![0].statusId == 60)
+                                        ? TicketStatusChip(
+                                            left: 0,
+                                            bottom: constraints.maxWidth * .4,
+                                            textColor: TColors.warning,
+                                            borderColor: TColors.warning,
+                                            ticketStatus: 'Change Dt',
+                                            consttrains: constraints,
+                                          )
+                                        : TicketStatusChip(
+                                            left: 0,
+                                            bottom: constraints.maxWidth * .4,
+                                            ticketStatus: 'New',
+                                            consttrains: constraints,
+                                          ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),

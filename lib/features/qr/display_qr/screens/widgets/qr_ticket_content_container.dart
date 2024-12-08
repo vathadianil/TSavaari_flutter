@@ -112,66 +112,72 @@ class QrTicketContentContainer extends StatelessWidget {
           ),
           items: tickets
               .map(
-                (ticket) => Stack(
-                  children: [
-                    QrImageView(
-                      data: ticket.ticketContent!,
-                      version: QrVersions.auto,
-                      dataModuleStyle: QrDataModuleStyle(
-                        dataModuleShape: QrDataModuleShape.square,
-                        color:
-                            (ticket.statusId != TicketStatusCodes.newTicket &&
-                                    ticket.ticketStatus !=
-                                        TicketStatusCodes.newTicketString &&
-                                    ticket.statusId !=
-                                        TicketStatusCodes.entryUsed &&
-                                    ticket.oldTicketStatusId !=
-                                        TicketStatusCodes.changeDestination
-                                            .toString())
-                                ? TColors.darkGrey
-                                : TColors.black,
-                      ),
-                      eyeStyle: QrEyeStyle(
-                        eyeShape: QrEyeShape.square,
-                        color:
-                            (ticket.statusId != TicketStatusCodes.newTicket &&
-                                    ticket.ticketStatus !=
-                                        TicketStatusCodes.newTicketString &&
-                                    ticket.statusId !=
-                                        TicketStatusCodes.entryUsed &&
-                                    ticket.oldTicketStatusId !=
-                                        TicketStatusCodes.changeDestination
-                                            .toString())
-                                ? TColors.darkGrey
-                                : TColors.black,
+                (ticket) => Center(
+                  child: SizedBox(
+                    width: screenWidth * .4,
+                    child: LayoutBuilder(
+                      builder: (context, constraints) => Stack(
+                        children: [
+                          QrImageView(
+                            data: ticket.ticketContent!,
+                            version: QrVersions.auto,
+                            dataModuleStyle: QrDataModuleStyle(
+                              dataModuleShape: QrDataModuleShape.square,
+                              color: (ticket.statusId !=
+                                          TicketStatusCodes.newTicket &&
+                                      ticket.ticketStatus !=
+                                          TicketStatusCodes.newTicketString &&
+                                      ticket.statusId !=
+                                          TicketStatusCodes.entryUsed &&
+                                      ticket.oldTicketStatusId !=
+                                          TicketStatusCodes.changeDestination
+                                              .toString())
+                                  ? TColors.darkGrey
+                                  : TColors.black,
+                            ),
+                            eyeStyle: QrEyeStyle(
+                              eyeShape: QrEyeShape.square,
+                              color: (ticket.statusId !=
+                                          TicketStatusCodes.newTicket &&
+                                      ticket.ticketStatus !=
+                                          TicketStatusCodes.newTicketString &&
+                                      ticket.statusId !=
+                                          TicketStatusCodes.entryUsed &&
+                                      ticket.oldTicketStatusId !=
+                                          TicketStatusCodes.changeDestination
+                                              .toString())
+                                  ? TColors.darkGrey
+                                  : TColors.black,
+                            ),
+                          ),
+                          if (ticket.statusId == 40)
+                            TicketStatusChip(
+                              left: 0,
+                              bottom: constraints.maxWidth * .4,
+                              textColor: TColors.error,
+                              borderColor: TColors.error,
+                              ticketStatus: 'Refunded',
+                              consttrains: constraints,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: TSizes.sm,
+                              ),
+                            ),
+                          if (ticket.statusId == 60)
+                            TicketStatusChip(
+                              left: 0,
+                              bottom: constraints.maxWidth * .4,
+                              textColor: TColors.warning,
+                              borderColor: TColors.warning,
+                              ticketStatus: 'Change Destination',
+                              consttrains: constraints,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: TSizes.sm,
+                              ),
+                            )
+                        ],
                       ),
                     ),
-                    if (ticket.statusId == 40)
-                      const TicketStatusChip(
-                        left: -6,
-                        bottom: 62,
-                        textColor: TColors.error,
-                        borderColor: TColors.error,
-                        ticketStatus: 'Refunded',
-                        isSmall: false,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: TSizes.lg,
-                        ),
-                      ),
-                    if (ticket.statusId == 60)
-                      const TicketStatusChip(
-                        left: -12,
-                        bottom: 60,
-                        textColor: TColors.warning,
-                        borderColor: TColors.warning,
-                        ticketStatus: 'Change Destination',
-                        isSmall: true,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: TSizes.lg,
-                          vertical: TSizes.sm,
-                        ),
-                      )
-                  ],
+                  ),
                 ),
               )
               .toList(),
