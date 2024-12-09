@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:tsavaari/data/repositories/book_qr/station_list_repository.dart';
@@ -22,40 +24,54 @@ class StationListController extends GetxController {
   }
 
   Future<void> getStationList() async {
-    try {
-      //Show loader while loading categories
-      isLoading.value = true;
-      final token = await TLocalStorage().readData('token') ?? '';
+    //Show loader while loading categories
+    isLoading.value = true;
 
-      // Retrieve station list from local storage
-      final storedData = await TLocalStorage().readData('stationList') ?? [];
+    // Retrieve station list from local storage
+    final storedData = await TLocalStorage().readData('stationList') ?? '';
 
-      List<StationListModel> storedStationList = (storedData as List)
-          .map((item) => StationListModel.fromJson(item))
-          .toList();
+    List<StationListModel> storedStationList = [];
 
-      if (storedStationList.isNotEmpty) {
-        stationList.assignAll(storedStationList);
-      } else {
-        if (token != '') {
-          final stationsData =
-              await stationListRepository.fetchStationList(token);
-          stationList
-              .assignAll(stationsData.stations as Iterable<StationListModel>);
-
-          // Save fetched data to local storage
-          await TLocalStorage().saveData(
-            'stationList',
-            stationsData.stations!.map((item) => item.toJson()).toList(),
-          );
-        } else {
-          TLoaders.errorSnackBar(
-              title: 'Oh Snap!',
-              message: 'Your Session has expired!. Please Login Again.');
-          Get.offAll(
-            () => const LoginScreen(),
-          );
+    if (storedData != '') {
+      try {
+        storedStationList = (storedData as List)
+            .map((item) => StationListModel.fromJson(jsonDecode(item)))
+            .toList();
+        if (storedStationList.isNotEmpty) {
+          stationList.assignAll(storedStationList);
+          isLoading.value = false;
         }
+      } catch (e) {
+        fetchStationList();
+      }
+    } else {
+      fetchStationList();
+    }
+  }
+
+  fetchStationList() async {
+    try {
+      final token = await TLocalStorage().readData('token') ?? '';
+      if (token != '') {
+        final stationsData =
+            await stationListRepository.fetchStationList(token);
+        stationList
+            .assignAll(stationsData.stations as Iterable<StationListModel>);
+
+        // Save fetched data to local storage
+        await TLocalStorage().saveData(
+          'stationList',
+          stationsData.stations!
+              .map((item) => jsonEncode(item.toJson()))
+              .toList(),
+        );
+      } else {
+        TLoaders.errorSnackBar(
+            title: 'Oh Snap!',
+            message: 'Your Session has expired!. Please Login Again.');
+        Get.offAll(
+          () => const LoginScreen(),
+        );
       }
     } catch (e) {
       TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());

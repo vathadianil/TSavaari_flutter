@@ -75,35 +75,35 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const CircleShape(
+                CircleShape(
                   width: TSizes.sm,
                   height: TSizes.sm,
-                  darkModeBorderColor: TColors.primary,
+                  darkModeBorderColor: TColors.warning,
                   lightModeBorderColor: TColors.primary,
-                  fillColor: TColors.primary,
+                  fillColor: isDark ? TColors.warning : TColors.primary,
                 ),
                 SizedBox(
                     width: screenWidth * .25,
-                    child: const DashedHorizontalLine(
+                    child: DashedHorizontalLine(
                       dashWidth: 4,
-                      color: TColors.primary,
+                      color: isDark ? TColors.warning : TColors.primary,
                     )),
-                const Icon(
+                Icon(
                   Icons.train,
-                  color: TColors.primary,
+                  color: isDark ? TColors.warning : TColors.primary,
                 ),
                 SizedBox(
                     width: screenWidth * .25,
-                    child: const DashedHorizontalLine(
+                    child: DashedHorizontalLine(
                       dashWidth: 4,
-                      color: TColors.primary,
+                      color: isDark ? TColors.warning : TColors.primary,
                     )),
-                const CircleShape(
+                CircleShape(
                   width: TSizes.sm,
                   height: TSizes.sm,
-                  darkModeBorderColor: TColors.primary,
+                  darkModeBorderColor: TColors.warning,
                   lightModeBorderColor: TColors.primary,
-                  fillColor: TColors.primary,
+                  fillColor: isDark ? TColors.warning : TColors.primary,
                 ),
               ],
             ),

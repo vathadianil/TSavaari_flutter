@@ -21,8 +21,8 @@ class TTicketShapeWidget extends StatelessWidget {
       color:
           isDark ? TColors.dark.withOpacity(.5) : TColors.grey.withOpacity(.01),
       shape: BoxShape.rectangle,
-      elevation: isDark ? TSizes.sm : TSizes.lg,
-      shadowColor: TColors.white,
+      elevation: TSizes.sm,
+      shadowColor: isDark ? TColors.white.withOpacity(.2) : TColors.grey,
       borderRadius: BorderRadius.circular(TSizes.md),
       child: ClipPath(
         clipper: TicketShapeClipper(),

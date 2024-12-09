@@ -24,7 +24,6 @@ class RefundPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(tickets![0].ticketId);
     final screenWidth = TDeviceUtils.getScreenWidth(context);
     final refundController =
         Get.put(RefundPreviewController(tickets: tickets!, orderId: orderId));
