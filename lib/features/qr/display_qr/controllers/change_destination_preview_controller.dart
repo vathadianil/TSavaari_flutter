@@ -133,8 +133,10 @@ class ChangeDestinationPreviewController extends GetxController {
         platformCode = 'IOS';
       }
 
+      const phoneNumber = '9999999999';
+
       final orderId =
-          "CHD$platformCode${DateTime.now().millisecondsSinceEpoch}";
+          "CHD$platformCode${DateTime.now().millisecondsSinceEpoch}${phoneNumber.substring(6, 10)}";
 
       if (totalAmount.value == 0) {
         generateNewTicket(orderId);
@@ -143,7 +145,7 @@ class ChangeDestinationPreviewController extends GetxController {
           "customer_details": {
             "customer_id": "CUSTID123",
             "customer_email": "abc@gmail.com",
-            "customer_phone": "9999999999",
+            "customer_phone": phoneNumber,
             "customer_name": "abcds"
           },
           "order_meta": {

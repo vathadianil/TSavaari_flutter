@@ -11,6 +11,7 @@ import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
 import 'package:tsavaari/utils/constants/text_size.dart';
 import 'package:tsavaari/utils/constants/text_strings.dart';
+import 'package:tsavaari/utils/constants/ticket_status_codes.dart';
 import 'package:tsavaari/utils/device/device_utility.dart';
 import 'package:tsavaari/utils/helpers/helper_functions.dart';
 
@@ -78,32 +79,32 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
                 CircleShape(
                   width: TSizes.sm,
                   height: TSizes.sm,
-                  darkModeBorderColor: TColors.warning,
+                  darkModeBorderColor: TColors.accent,
                   lightModeBorderColor: TColors.primary,
-                  fillColor: isDark ? TColors.warning : TColors.primary,
+                  fillColor: isDark ? TColors.accent : TColors.primary,
                 ),
                 SizedBox(
                     width: screenWidth * .25,
                     child: DashedHorizontalLine(
                       dashWidth: 4,
-                      color: isDark ? TColors.warning : TColors.primary,
+                      color: isDark ? TColors.accent : TColors.primary,
                     )),
                 Icon(
                   Icons.train,
-                  color: isDark ? TColors.warning : TColors.primary,
+                  color: isDark ? TColors.accent : TColors.primary,
                 ),
                 SizedBox(
                     width: screenWidth * .25,
                     child: DashedHorizontalLine(
                       dashWidth: 4,
-                      color: isDark ? TColors.warning : TColors.primary,
+                      color: isDark ? TColors.accent : TColors.primary,
                     )),
                 CircleShape(
                   width: TSizes.sm,
                   height: TSizes.sm,
-                  darkModeBorderColor: TColors.warning,
+                  darkModeBorderColor: TColors.accent,
                   lightModeBorderColor: TColors.primary,
-                  fillColor: isDark ? TColors.warning : TColors.primary,
+                  fillColor: isDark ? TColors.accent : TColors.primary,
                 ),
               ],
             ),
@@ -216,49 +217,63 @@ class MyOrdersTicketShapeCard extends StatelessWidget {
                                     : TColors.dark,
                           ),
                         ),
-                        (tabController.tabIndex.value == 1)
-                            ? TicketStatusChip(
-                                left: 0,
-                                bottom: constraints.maxWidth * .4,
-                                ticketStatus: 'Expired',
-                                borderColor: TColors.error,
-                                textColor: TColors.error,
-                                consttrains: constraints,
-                              )
-                            : (ticketData.tickets![0].statusId == 20)
-                                ? TicketStatusChip(
-                                    left: 0,
-                                    bottom: constraints.maxWidth * .4,
-                                    textColor: TColors.secondary,
-                                    borderColor: TColors.secondary,
-                                    backgroundColor: TColors.dark,
-                                    ticketStatus: 'In Transit',
-                                    consttrains: constraints,
-                                  )
-                                : (ticketData.tickets![0].statusId == 40)
-                                    ? TicketStatusChip(
-                                        left: 0,
-                                        bottom: constraints.maxWidth * .4,
-                                        textColor: TColors.error,
-                                        borderColor: TColors.error,
-                                        ticketStatus: 'Refunded',
-                                        consttrains: constraints,
-                                      )
-                                    : (ticketData.tickets![0].statusId == 60)
-                                        ? TicketStatusChip(
-                                            left: 0,
-                                            bottom: constraints.maxWidth * .4,
-                                            textColor: TColors.warning,
-                                            borderColor: TColors.warning,
-                                            ticketStatus: 'Change Dt',
-                                            consttrains: constraints,
-                                          )
-                                        : TicketStatusChip(
-                                            left: 0,
-                                            bottom: constraints.maxWidth * .4,
-                                            ticketStatus: 'New',
-                                            consttrains: constraints,
-                                          ),
+                        if (ticketData.tickets![0].statusId ==
+                            TicketStatusCodes.newTicket)
+                          TicketStatusChip(
+                            left: 0,
+                            bottom: constraints.maxWidth * .4,
+                            ticketStatus: 'New',
+                            consttrains: constraints,
+                          ),
+                        if (ticketData.tickets![0].statusId ==
+                            TicketStatusCodes.expired)
+                          TicketStatusChip(
+                            left: 0,
+                            bottom: constraints.maxWidth * .4,
+                            ticketStatus: 'Expired',
+                            borderColor: TColors.error,
+                            textColor: TColors.error,
+                            consttrains: constraints,
+                          ),
+                        if (ticketData.tickets![0].statusId ==
+                            TicketStatusCodes.entryUsed)
+                          TicketStatusChip(
+                            left: 0,
+                            bottom: constraints.maxWidth * .4,
+                            textColor: TColors.secondary,
+                            borderColor: TColors.secondary,
+                            backgroundColor: TColors.dark,
+                            ticketStatus: 'In Transit',
+                            consttrains: constraints,
+                          ),
+                        if (ticketData.tickets![0].statusId ==
+                            TicketStatusCodes.refunded)
+                          TicketStatusChip(
+                            left: 0,
+                            bottom: constraints.maxWidth * .4,
+                            textColor: TColors.error,
+                            borderColor: TColors.error,
+                            ticketStatus: 'Refunded',
+                            consttrains: constraints,
+                          ),
+                        if (ticketData.tickets![0].statusId ==
+                            TicketStatusCodes.changeDestination)
+                          TicketStatusChip(
+                            left: 0,
+                            bottom: constraints.maxWidth * .4,
+                            textColor: TColors.warning,
+                            borderColor: TColors.warning,
+                            ticketStatus: 'Change Dt',
+                            consttrains: constraints,
+                          ),
+                        if (ticketData.tickets![0].statusId ==
+                            TicketStatusCodes.exitUsed)
+                          TicketStatusChip(
+                            left: 0,
+                            bottom: constraints.maxWidth * .4,
+                            ticketStatus: 'Completed',
+                            consttrains: constraints,
+                          ),
                       ],
                     ),
                   ),

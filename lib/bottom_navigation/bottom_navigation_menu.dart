@@ -69,7 +69,7 @@ class BottomNavigationMenu extends StatelessWidget {
                                 1]
                             .tickets![0]
                             .orderID!
-                            .substring(14, 33)
+                            .substring(14, 37)
                         : '',
                   );
                 },

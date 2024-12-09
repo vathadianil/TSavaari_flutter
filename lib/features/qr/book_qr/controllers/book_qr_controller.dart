@@ -132,12 +132,12 @@ class BookQrController extends GetxController {
       }
 
       String platformCode = TDeviceUtils.getPlatfromString();
-
+      const phoneNumber = '9999999999';
       final payload = {
         "customer_details": {
           "customer_id": "CUSTID123",
           "customer_email": "abc@gmail.com",
-          "customer_phone": "9999999999",
+          "customer_phone": phoneNumber,
           "customer_name": "abcds"
         },
         "order_meta": {
@@ -145,7 +145,8 @@ class BookQrController extends GetxController {
           "notify_url":
               "https://122.252.226.254:5114/api/v1/NotifyUrl/CFPaymentRequest"
         },
-        "order_id": "SAL$platformCode${DateTime.now().millisecondsSinceEpoch}",
+        "order_id":
+            "SAL$platformCode${DateTime.now().millisecondsSinceEpoch}${phoneNumber.substring(6, 10)}",
         "order_amount": (passengerCount.value * qrFareData.first.finalFare!),
         "order_currency": "INR",
         "order_note": "some order note here"
@@ -203,7 +204,7 @@ class BookQrController extends GetxController {
               "merchantTotalSgst": 0,
               "merchantTotalFareAfterGst": 0,
               "ltmrhlPassId": "",
-              "patronPhoneNumber": "9999999999",
+              "patronPhoneNumber": phoneNumber,
               "fareQuoteIdforOneTicket":
                   "${qrFareData.first.fareQuotIdforOneTicket}",
             };

@@ -150,7 +150,7 @@ class QrTicketContentContainer extends StatelessWidget {
                                   : TColors.black,
                             ),
                           ),
-                          if (ticket.statusId == 40)
+                          if (ticket.statusId == TicketStatusCodes.refunded)
                             TicketStatusChip(
                               left: 0,
                               bottom: constraints.maxWidth * .4,
@@ -162,7 +162,8 @@ class QrTicketContentContainer extends StatelessWidget {
                                 vertical: TSizes.sm,
                               ),
                             ),
-                          if (ticket.statusId == 60)
+                          if (ticket.statusId ==
+                              TicketStatusCodes.changeDestination)
                             TicketStatusChip(
                               left: 0,
                               bottom: constraints.maxWidth * .4,
@@ -173,7 +174,29 @@ class QrTicketContentContainer extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(
                                 vertical: TSizes.sm,
                               ),
-                            )
+                            ),
+                          if (ticket.statusId == TicketStatusCodes.exitUsed)
+                            TicketStatusChip(
+                              left: 0,
+                              bottom: constraints.maxWidth * .4,
+                              ticketStatus: 'Completed',
+                              consttrains: constraints,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: TSizes.sm,
+                              ),
+                            ),
+                          if (ticket.statusId == TicketStatusCodes.expired)
+                            TicketStatusChip(
+                              left: 0,
+                              bottom: constraints.maxWidth * .4,
+                              textColor: TColors.error,
+                              borderColor: TColors.error,
+                              ticketStatus: 'Expired',
+                              consttrains: constraints,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: TSizes.sm,
+                              ),
+                            ),
                         ],
                       ),
                     ),
