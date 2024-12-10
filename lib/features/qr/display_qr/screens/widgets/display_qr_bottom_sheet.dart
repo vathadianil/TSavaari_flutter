@@ -24,6 +24,7 @@ class DisplayQrBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bottomSheetController = Get.put(BottomSheetPageViewController());
+
     return Center(
       child: MaxWidthContaiiner(
         child: Padding(

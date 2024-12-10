@@ -64,24 +64,27 @@ class DisplayQrScreen extends StatelessWidget {
           textScaler: TextScaleUtil.getScaledText(context, maxScale: 3),
         ),
         actions: [
-          NeedHelpButton(onPressed: () {
-            displayQrController.resetScreenBrightness();
-            showModalBottomSheet(
-                context: context,
-                builder: (context) {
-                  return DisplayQrBottomSheet(
-                    tickets: (tickets![0].ticketTypeId == 20 &&
-                            previousScreenIndication == 'bookQr')
-                        ? getFormatttedTicketData('oneWay')
-                        : tickets,
-                    stationList: stationList,
-                    orderId: orderId,
-                  );
-                }).whenComplete(() {
-              Get.delete<RefundPreviewController>();
-              Get.delete<ChangeDestinationPreviewController>();
-            });
-          }),
+          if (tickets![displayQrController.carouselCurrentIndex.value]
+                  .entryExitType !=
+              TicketStatusCodes.exitOnly.toString())
+            NeedHelpButton(onPressed: () {
+              displayQrController.resetScreenBrightness();
+              showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return DisplayQrBottomSheet(
+                      tickets: (tickets![0].ticketTypeId == 20 &&
+                              previousScreenIndication == 'bookQr')
+                          ? getFormatttedTicketData('oneWay')
+                          : tickets,
+                      stationList: stationList,
+                      orderId: orderId,
+                    );
+                  }).whenComplete(() {
+                Get.delete<RefundPreviewController>();
+                Get.delete<ChangeDestinationPreviewController>();
+              });
+            }),
           IconButton(
               onPressed: () {
                 if (previousScreenIndication == 'bookQr') {

@@ -4,6 +4,20 @@ import 'package:intl/intl.dart';
 import 'package:tsavaari/features/qr/book_qr/models/station_list_model.dart';
 
 class THelperFunctions {
+  static const monthToNumberMap = {
+    "JAN": '01',
+    "FEB": '02',
+    "MAR": '03',
+    "APR": '04',
+    "MAY": '05',
+    "JUN": '06',
+    "JUL": '07',
+    "AUG": '08',
+    "SEP": '09',
+    "OCT": '10',
+    "NOV": '11',
+    "DEC": '12'
+  };
   static Color? getColor(String value) {
     /// Define your product specific colors here and it will match the attribute colors and show specific 🟠🟡🟢🔵🟣🟤
 
@@ -118,6 +132,13 @@ class THelperFunctions {
     return '$day-$month-$year $hours:$minutes:$seconds';
   }
 
+  static String getFormattedDateString(String dateString) {
+    final day = dateString.substring(0, 2);
+    final month = monthToNumberMap[dateString.substring(3, 6)];
+    final year = dateString.substring(7, 11);
+    return '$day-$month-$year';
+  }
+
   static List<T> removeDuplicates<T>(List<T> list) {
     return list.toSet().toList();
   }
@@ -144,5 +165,11 @@ class THelperFunctions {
     final station =
         stationList.firstWhere((station) => station.name == stationName);
     return station;
+  }
+
+  static DateTime parsedDateTime(String dateSting, timeString) {
+    final dateString = getFormattedDateString(dateSting);
+    final timString = timeString;
+    return DateFormat('dd-MM-yyyy hh:mm a').parse('$dateString $timString');
   }
 }

@@ -26,6 +26,7 @@ class MyOrdersScreen extends StatelessWidget {
       TTexts.activeTickets,
       TTexts.pastTickets,
     ];
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(TSizes.defaultSpace),
