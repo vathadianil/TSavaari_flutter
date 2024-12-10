@@ -60,16 +60,18 @@ class ChangeDestinationStepper extends StatelessWidget {
 
         //Entry Step
         CustonQrStep.step(
-          displayQrController,
-          context,
-          'Entry Time',
-          tickets[displayQrController.carouselCurrentIndex.value]
-                  .entryDateTime ??
-              '',
-          isActive: tickets[displayQrController.carouselCurrentIndex.value]
-                  .entryDateTime !=
-              null,
-        ),
+            displayQrController,
+            context,
+            'Entry Time',
+            tickets[displayQrController.carouselCurrentIndex.value]
+                    .entryDateTime ??
+                '',
+            isActive: tickets[displayQrController.carouselCurrentIndex.value]
+                    .entryDateTime !=
+                null,
+            info: tickets[displayQrController.carouselCurrentIndex.value]
+                    .fromStation ??
+                ''),
 
         //-- Change Destination
         CustonQrStep.step(

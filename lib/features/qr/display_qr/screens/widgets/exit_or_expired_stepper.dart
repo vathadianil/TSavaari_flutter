@@ -64,29 +64,33 @@ class ExitOrExpiredStepper extends StatelessWidget {
                 .entryExitType !=
             TicketStatusCodes.exitOnly.toString())
           CustonQrStep.step(
-            displayQrController,
-            context,
-            'Entry Time',
-            tickets[displayQrController.carouselCurrentIndex.value]
-                    .entryDateTime ??
-                '',
-            isActive: tickets[displayQrController.carouselCurrentIndex.value]
-                    .entryDateTime !=
-                null,
-          ),
+              displayQrController,
+              context,
+              'Entry Time',
+              tickets[displayQrController.carouselCurrentIndex.value]
+                      .entryDateTime ??
+                  '',
+              isActive: tickets[displayQrController.carouselCurrentIndex.value]
+                      .entryDateTime !=
+                  null,
+              info: tickets[displayQrController.carouselCurrentIndex.value]
+                      .fromStation ??
+                  ''),
 
         //Exit Step
         CustonQrStep.step(
-          displayQrController,
-          context,
-          'Exit Time',
-          tickets[displayQrController.carouselCurrentIndex.value]
-                  .exitDateTime ??
-              'In Transit',
-          isActive: tickets[displayQrController.carouselCurrentIndex.value]
-                  .exitDateTime !=
-              null,
-        ),
+            displayQrController,
+            context,
+            'Exit Time',
+            tickets[displayQrController.carouselCurrentIndex.value]
+                    .exitDateTime ??
+                'In Transit',
+            isActive: tickets[displayQrController.carouselCurrentIndex.value]
+                    .exitDateTime !=
+                null,
+            info: tickets[displayQrController.carouselCurrentIndex.value]
+                    .toStation ??
+                ''),
       ],
     );
   }

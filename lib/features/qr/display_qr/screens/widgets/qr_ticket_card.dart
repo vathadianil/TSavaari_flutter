@@ -22,7 +22,6 @@ class QrTicketCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final displayQrController = DisplayQrController.instance;
-
     return Column(
       children: [
         TTicketShapeWidget(
