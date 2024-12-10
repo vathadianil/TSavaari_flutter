@@ -226,7 +226,7 @@ class TicketsListModel {
     merchantType = json['merchantType'];
     finalCost = json['finalCost'].toString();
     ticketType = json['ticketType'];
-    relateTicketId = json['relateTicketId'];
+    relateTicketId = json['relateTicketId'] ?? json['relate_Ticket_Id'];
     returnCode = json['returnCode'];
     returnMsg = json['returnMsg'];
     ticketEntryExittype = json['ticketEntryExittype'];

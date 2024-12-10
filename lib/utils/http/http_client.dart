@@ -28,7 +28,6 @@ class THttpHelper {
       body: data != null ? json.encode(data) : null,
     );
     // .timeout(const Duration(seconds: 10));
-
     return _handleResponse(response);
   }
 

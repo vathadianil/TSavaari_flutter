@@ -146,7 +146,7 @@ class BookQrController extends GetxController {
               "https://122.252.226.254:5114/api/v1/NotifyUrl/CFPaymentRequest"
         },
         "order_id":
-            "SAL$platformCode${DateTime.now().millisecondsSinceEpoch}${phoneNumber.substring(6, 10)}",
+            "SAL$platformCode${phoneNumber.substring(6, 10)}${DateTime.now().millisecondsSinceEpoch}",
         "order_amount": (passengerCount.value * qrFareData.first.finalFare!),
         "order_currency": "INR",
         "order_note": "some order note here"

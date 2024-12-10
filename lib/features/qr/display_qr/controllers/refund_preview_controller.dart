@@ -7,6 +7,7 @@ import 'package:tsavaari/data/repositories/refund_qr/refund_qr_repository.dart';
 import 'package:tsavaari/features/qr/display_qr/models/qr_code_model.dart';
 import 'package:tsavaari/utils/constants/image_strings.dart';
 import 'package:tsavaari/utils/constants/merchant_id.dart';
+import 'package:tsavaari/utils/constants/ticket_status_codes.dart';
 import 'package:tsavaari/utils/helpers/network_manager.dart';
 import 'package:tsavaari/utils/popups/full_screen_loader.dart';
 import 'package:tsavaari/utils/popups/loaders.dart';
@@ -124,8 +125,10 @@ class RefundPreviewController extends GetxController {
             getRefundStatus.refundStatus == 'PENDING') {
           var refundQuoteIdList = [];
           for (var index = 0; index < tickets.length; index++) {
-            if (tickets[index].ticketType == 'RJT' ||
-                tickets[index].ticketTypeId == 20) {
+            if (tickets[index].ticketType ==
+                    TicketStatusCodes.ticketTypeRjtString ||
+                tickets[index].ticketTypeId ==
+                    TicketStatusCodes.ticketTypeRjt) {
               refundQuoteIdList.addIf(
                   radioSelectedValue.contains(refundPreviewData[index].rjtId),
                   refundPreviewData[index].refundQuoteId);
@@ -139,12 +142,16 @@ class RefundPreviewController extends GetxController {
           for (var index = 0; index < radioSelectedValue.length; index++) {
             apiArray.add(_refundQrRepository.refundConfirm({
               "token": "$token",
-              "ticketId": (tickets[index].ticketType == 'SJT' ||
-                      tickets[index].ticketTypeId == 10)
+              "ticketId": (tickets[index].ticketType ==
+                          TicketStatusCodes.ticketTypeSjtString ||
+                      tickets[index].ticketTypeId ==
+                          TicketStatusCodes.ticketTypeSjt)
                   ? radioSelectedValue[index]
                   : '',
-              "rjtId": (tickets[index].ticketType == 'RJT' ||
-                      tickets[index].ticketTypeId == 20)
+              "rjtId": (tickets[index].ticketType ==
+                          TicketStatusCodes.ticketTypeRjtString ||
+                      tickets[index].ticketTypeId ==
+                          TicketStatusCodes.ticketTypeRjt)
                   ? radioSelectedValue[index]
                   : '',
               "passId": "",

@@ -136,7 +136,7 @@ class ChangeDestinationPreviewController extends GetxController {
       const phoneNumber = '9999999999';
 
       final orderId =
-          "CHD$platformCode${DateTime.now().millisecondsSinceEpoch}${phoneNumber.substring(6, 10)}";
+          "CHD$platformCode${phoneNumber.substring(6, 10)}${DateTime.now().millisecondsSinceEpoch}";
 
       if (totalAmount.value == 0) {
         generateNewTicket(orderId);
@@ -211,7 +211,12 @@ class ChangeDestinationPreviewController extends GetxController {
     final stationId = station!.stationId;
 
     var chaneDestinationQuoteIdList = [];
+    var ticketIdList = [];
     for (var index = 0; index < checkBoxValue.length; index++) {
+      ticketIdList.addIf(
+          (checkBoxValue
+              .contains(changeDestinationPreviewData[index].ticketId)),
+          changeDestinationPreviewData[index].ticketId);
       chaneDestinationQuoteIdList.addIf(
           (checkBoxValue
               .contains(changeDestinationPreviewData[index].ticketId)),
@@ -223,9 +228,9 @@ class ChangeDestinationPreviewController extends GetxController {
         final ticketData =
             await _changeDestinationRepository.changeDestinationConfirm({
           "token": "$token",
-          "ticketId": checkBoxValue[index],
+          "ticketId": ticketIdList[index],
           "newDestinationId": stationId,
-          "newOrderId": orderId + checkBoxValue[index].substring(14),
+          "newOrderId": orderId + ticketIdList[index].substring(14, 25),
           "codQuoteId": chaneDestinationQuoteIdList[index]
         });
 
