@@ -36,6 +36,7 @@ class DisplayQrScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = TDeviceUtils.getScreenWidth(context);
     final displayQrController = Get.put(DisplayQrController());
+
     Get.put(CheckBoxController());
     List<TicketsListModel> getFormatttedTicketData(String indicator) {
       List<TicketsListModel> copiedtickets = [];

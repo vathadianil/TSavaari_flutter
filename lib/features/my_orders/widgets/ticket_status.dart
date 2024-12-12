@@ -48,7 +48,7 @@ class TicketStatusChip extends StatelessWidget {
           child: Center(
             child: Text(
               ticketStatus,
-              textScaler: TextScaleUtil.getScaledText(context, maxScale: 3),
+              textScaler: TextScaleUtil.getScaledText(context, maxScale: 2.5),
               style: Theme.of(context).textTheme.labelLarge!.copyWith(
                     color: textColor,
                     fontWeight: FontWeight.bold,

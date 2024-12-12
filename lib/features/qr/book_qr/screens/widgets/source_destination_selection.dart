@@ -25,7 +25,7 @@ class SourceDestinationSelection extends StatelessWidget {
     final bookQrController = BookQrController.instance;
 
     return SizedBox(
-      height: 200,
+      height: 220,
       child: LayoutBuilder(
         builder: (context, consttraint) => Stack(
           clipBehavior: Clip.none,

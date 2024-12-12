@@ -12,7 +12,6 @@ class MyOrdersRepository extends GetxController {
       final data = await THttpHelper.post(
         ApiEndPoint.getActiveTickets,
         payload,
-        newUrl: false,
       );
 
       return ActiveTicketModel.fromJson(data);
@@ -30,7 +29,6 @@ class MyOrdersRepository extends GetxController {
       final data = await THttpHelper.post(
         ApiEndPoint.getPastTickets,
         payload,
-        newUrl: false,
       );
       return ActiveTicketModel.fromJson(data);
     } on FormatException catch (_) {

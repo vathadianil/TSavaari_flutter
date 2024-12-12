@@ -9,10 +9,8 @@ class ApiEndPoint {
   static String generateTicket = 'qr/generateTicket';
   static String getFareCalculation =
       'getActiveMetroStationsFareandDistanceList/services.do?fromStation=';
-  static String getActiveTickets =
-      'getactiveticketdetailsbytsavaari/services.do';
-  static String getPastTickets =
-      'getexpiredticketdetailsbytsavaari/services.do';
+  static String getActiveTickets = 'qr/getActiveTickets';
+  static String getPastTickets = 'qr/getExpiredTickets';
   static String refundPreview = "qr/refunPreview";
   static String createRefundOrder = "cfpg/cashfree/refundOrder";
   static String refundOrderStatus = "cfpg/cashfree/getRefund";

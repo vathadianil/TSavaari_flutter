@@ -10,6 +10,7 @@ import 'package:tsavaari/features/fare_calculator/models/fare_calculation_model.
 import 'package:tsavaari/features/qr/book_qr/controllers/station_list_controller.dart';
 import 'package:tsavaari/features/qr/book_qr/models/qr_get_fare_model.dart';
 import 'package:tsavaari/features/qr/display_qr/screens/display_qr.dart';
+import 'package:tsavaari/features/qr/display_qr/screens/payment_processing_screen.dart';
 import 'package:tsavaari/routes/routes.dart';
 import 'package:tsavaari/utils/constants/image_strings.dart';
 import 'package:tsavaari/utils/constants/merchant_id.dart';
@@ -197,12 +198,14 @@ class BookQrController extends GetxController {
               "ticketTypeId": ticketTypeId,
               "noOfTickets": passengerCount.value,
               "travelDateTime": "${DateTime.now()}",
-              "merchantEachTicketFareBeforeGst": 0,
-              "merchantEachTicketFareAfterGst": 0,
-              "merchantTotalFareBeforeGst": 0,
+              "merchantEachTicketFareBeforeGst": qrFareData.first.finalFare,
+              "merchantEachTicketFareAfterGst": qrFareData.first.finalFare,
+              "merchantTotalFareBeforeGst":
+                  (passengerCount.value * qrFareData.first.finalFare!),
               "merchantTotalCgst": 0,
               "merchantTotalSgst": 0,
-              "merchantTotalFareAfterGst": 0,
+              "merchantTotalFareAfterGst":
+                  (passengerCount.value * qrFareData.first.finalFare!),
               "ltmrhlPassId": "",
               "patronPhoneNumber": phoneNumber,
               "fareQuoteIdforOneTicket":
@@ -226,6 +229,10 @@ class BookQrController extends GetxController {
             } else {
               throw 'Something went wrong. Please try again later!';
             }
+          } else {
+            TFullScreenLoader.stopLoading();
+            Get.offAll(
+                () => PaymentProcessingScreen(verifyPayment: verifyPayment));
           }
         } catch (e) {
           TFullScreenLoader.stopLoading();

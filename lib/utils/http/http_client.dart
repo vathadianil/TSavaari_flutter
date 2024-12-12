@@ -11,7 +11,6 @@ class THttpHelper {
     final url = newUrl ? _baseUrl : _baseUrlOld;
     final response = await http.get(Uri.parse('$url/$endpoint'));
     // .timeout(const Duration(seconds: 10));
-
     return _handleResponse(response);
   }
 
@@ -28,6 +27,9 @@ class THttpHelper {
       body: data != null ? json.encode(data) : null,
     );
     // .timeout(const Duration(seconds: 10));
+    print('-----------------------------------');
+    print(data);
+    print(response.body);
     return _handleResponse(response);
   }
 

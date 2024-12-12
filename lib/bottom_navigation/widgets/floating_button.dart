@@ -6,18 +6,24 @@ import 'package:iconsax/iconsax.dart';
 import 'package:tsavaari/bottom_navigation/controller/navigation_controller.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/constants/text_size.dart';
+import 'package:tsavaari/utils/constants/ticket_status_codes.dart';
+import 'package:tsavaari/utils/device/device_utility.dart';
 import 'package:tsavaari/utils/helpers/helper_functions.dart';
 
 class FloatingButton extends StatelessWidget {
   const FloatingButton({
     super.key,
     required this.onTap,
+    required this.ticketStatus,
   });
   final Function() onTap;
+  final String ticketStatus;
   @override
   Widget build(BuildContext context) {
     final controller = NavigationController.instance;
     final isDark = THelperFunctions.isDarkMode(context);
+
     return Obx(
       () => Positioned(
         top: controller.top.value,
@@ -32,8 +38,8 @@ class FloatingButton extends StatelessWidget {
           },
           onTap: onTap,
           child: Container(
-            width: 70,
-            height: 70,
+            width: TDeviceUtils.getScreenWidth(context) * .2,
+            height: TDeviceUtils.getScreenWidth(context) * .2,
             decoration: BoxDecoration(
                 color: isDark ? TColors.dark : TColors.white,
                 borderRadius: BorderRadius.circular(100),
@@ -45,7 +51,10 @@ class FloatingButton extends StatelessWidget {
               children: [
                 const Icon(Iconsax.ticket),
                 Text(
-                  'New',
+                  ticketStatus == TicketStatusCodes.entryUsedString
+                      ? 'In Transit'
+                      : ticketStatus,
+                  textScaler: TextScaleUtil.getScaledText(context),
                   style: Theme.of(context).textTheme.labelSmall,
                 )
               ],

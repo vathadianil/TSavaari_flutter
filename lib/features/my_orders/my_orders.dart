@@ -81,7 +81,6 @@ class MyOrdersScreen extends StatelessWidget {
                               //--Active Tickets
                               ? ListView.separated(
                                   shrinkWrap: true,
-                                  reverse: true,
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemBuilder: (context, index) {
                                     return MyOrdersTicketShapeCard(
@@ -132,7 +131,6 @@ class MyOrdersScreen extends StatelessWidget {
                                   //--Past Tickets
                                   ? ListView.separated(
                                       shrinkWrap: true,
-                                      reverse: true,
                                       physics:
                                           const NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) {

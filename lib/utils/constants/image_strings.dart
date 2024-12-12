@@ -18,6 +18,8 @@ class TImages {
   // -- Lottie animations
   static const String docerAnimation =
       "assets/images/animations/animation-of-docer.json";
+  static const String loaderAnimation =
+      "assets/images/animations/141397-loading-juggle.json";
 
   //-- Gif animations
   static const String trainAnimation =

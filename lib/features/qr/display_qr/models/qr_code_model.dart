@@ -143,7 +143,6 @@ class TicketsListModel {
   String? relateTicketId;
   String? returnCode;
   String? returnMsg;
-  String? ticketEntryExittype;
   String? oldTicketId;
   String? oldTicketStatusId;
   double? differenceOfFare;
@@ -185,7 +184,6 @@ class TicketsListModel {
     relateTicketId,
     returnCode,
     returnMsg,
-    ticketEntryExittype,
     oldTicketId,
     oldTicketStatusId,
     this.differenceOfFare,
@@ -208,7 +206,7 @@ class TicketsListModel {
     noOfTripsRemaining = json['noOfTripsRemaining'];
     noOfTripsUsed = json['noOfTripsUsed'];
     remainingStoredValue = json['remainingStoredValue'];
-    entryExitType = json['entryExitType'];
+    entryExitType = json['entryExitType'] ?? json['ticketEntryExittype'];
     platFormNo = json['platFormNo'];
     ticketExpiryTime = json['ticketExpiryTime'];
     carbonEmissionMsg = json['carbonEmissionMsg'];
@@ -229,7 +227,6 @@ class TicketsListModel {
     relateTicketId = json['relateTicketId'] ?? json['relate_Ticket_Id'];
     returnCode = json['returnCode'];
     returnMsg = json['returnMsg'];
-    ticketEntryExittype = json['ticketEntryExittype'];
     oldTicketId = json['OldTicketId'];
     oldTicketStatusId = json['oldTicketStatusId'];
     differenceOfFare = (json['DifferenceOfFare'] ?? 0) + 0.0;

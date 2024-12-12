@@ -203,65 +203,78 @@ class ChangeDestinationPreviewController extends GetxController {
   }
 
   void generateNewTicket(String orderId) async {
-    final token = await deviceStorage.read('token');
-    final station = stationName.value != ''
-        ? THelperFunctions.getStationFromStationName(
-            stationName.value, stationList)
-        : null;
-    final stationId = station!.stationId;
+    try {
+      final token = await deviceStorage.read('token');
+      final station = stationName.value != ''
+          ? THelperFunctions.getStationFromStationName(
+              stationName.value, stationList)
+          : null;
+      final stationId = station!.stationId;
 
-    var chaneDestinationQuoteIdList = [];
-    var ticketIdList = [];
-    for (var index = 0; index < checkBoxValue.length; index++) {
-      ticketIdList.addIf(
-          (checkBoxValue
-              .contains(changeDestinationPreviewData[index].ticketId)),
-          changeDestinationPreviewData[index].ticketId);
-      chaneDestinationQuoteIdList.addIf(
-          (checkBoxValue
-              .contains(changeDestinationPreviewData[index].ticketId)),
-          changeDestinationPreviewData[index].codQuoteId);
-    }
-    var isSuccess = true;
-    for (var index = 0; index < chaneDestinationQuoteIdList.length; index++) {
-      Future.delayed(Duration(seconds: index), () async {
-        final ticketData =
-            await _changeDestinationRepository.changeDestinationConfirm({
-          "token": "$token",
-          "ticketId": ticketIdList[index],
-          "newDestinationId": stationId,
-          "newOrderId": orderId + ticketIdList[index].substring(14, 25),
-          "codQuoteId": chaneDestinationQuoteIdList[index]
-        });
+      var chaneDestinationQuoteIdList = [];
+      var ticketIdList = [];
+      for (var index = 0; index < checkBoxValue.length; index++) {
+        ticketIdList.addIf(
+            (checkBoxValue
+                .contains(changeDestinationPreviewData[index].ticketId)),
+            changeDestinationPreviewData[index].ticketId);
+        chaneDestinationQuoteIdList.addIf(
+            (checkBoxValue
+                .contains(changeDestinationPreviewData[index].ticketId)),
+            changeDestinationPreviewData[index].codQuoteId);
+      }
+      var isSuccess = true;
+      for (var index = 0; index < chaneDestinationQuoteIdList.length; index++) {
+        Future.delayed(Duration(seconds: index), () async {
+          try {
+            final ticketData =
+                await _changeDestinationRepository.changeDestinationConfirm({
+              "token": "$token",
+              "ticketId": ticketIdList[index],
+              "newDestinationId": stationId,
+              "newOrderId": orderId + ticketIdList[index].substring(14, 25),
+              "codQuoteId": chaneDestinationQuoteIdList[index]
+            });
 
-        if (ticketData.returnCode != '0') {
-          isSuccess = false;
-        }
-        changeDestinationConfirmData.add(ticketData);
+            if (ticketData.returnCode != '0') {
+              isSuccess = false;
+            }
+            changeDestinationConfirmData.add(ticketData);
 
-        if (index == chaneDestinationQuoteIdList.length - 1) {
-          //Navigate to Dispaly QR Page
-          if (isSuccess) {
-            final tickets =
-                changeDestinationConfirmData.cast<TicketsListModel>().toList();
+            if (index == chaneDestinationQuoteIdList.length - 1) {
+              //Navigate to Dispaly QR Page
+              if (isSuccess) {
+                final tickets = changeDestinationConfirmData
+                    .cast<TicketsListModel>()
+                    .toList();
 
+                //Stop Loading
+                TFullScreenLoader.stopLoading();
+                Get.offAll(
+                  () => DisplayQrScreen(
+                    tickets: tickets,
+                    stationList: stationList,
+                  ),
+                );
+              } else {
+                TFullScreenLoader.stopLoading();
+                TLoaders.errorSnackBar(
+                    title: 'Oh Snap!',
+                    message:
+                        'Something went wrong. Unable to do Change destination. Please contact customer care!');
+              }
+            }
+          } catch (e) {
             //Stop Loading
             TFullScreenLoader.stopLoading();
-            Get.offAll(
-              () => DisplayQrScreen(
-                tickets: tickets,
-                stationList: stationList,
-              ),
-            );
-          } else {
-            TFullScreenLoader.stopLoading();
-            TLoaders.errorSnackBar(
-                title: 'Oh Snap!',
-                message:
-                    'Something went wrong. Unable to do Change destination. Please contact customer care!');
+            TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
           }
-        }
-      });
+        });
+      }
+    } catch (e) {
+      //Stop Loading
+      TFullScreenLoader.stopLoading();
+      TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
     }
   }
 }
