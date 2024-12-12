@@ -78,8 +78,8 @@ class BookQrRepository extends GetxController {
   Future<FareCalculationModel> fetchFareCalculationData(payload) async {
     try {
       final data = await THttpHelper.get(
-          '${ApiEndPoint.getFareCalculation + payload['fromStation']}&toStation=${payload['toStation']}',
-          newUrl: false);
+        '${ApiEndPoint.getFareCalculation + payload['fromStation']}&toStation=${payload['toStation']}',
+      );
       return FareCalculationModel.fromJson(data);
     } on FormatException catch (_) {
       throw const TFormatException();

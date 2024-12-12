@@ -7,8 +7,7 @@ class ApiEndPoint {
   static String createQrPaymentOrder = 'cfpg/cashfree/createOrder';
   static String verifyPayment = 'cfpg/cashfree/getOrder';
   static String generateTicket = 'qr/generateTicket';
-  static String getFareCalculation =
-      'getActiveMetroStationsFareandDistanceList/services.do?fromStation=';
+  static String getFareCalculation = 'db/fare_calculator?fromStation=';
   static String getActiveTickets = 'qr/getActiveTickets';
   static String getPastTickets = 'qr/getExpiredTickets';
   static String refundPreview = "qr/refunPreview";

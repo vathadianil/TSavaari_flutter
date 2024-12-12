@@ -16,10 +16,9 @@ class TImages {
   static const String banner8 = "assets/images/banners/banner_8.jpg";
 
   // -- Lottie animations
-  static const String docerAnimation =
-      "assets/images/animations/animation-of-docer.json";
-  static const String loaderAnimation =
-      "assets/images/animations/141397-loading-juggle.json";
+
+  static const String paymentSuccess =
+      "assets/images/animations/payment-successful.json";
 
   //-- Gif animations
   static const String trainAnimation =

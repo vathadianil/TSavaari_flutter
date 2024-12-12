@@ -74,7 +74,8 @@ class DisplayQrScreen extends StatelessWidget {
                   context: context,
                   builder: (context) {
                     return DisplayQrBottomSheet(
-                      tickets: (tickets![0].ticketTypeId == 20 &&
+                      tickets: (tickets![0].ticketTypeId ==
+                                  TicketStatusCodes.ticketTypeRjt &&
                               previousScreenIndication == 'bookQr')
                           ? getFormatttedTicketData('oneWay')
                           : tickets,

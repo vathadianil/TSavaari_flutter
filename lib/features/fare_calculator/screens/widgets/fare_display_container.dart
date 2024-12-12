@@ -20,10 +20,10 @@ class FareDisplayContainer extends StatelessWidget {
     final stationListController = StationListController.instance;
     final controller = BookQrController.instance;
     final fromStation = THelperFunctions.getStationFromStationName(
-        controller.fareCalculationData.first.r![0].fromStationName!,
+        controller.fareCalculationData.first.fromStationName!,
         stationListController.stationList);
     final toStation = THelperFunctions.getStationFromStationName(
-        controller.fareCalculationData.first.r![0].toStationName!,
+        controller.fareCalculationData.first.toStationName!,
         stationListController.stationList);
     return PhysicalModel(
       color:
@@ -65,7 +65,7 @@ class FareDisplayContainer extends StatelessWidget {
                         ),
                         const SizedBox(width: TSizes.spaceBtwItems / 4),
                         Text(
-                          '${controller.fareCalculationData.first.r![0].time ?? ''} Min',
+                          '${controller.fareCalculationData.first.time ?? ''} Min',
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ],
@@ -112,7 +112,7 @@ class FareDisplayContainer extends StatelessWidget {
                           width: TSizes.spaceBtwItems / 4,
                         ),
                         Text(
-                          '${controller.fareCalculationData.first.r![0].distance ?? ''} Km',
+                          '${controller.fareCalculationData.first.distance ?? ''} Km',
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ],
@@ -148,7 +148,7 @@ class FareDisplayContainer extends StatelessWidget {
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 Text(
-                  '\u{20B9}${controller.fareCalculationData.first.r![0].fare ?? ''}/-',
+                  '\u{20B9}${controller.fareCalculationData.first.fare ?? ''}/-',
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
               ],

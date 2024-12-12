@@ -11,6 +11,9 @@ class THttpHelper {
     final url = newUrl ? _baseUrl : _baseUrlOld;
     final response = await http.get(Uri.parse('$url/$endpoint'));
     // .timeout(const Duration(seconds: 10));
+    print('----------------------------------');
+    print(endpoint);
+    print(response.body);
     return _handleResponse(response);
   }
 

@@ -1,69 +1,37 @@
 class FareCalculationModel {
-  String? s;
-  String? e;
-  String? em;
-  List<R>? r;
-
-  FareCalculationModel({this.s, this.e, this.em, this.r});
-
-  FareCalculationModel.fromJson(Map<String, dynamic> json) {
-    s = json['s'];
-    e = json['e'];
-    em = json['em'];
-    if (json['r'] != null) {
-      r = <R>[];
-      json['r'].forEach((v) {
-        r!.add(R.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['s'] = s;
-    data['e'] = e;
-    data['em'] = em;
-    if (r != null) {
-      data['r'] = r!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class R {
-  int? mcrId;
-  int? mrmId;
+  String? mCRID;
+  String? mRMID;
   String? fromStationName;
   String? toStationName;
-  double? distance;
-  int? time;
-  int? fare;
+  String? distance;
+  String? time;
+  String? fare;
 
-  R(
-      {this.mcrId,
-      this.mrmId,
+  FareCalculationModel(
+      {this.mCRID,
+      this.mRMID,
       this.fromStationName,
       this.toStationName,
       this.distance,
       this.time,
       this.fare});
 
-  R.fromJson(Map<String, dynamic> json) {
-    mcrId = json['mcrId'];
-    mrmId = json['mrmId'];
-    fromStationName = json['fromStationName'];
-    toStationName = json['toStationName'];
-    distance = json['distance'];
-    time = json['time'];
-    fare = json['fare'];
+  FareCalculationModel.fromJson(Map<String, dynamic> json) {
+    mCRID = json['MCRID'].toString();
+    mRMID = json['MRMID'].toString();
+    fromStationName = json['from_station_name'];
+    toStationName = json['to_station_name'];
+    distance = json['distance'].toString();
+    time = json['time'].toString();
+    fare = json['fare'].toString();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['mcrId'] = mcrId;
-    data['mrmId'] = mrmId;
-    data['fromStationName'] = fromStationName;
-    data['toStationName'] = toStationName;
+    data['MCRID'] = mCRID;
+    data['MRMID'] = mRMID;
+    data['from_station_name'] = fromStationName;
+    data['to_station_name'] = toStationName;
     data['distance'] = distance;
     data['time'] = time;
     data['fare'] = fare;

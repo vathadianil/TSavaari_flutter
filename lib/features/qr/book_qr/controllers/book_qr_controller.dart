@@ -102,12 +102,7 @@ class BookQrController extends GetxController {
         if (fareCalculationData.isNotEmpty) {
           fareCalculationData.clear();
         }
-        if (data.r!.isEmpty) {
-          TLoaders.errorSnackBar(
-              title: 'Oh Snap!',
-              message: 'Something went wrong. Please try again later');
-          return;
-        }
+
         fareCalculationData.add(data);
       }
     } catch (e) {
@@ -170,47 +165,8 @@ class BookQrController extends GetxController {
           final verifyPayment = await bookQrRepository.verifyPayment(orderId);
 
           if (verifyPayment.orderStatus == 'PAID') {
-            final token = await deviceStorage.read('token');
-            final ticketTypeId = ticketType.value
-                ? TicketStatusCodes.ticketTypeRjt.toString()
-                : TicketStatusCodes.ticketTypeSjt.toString();
-
-            final fromStation = source.value != ''
-                ? stationController.stationList
-                    .firstWhere((station) => station.name == source.value)
-                : null;
-
-            final fromStationId = fromStation?.stationId;
-
-            final toStation = destination.value != ''
-                ? stationController.stationList
-                    .firstWhere((station) => station.name == destination.value)
-                : null;
-            final toStationId = toStation?.stationId;
-
-            final requestPayload = {
-              "token": "$token",
-              "merchantOrderId": verifyPayment.orderId,
-              "merchantId": MerchantDetails.merchantId,
-              "transType": "0",
-              "fromStationId": fromStationId,
-              "toStationid": toStationId,
-              "ticketTypeId": ticketTypeId,
-              "noOfTickets": passengerCount.value,
-              "travelDateTime": "${DateTime.now()}",
-              "merchantEachTicketFareBeforeGst": qrFareData.first.finalFare,
-              "merchantEachTicketFareAfterGst": qrFareData.first.finalFare,
-              "merchantTotalFareBeforeGst":
-                  (passengerCount.value * qrFareData.first.finalFare!),
-              "merchantTotalCgst": 0,
-              "merchantTotalSgst": 0,
-              "merchantTotalFareAfterGst":
-                  (passengerCount.value * qrFareData.first.finalFare!),
-              "ltmrhlPassId": "",
-              "patronPhoneNumber": phoneNumber,
-              "fareQuoteIdforOneTicket":
-                  "${qrFareData.first.fareQuotIdforOneTicket}",
-            };
+            final requestPayload =
+                await prepareGenerateTicketPayload(verifyPayment.orderId);
 
             final ticketData =
                 await bookQrRepository.generateTicket(requestPayload);
@@ -231,14 +187,20 @@ class BookQrController extends GetxController {
             }
           } else {
             TFullScreenLoader.stopLoading();
-            Get.offAll(
-                () => PaymentProcessingScreen(verifyPayment: verifyPayment));
+            final requestPayload =
+                await prepareGenerateTicketPayload(verifyPayment.orderId);
+            Get.offAll(() => PaymentProcessingScreen(
+                  verifyPayment: verifyPayment,
+                  generateTicketPayload: requestPayload,
+                ));
           }
         } catch (e) {
           TFullScreenLoader.stopLoading();
           TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
         }
       }, (p0, orderId) {
+        print('--------------------------------------------------');
+        print(p0);
         //Stop Loading
         TFullScreenLoader.stopLoading();
         TLoaders.errorSnackBar(
@@ -254,5 +216,50 @@ class BookQrController extends GetxController {
       TFullScreenLoader.stopLoading();
       TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
     }
+  }
+
+  Future<Map<String, Object?>> prepareGenerateTicketPayload(
+      String? orderId) async {
+    final token = await deviceStorage.read('token');
+    final ticketTypeId = ticketType.value
+        ? TicketStatusCodes.ticketTypeRjt.toString()
+        : TicketStatusCodes.ticketTypeSjt.toString();
+
+    final fromStation = source.value != ''
+        ? stationController.stationList
+            .firstWhere((station) => station.name == source.value)
+        : null;
+
+    final fromStationId = fromStation?.stationId;
+
+    final toStation = destination.value != ''
+        ? stationController.stationList
+            .firstWhere((station) => station.name == destination.value)
+        : null;
+    final toStationId = toStation?.stationId;
+
+    final requestPayload = {
+      "token": "$token",
+      "merchantOrderId": orderId,
+      "merchantId": MerchantDetails.merchantId,
+      "transType": "0",
+      "fromStationId": fromStationId,
+      "toStationid": toStationId,
+      "ticketTypeId": ticketTypeId,
+      "noOfTickets": passengerCount.value,
+      "travelDateTime": "${DateTime.now()}",
+      "merchantEachTicketFareBeforeGst": qrFareData.first.finalFare,
+      "merchantEachTicketFareAfterGst": qrFareData.first.finalFare,
+      "merchantTotalFareBeforeGst":
+          (passengerCount.value * qrFareData.first.finalFare!),
+      "merchantTotalCgst": 0,
+      "merchantTotalSgst": 0,
+      "merchantTotalFareAfterGst":
+          (passengerCount.value * qrFareData.first.finalFare!),
+      "ltmrhlPassId": "",
+      "patronPhoneNumber": '9999999999',
+      "fareQuoteIdforOneTicket": "${qrFareData.first.fareQuotIdforOneTicket}",
+    };
+    return requestPayload;
   }
 }

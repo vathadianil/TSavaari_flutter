@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:tsavaari/bottom_navigation/bottom_navigation_menu.dart';
@@ -9,6 +7,7 @@ import 'package:tsavaari/utils/constants/image_strings.dart';
 import 'package:tsavaari/utils/constants/merchant_id.dart';
 import 'package:tsavaari/utils/constants/ticket_status_codes.dart';
 import 'package:tsavaari/utils/helpers/network_manager.dart';
+import 'package:tsavaari/utils/payment_gateway/cash_free.dart';
 import 'package:tsavaari/utils/popups/full_screen_loader.dart';
 import 'package:tsavaari/utils/popups/loaders.dart';
 
@@ -29,6 +28,7 @@ class RefundPreviewController extends GetxController {
   final refundConfirmData = [].obs;
   var apiArray = <Future<dynamic>>[];
   RxDouble totalRefundAmount = 0.0.obs;
+  final cashFreePaymentController = Get.put(CashFreeController());
 
   @override
   void onInit() {
@@ -98,29 +98,12 @@ class RefundPreviewController extends GetxController {
         return;
       }
 
-      //Creating refund order
-      String platformCode = '';
-      if (Platform.isAndroid) {
-        platformCode = 'AND';
-      } else if (Platform.isIOS) {
-        platformCode = 'IOS';
-      }
-
-      final refundOrderPayload = {
-        "order_id": orderId,
-        "refund_amount": 1.0, //totalRefundAmount.value,
-        "refund_id": "RFD$platformCode${DateTime.now().millisecondsSinceEpoch}",
-        "refund_note": "string",
-        "refund_speed": "STANDARD"
-      };
-
-      final refundOrderResponse =
-          await _refundQrRepository.createRefundOrder(refundOrderPayload);
-
+      final refundOrderResponse = await cashFreePaymentController
+          .createRefundOrder(orderId, totalRefundAmount.value);
       if (refundOrderResponse.cfPaymentId != null &&
           refundOrderResponse.cfRefundId != null) {
-        final getRefundStatus = await _refundQrRepository.getRefundOrderStatus(
-            {"order_id": orderId, "refund_id": refundOrderResponse.refundId});
+        final getRefundStatus = await cashFreePaymentController.getRefundStatus(
+            orderId, refundOrderResponse.refundId!);
         if (getRefundStatus.refundStatus == 'SUCCESS' ||
             getRefundStatus.refundStatus == 'PENDING') {
           var refundQuoteIdList = [];
