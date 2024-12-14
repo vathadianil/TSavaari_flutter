@@ -3,41 +3,41 @@ import 'package:get/get.dart';
 import 'package:tsavaari/common/controllers/button_tabbar_controller.dart';
 import 'package:tsavaari/common/widgets/appbar/button_tabbar.dart';
 import 'package:tsavaari/common/widgets/appbar/t_appbar.dart';
-import 'package:tsavaari/common/widgets/containers/t_flip.dart';
 import 'package:tsavaari/features/card_reacharge/controllers/metro_card_controller.dart';
-// import 'package:tsavaari/common/widgets/text/t_section_heading.dart';
-import 'package:tsavaari/features/card_reacharge/screens/widgets/card_back_view.dart';
-import 'package:tsavaari/features/card_reacharge/screens/widgets/card_front_view.dart';
+import 'package:tsavaari/features/card_reacharge/screens/widgets/add_card.dart';
+import 'package:tsavaari/features/card_reacharge/screens/widgets/card_layout.dart';
+import 'package:tsavaari/features/card_reacharge/screens/widgets/card_layout_shimmer.dart';
 import 'package:tsavaari/features/card_reacharge/screens/widgets/card_topup_history.dart';
-import 'package:tsavaari/features/card_reacharge/screens/widgets/tap_on_the_card_text.dart';
 import 'package:tsavaari/features/card_reacharge/screens/widgets/travel_history_card.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/device/device_utility.dart';
 
 class CardReachargeScreen extends StatelessWidget {
   const CardReachargeScreen({super.key});
 
-  get cardNumber => '1234123412341234';
-
   get expiryDate => '04/24';
-
-  get cardHolderName => 'Krishna Chaitanya Kumar';
-
-  get cardHeight => 220.0;
 
   get cardBalance => '2000.00';
 
   @override
   Widget build(BuildContext context) {
-    Get.put(MetroCardController());
+    final screenWidth = TDeviceUtils.getScreenWidth(context);
+    final cardHeight = screenWidth * .5;
+    final cardController = Get.put(MetroCardController());
     final btnTabbarController = Get.put(ButtonTabbarController());
     final buttonTexts = [
       "Travel History",
       "Topup History",
     ];
     return Scaffold(
-      appBar: const TAppBar(
+      appBar: TAppBar(
         showBackArrow: true,
-        title: Text('Card Recharge'),
+        title: const Text('Card Recharge'),
+        actions: [
+          AddCard(
+            onPressed: () {},
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(TSizes.defaultSpace),
@@ -45,34 +45,13 @@ class CardReachargeScreen extends StatelessWidget {
           () => Column(
             children: [
               //--Metro Card
-              TFlip(
-                  foreGroudndWidget: CardFrontView(
-                    cardHeight: cardHeight,
-                    cardHolderName: cardHolderName,
-                    cardBalance: cardBalance,
-                    cardNumber: cardNumber,
-                  ),
-                  backGroundWidget: CardBackView(
-                    cardHeight: cardHeight,
-                    cardHolderName: cardHolderName,
-                    cardBalance: cardBalance,
-                    cardNumber: cardNumber,
-                  )),
-              const SizedBox(
-                height: TSizes.spaceBtwItems,
-              ),
-
-              //-- Tap on Card Text
-              const TapOnTheCardText(),
-              const SizedBox(
-                height: TSizes.spaceBtwItems,
-              ),
-
-              const Divider(),
-
-              const SizedBox(
-                height: TSizes.spaceBtwItems,
-              ),
+              if (cardController.isCardDetailsLoading.value)
+                CardLayoutShimmer(cardHeight: cardHeight),
+              if (!cardController.isCardDetailsLoading.value)
+                CardLayout(
+                  cardHeight: cardHeight,
+                  cardBalance: cardBalance,
+                ),
 
               ButtonTabbar(
                 buttonTexts: buttonTexts,

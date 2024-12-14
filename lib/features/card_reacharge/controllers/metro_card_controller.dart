@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:tsavaari/data/repositories/metro_card/metro_card_repository.dart';
+import 'package:tsavaari/features/card_reacharge/models/card_details_by_user_model.dart';
 import 'package:tsavaari/features/card_reacharge/models/card_travel_history_model.dart';
 import 'package:tsavaari/utils/popups/loaders.dart';
 import 'dart:math';
@@ -11,9 +12,24 @@ class MetroCardController extends GetxController {
   static MetroCardController get instance => Get.find();
 
   //variables
-  final isLoading = false.obs;
+  final isCardDetailsLoading = false.obs;
+  final isTravelHistoryLoading = false.obs;
   final cardTravelHistoryData = <CardTravelHistoryModel>[].obs;
+  final cardDetailsByUser = <CardDetailsByUserModel>{}.obs;
   final _cardRepository = Get.put(MetroCardRepository());
+  final userId = '336838';
+  final carouselCurrentIndex = 0.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchMetroCardDetailsByUser();
+  }
+
+  //Update page navigation dots
+  void updatePageIndicator(index) {
+    carouselCurrentIndex.value = index;
+  }
 
   String getBankRequestDateTime() {
     final now = DateTime.now();
@@ -55,17 +71,35 @@ class MetroCardController extends GetxController {
   }
 
   //Fetch Travel History
+  Future<void> fetchMetroCardDetailsByUser() async {
+    try {
+      isCardDetailsLoading.value = true;
+      cardDetailsByUser.clear();
+      final cardDetails =
+          await _cardRepository.getMetroCardDetailsByUser(userId);
+      if (cardDetails.returnCode == '0' &&
+          cardDetails.returnMessage == 'SUCCESS') {
+        cardDetailsByUser.add(cardDetails);
+      } else {
+        throw 'Something went wrong. Please Try again later!';
+      }
+    } catch (e) {
+      TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+    } finally {
+      isCardDetailsLoading.value = false;
+    }
+  }
+
+  //Fetch Travel History
   Future<void> fetchMetroCardTravelHistory() async {
     try {
-      //Show loader while loading categories
-      isLoading.value = true;
+      isTravelHistoryLoading.value = true;
       final travelHistory = await _cardRepository.getMetroCardTravelHistory();
       cardTravelHistoryData.assignAll(travelHistory);
     } catch (e) {
       TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
     } finally {
-      //Remove loader
-      isLoading.value = false;
+      isTravelHistoryLoading.value = false;
     }
   }
 

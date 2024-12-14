@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tsavaari/common/controllers/checkbox_controller.dart';
+import 'package:tsavaari/common/widgets/button/custom_elevated_btn.dart';
 import 'package:tsavaari/common/widgets/button/underlined_text_button.dart';
 import 'package:tsavaari/features/qr/book_qr/screens/widgets/terms_and_conditions_popup.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
@@ -55,18 +56,11 @@ class ProceedToPayBtn extends StatelessWidget {
           ],
         ),
         Obx(
-          () => ElevatedButton(
+          () => CustomElevatedBtn(
             onPressed: onPressed,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: checkBoxController.checkBoxState.value
-                  ? TColors.primary
-                  : TColors.grey,
-              padding: const EdgeInsets.symmetric(
-                horizontal: TSizes.defaultSpace,
-                vertical: TSizes.defaultSpace / 2,
-              ),
-              side: const BorderSide(color: TColors.accent),
-            ),
+            backgroundColor: checkBoxController.checkBoxState.value
+                ? TColors.primary
+                : TColors.grey,
             child: Text(
               btnText,
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(

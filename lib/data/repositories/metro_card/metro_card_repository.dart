@@ -1,14 +1,22 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:tsavaari/features/card_reacharge/models/card_details_by_user_model.dart';
 import 'package:tsavaari/features/card_reacharge/models/card_travel_history_model.dart';
+import 'package:tsavaari/utils/constants/api_constants.dart';
 import 'package:tsavaari/utils/exceptions/format_exceptions.dart';
 import 'package:tsavaari/utils/exceptions/platform_exceptions.dart';
+import 'package:tsavaari/utils/http/http_client.dart';
 
 class MetroCardRepository extends GetxController {
   static MetroCardRepository get instance => Get.find();
 
-  Future<void> getMetroCardDetailsByUser() async {
-    try {} on FormatException catch (_) {
+  Future<CardDetailsByUserModel> getMetroCardDetailsByUser(userId) async {
+    try {
+      final data = await THttpHelper.get(
+        '${ApiEndPoint.getCardDetailsByUser}$userId',
+      );
+      return CardDetailsByUserModel.fromJson(data);
+    } on FormatException catch (_) {
       throw const TFormatException();
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
