@@ -20,7 +20,8 @@ class MyOrdersScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final stationController = Get.put(StationListController());
     final tabBarController = Get.put(ButtonTabbarController());
-    final ordersController = Get.put(OrdersController());
+    final ordersController =
+        Get.put(OrdersController(tabIndex: tabBarController.tabIndex.value));
     final screenWidth = TDeviceUtils.getScreenWidth(context);
     final buttonTexts = [
       TTexts.activeTickets,

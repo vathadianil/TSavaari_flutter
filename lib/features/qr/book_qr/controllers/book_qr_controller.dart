@@ -199,8 +199,6 @@ class BookQrController extends GetxController {
           TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
         }
       }, (p0, orderId) {
-        print('--------------------------------------------------');
-        print(p0);
         //Stop Loading
         TFullScreenLoader.stopLoading();
         TLoaders.errorSnackBar(

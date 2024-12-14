@@ -7,6 +7,8 @@ class ApiEndPoint {
   static String createQrPaymentOrder = 'cfpg/cashfree/createOrder';
   static String verifyPayment = 'cfpg/cashfree/getOrder';
   static String generateTicket = 'qr/generateTicket';
+  static String verifyGenerateTicket = 'qr/getOrderStatusByMerchantOrderId';
+  static String refundPaymentIntimation = 'qr/RefundInitiatedByMerchant';
   static String getFareCalculation = 'db/fare_calculator?fromStation=';
   static String getActiveTickets = 'qr/getActiveTickets';
   static String getPastTickets = 'qr/getExpiredTickets';

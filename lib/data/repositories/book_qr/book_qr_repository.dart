@@ -65,6 +65,39 @@ class BookQrRepository extends GetxController {
         ApiEndPoint.generateTicket,
         payload,
       );
+
+      return QrTicketModel.fromJson(data);
+    } on FormatException catch (_) {
+      throw const TFormatException();
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw 'Something went wrong. Please try again later!';
+    }
+  }
+
+  Future<QrTicketModel> verifyGenerateTicket(payload) async {
+    try {
+      final data = await THttpHelper.post(
+        ApiEndPoint.verifyGenerateTicket,
+        payload,
+      );
+      return QrTicketModel.fromJson(data);
+    } on FormatException catch (_) {
+      throw const TFormatException();
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw 'Something went wrong. Please try again later!';
+    }
+  }
+
+  Future<QrTicketModel> paymentRefundIntimation(payload) async {
+    try {
+      final data = await THttpHelper.post(
+        ApiEndPoint.refundPaymentIntimation,
+        payload,
+      );
       return QrTicketModel.fromJson(data);
     } on FormatException catch (_) {
       throw const TFormatException();

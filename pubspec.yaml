@@ -28,6 +28,9 @@ dependencies:
   #Qr Code
   qr_flutter: ^4.1.0
 
+  #Card Recharge
+  crypto: ^3.0.3
+
   #Icon Packages
   cupertino_icons: ^1.0.2
   iconsax: ^0.0.8

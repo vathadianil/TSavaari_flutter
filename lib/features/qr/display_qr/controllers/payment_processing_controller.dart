@@ -3,6 +3,8 @@ import 'package:tsavaari/data/repositories/book_qr/book_qr_repository.dart';
 import 'package:tsavaari/features/qr/book_qr/controllers/station_list_controller.dart';
 import 'package:tsavaari/features/qr/book_qr/models/create_order_model.dart';
 import 'package:tsavaari/features/qr/display_qr/screens/display_qr.dart';
+import 'package:tsavaari/utils/constants/merchant_id.dart';
+import 'package:tsavaari/utils/local_storage/storage_utility.dart';
 import 'package:tsavaari/utils/payment_gateway/cash_free.dart';
 import 'package:tsavaari/utils/popups/loaders.dart';
 
@@ -16,32 +18,38 @@ class PaymentProcessingController extends GetxController {
   var verifyApiCounter = 0;
   final isPaymentVerifing = false.obs;
   final hasVerifyPaymentSuccess = false.obs;
+  final hasPaymentVerifyRetriesCompleted = false.obs;
+  final isGenerateTicketError = false.obs;
   final cashFreePaymentController = Get.put(CashFreeController());
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    verifyOrder();
+    await verifyOrder();
   }
 
   Future<void> verifyOrder() async {
     try {
       isPaymentVerifing.value = true;
+
       //Retry limit reached
       if (verifyApiCounter == 2) {
+        isPaymentVerifing.value = false;
         hasVerifyPaymentSuccess.value = false;
+        hasPaymentVerifyRetriesCompleted.value = true;
       } else {
         //calling verify payment after second
-        Future.delayed(const Duration(seconds: 10), () async {
+        Future.delayed(const Duration(seconds: 5), () async {
           try {
             final verifyPayment =
                 await bookQrRepository.verifyPayment(verifyPaymentData.orderId);
             if (verifyPayment.orderStatus == 'PAID') {
-              isPaymentVerifing.value = true;
-              generateTicket();
+              isPaymentVerifing.value = false;
+              hasVerifyPaymentSuccess.value = true;
+              await generateTicket();
             } else {
               verifyApiCounter++;
-              verifyOrder();
+              await verifyOrder();
             }
           } catch (e) {
             isPaymentVerifing.value = false;
@@ -58,31 +66,74 @@ class PaymentProcessingController extends GetxController {
   Future<void> generateTicket() async {
     try {
       final ticketData = await bookQrRepository.generateTicket(requestPayload);
-
       //Navigate to Dispaly QR Page
       if (ticketData.returnCode == '0' && ticketData.returnMsg == 'SUCESS') {
-        //Stop Loading
-
         Get.offAll(() => DisplayQrScreen(
               tickets: ticketData.tickets!,
               stationList: stationController.stationList,
               orderId: ticketData.orderId!,
             ));
       } else {
-        final refundOrderResponse =
-            await cashFreePaymentController.createRefundOrder(
-                verifyPaymentData.orderId!, verifyPaymentData.orderAmount!);
-        if (refundOrderResponse.cfPaymentId != null &&
-            refundOrderResponse.cfRefundId != null) {
-          final getRefundStatus =
-              await cashFreePaymentController.getRefundStatus(
-                  verifyPaymentData.orderId!, refundOrderResponse.refundId!);
-          if (getRefundStatus.refundStatus == 'SUCCESS') {
-          } else if (getRefundStatus.refundStatus == 'PENDING') {}
-        }
+        await verifyGenerateTicket();
       }
     } catch (e) {
       TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
     }
+  }
+
+  verifyGenerateTicket() async {
+    final token = await TLocalStorage().readData('token');
+    final payload = {
+      token: '$token',
+      "merchantOrderId": verifyPaymentData.orderId,
+      "merchantId": MerchantDetails.merchantId
+    };
+    Future.delayed(const Duration(seconds: 5), () async {
+      try {
+        final verifyGenerateTicketResponse =
+            await bookQrRepository.verifyGenerateTicket(payload);
+        if (verifyGenerateTicketResponse.returnCode == "0" &&
+            verifyGenerateTicketResponse.returnMsg == "SUCESS") {
+          Get.offAll(() => DisplayQrScreen(
+                tickets: verifyGenerateTicketResponse.tickets!,
+                stationList: stationController.stationList,
+                orderId: verifyGenerateTicketResponse.orderId!,
+              ));
+        } else {
+          final refundOrderResponse =
+              await cashFreePaymentController.createRefundOrder(
+                  verifyPaymentData.orderId!, verifyPaymentData.orderAmount!);
+          if (refundOrderResponse.cfPaymentId != null &&
+              refundOrderResponse.cfRefundId != null) {
+            final getRefundStatus =
+                await cashFreePaymentController.getRefundStatus(
+                    verifyPaymentData.orderId!, refundOrderResponse.refundId!);
+            if (getRefundStatus.refundStatus == 'SUCCESS') {
+            } else if (getRefundStatus.refundStatus == 'PENDING') {
+              final payload = {
+                "token": "$token",
+                "merchantOrderId": verifyPaymentData.orderId,
+                "merchantId": MerchantDetails.merchantShortId,
+                "ticketTypeId": requestPayload['ticketTypeId'],
+                "noOfTickets": requestPayload['noOfTickets'],
+                "merchantTotalFareAfterGst":
+                    requestPayload['merchantTotalFareAfterGst'],
+                "travelDateTime": requestPayload['travelDateTime'],
+                "patronPhoneNumber": "9999999999"
+              };
+              final response =
+                  await bookQrRepository.paymentRefundIntimation(payload);
+              if (response.returnCode == '0') {
+                isGenerateTicketError.value = true;
+              } else {
+                throw 'Something went wrong!';
+              }
+            }
+          }
+        }
+      } catch (e) {
+        rethrow;
+      }
+    });
   }
 }

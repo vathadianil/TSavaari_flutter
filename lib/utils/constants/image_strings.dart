@@ -19,6 +19,8 @@ class TImages {
 
   static const String paymentSuccess =
       "assets/images/animations/payment-successful.json";
+  static const String paymentFailed =
+      "assets/images/animations/payment_failed.json";
 
   //-- Gif animations
   static const String trainAnimation =

@@ -35,26 +35,85 @@ class PaymentProcessingScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  if (paymentProcessingController.isPaymentVerifing.value &&
+                      !paymentProcessingController
+                          .hasPaymentVerifyRetriesCompleted.value)
+                    Text(
+                      'Payment in Progress',
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+
+                  if (paymentProcessingController
+                          .hasVerifyPaymentSuccess.value &&
+                      !paymentProcessingController.isGenerateTicketError.value)
+                    Text(
+                      'Payment Success',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall!
+                          .copyWith(color: TColors.success),
+                    ),
+
+                  if (!paymentProcessingController
+                          .hasVerifyPaymentSuccess.value &&
+                      paymentProcessingController
+                          .hasPaymentVerifyRetriesCompleted.value)
+                    Text(
+                      'Payment Failed',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall!
+                          .copyWith(color: TColors.error),
+                    ),
+                  if (paymentProcessingController
+                          .hasVerifyPaymentSuccess.value &&
+                      paymentProcessingController.isGenerateTicketError.value)
+                    Text(
+                      'Ticket Generation Failed',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall!
+                          .copyWith(color: TColors.error),
+                    ),
                   const SizedBox(
                     height: TSizes.spaceBtwSections,
                   ),
-                  if (paymentProcessingController.isPaymentVerifing.value)
+                  //-- Payment in Progress animation
+                  if (paymentProcessingController.isPaymentVerifing.value &&
+                      !paymentProcessingController
+                          .hasPaymentVerifyRetriesCompleted.value)
                     const TAnimationLoaderWidget(
                       animation: TImages.trainAnimation,
-                      text: 'Payment In Progress...',
+                      text: 'Please Wait...',
                     ),
+                  //-- Payment Success animation
                   if (paymentProcessingController.hasVerifyPaymentSuccess.value)
                     const TAnimationLoaderWidget(
+                      isGifanimation: false,
                       animation: TImages.paymentSuccess,
-                      text: 'Payment Success...',
+                      text: 'Generating Ticket Please Wait...',
+                    ),
+
+                  //-- Payment failed animation
+                  if (!paymentProcessingController
+                          .hasVerifyPaymentSuccess.value &&
+                      paymentProcessingController
+                          .hasPaymentVerifyRetriesCompleted.value)
+                    const TAnimationLoaderWidget(
+                      isGifanimation: false,
+                      animation: TImages.paymentFailed,
+                      text:
+                          'If any amount deducted will be refuned in 2-3 business days',
                     ),
                   const SizedBox(
                     height: TSizes.spaceBtwItems,
                   ),
-                  Text(
-                    'Do not close the app',
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
+                  if (!paymentProcessingController
+                      .hasPaymentVerifyRetriesCompleted.value)
+                    Text(
+                      'Do not close the app',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
                   const SizedBox(
                     height: TSizes.spaceBtwSections * 2,
                   ),
@@ -107,18 +166,20 @@ class PaymentProcessingScreen extends StatelessWidget {
                   const SizedBox(
                     height: TSizes.spaceBtwSections,
                   ),
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: TSizes.defaultSpace,
-                          vertical: TSizes.defaultSpace / 2,
+                  if (paymentProcessingController
+                      .hasPaymentVerifyRetriesCompleted.value)
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: TSizes.defaultSpace,
+                            vertical: TSizes.defaultSpace / 2,
+                          ),
+                          side: const BorderSide(color: TColors.accent),
                         ),
-                        side: const BorderSide(color: TColors.accent),
-                      ),
-                      onPressed: () {
-                        Get.offAll(() => const BottomNavigationMenu());
-                      },
-                      child: const Text('Go Back to Home'))
+                        onPressed: () {
+                          Get.offAll(() => const BottomNavigationMenu());
+                        },
+                        child: const Text('Go Back to Home'))
                 ],
               ),
             ),

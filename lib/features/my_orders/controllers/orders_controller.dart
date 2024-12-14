@@ -7,7 +7,9 @@ import 'package:tsavaari/utils/popups/loaders.dart';
 
 class OrdersController extends GetxController {
   static OrdersController get instance => Get.find();
+  OrdersController({this.tabIndex = 0});
   //Variables
+  final int tabIndex;
   final isLoading = true.obs;
   final deviceStorage = GetStorage();
   final activeTickets = <ActiveTicketModel>{}.obs;
@@ -16,7 +18,11 @@ class OrdersController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getActiveTickets();
+    if (tabIndex == 0) {
+      getActiveTickets();
+    } else {
+      getPastTickets();
+    }
   }
 
   Future<void> getActiveTickets() async {
@@ -36,7 +42,9 @@ class OrdersController extends GetxController {
         final activeTicketData =
             await _myOrdersRepository.fetchActiveTickets(payload);
 
-        activeTickets.add(activeTicketData);
+        if (activeTicketData.ticketHistory != null) {
+          activeTickets.add(activeTicketData);
+        }
       }
     } catch (e) {
       TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
