@@ -9,7 +9,7 @@ class NavigationController extends GetxController {
   static NavigationController get instance => Get.find();
   final Rx<int> selectedIndex = 0.obs;
   final right = 5.0.obs;
-  final top = (TDeviceUtils.getScreenHeight() * 0.65).obs;
+  final top = (TDeviceUtils.getScreenHeight() * 0.4).obs;
   final screens = [
     const HomeScreen(),
     // const TravelHistoryScreen(),

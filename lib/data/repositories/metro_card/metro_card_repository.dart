@@ -7,6 +7,16 @@ import 'package:tsavaari/utils/exceptions/platform_exceptions.dart';
 class MetroCardRepository extends GetxController {
   static MetroCardRepository get instance => Get.find();
 
+  Future<void> getMetroCardDetailsByUser() async {
+    try {} on FormatException catch (_) {
+      throw const TFormatException();
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw 'Something went wrong. Please try again later!';
+    }
+  }
+
   Future<List<CardTravelHistoryModel>> getMetroCardTravelHistory() async {
     try {
       final list = [

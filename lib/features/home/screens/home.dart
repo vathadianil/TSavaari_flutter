@@ -109,10 +109,10 @@ class HomeScreen extends StatelessWidget {
                     // Services Grid
                     GridLayout(
                       itemCount: getActiveServiceList().length,
-                      mainAxisExtent: screenHeight * .15,
-                      crossAxisCount: 4,
+                      mainAxisExtent: screenHeight * .17,
+                      crossAxisCount: 3,
                       mainAxisSpacing: TSizes.gridViewSpacing,
-                      crossAxisSpacing: screenWidth * .06,
+                      crossAxisSpacing: screenWidth * .08,
                       itemBuilder: (BuildContext context, int index) {
                         final activeServiceList = getActiveServiceList();
                         return ServiceCards(

@@ -39,7 +39,7 @@ class ServiceCards extends StatelessWidget {
               radius: TSizes.borderRadiusMd,
               child: Icon(
                 TIcons.getIcon(service.icon),
-                size: screenWidth * .1,
+                size: screenWidth * .11,
                 color: dark ? TColors.accent : TColors.primary,
               ),
             ),
