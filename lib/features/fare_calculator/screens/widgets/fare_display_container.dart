@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:tsavaari/common/widgets/button/custom_elevated_btn.dart';
 // import 'package:tsavaari/common/widgets/containers/t_ticket_shape_widget.dart';
 import 'package:tsavaari/common/widgets/shapes/circle_shape.dart';
 import 'package:tsavaari/common/widgets/shapes/dashed_horizontal_line.dart';
 import 'package:tsavaari/features/qr/book_qr/controllers/book_qr_controller.dart';
 import 'package:tsavaari/features/qr/book_qr/controllers/station_list_controller.dart';
+import 'package:tsavaari/features/qr/book_qr/screens/book_qr.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
+import 'package:tsavaari/utils/device/device_utility.dart';
 import 'package:tsavaari/utils/helpers/helper_functions.dart';
 
 class FareDisplayContainer extends StatelessWidget {
@@ -20,11 +24,12 @@ class FareDisplayContainer extends StatelessWidget {
     final stationListController = StationListController.instance;
     final controller = BookQrController.instance;
     final fromStation = THelperFunctions.getStationFromStationName(
-        controller.fareCalculationData.first.fromStationName!,
+        controller.fareCalculationData.first.routeDetails!.fromStationName!,
         stationListController.stationList);
     final toStation = THelperFunctions.getStationFromStationName(
-        controller.fareCalculationData.first.toStationName!,
+        controller.fareCalculationData.first.routeDetails!.toStationName!,
         stationListController.stationList);
+    final screenWidth = TDeviceUtils.getScreenWidth(context);
     return PhysicalModel(
       color:
           isDark ? TColors.dark.withOpacity(.5) : TColors.grey.withOpacity(.01),
@@ -65,7 +70,7 @@ class FareDisplayContainer extends StatelessWidget {
                         ),
                         const SizedBox(width: TSizes.spaceBtwItems / 4),
                         Text(
-                          '${controller.fareCalculationData.first.time ?? ''} Min',
+                          '${controller.fareCalculationData.first.routeDetails!.time ?? ''} Min',
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ],
@@ -79,26 +84,22 @@ class FareDisplayContainer extends StatelessWidget {
                           darkModeBorderColor: TColors.grey,
                           lightModeBorderColor: TColors.grey,
                         ),
-                        const SizedBox(
-                          width: 100,
+                        SizedBox(
+                          width: screenWidth * .04,
                           child: Divider(
+                            endIndent: screenWidth * .01,
                             color: TColors.borderPrimary,
                           ),
                         ),
-                        Container(
-                          decoration: const BoxDecoration(boxShadow: [
-                            BoxShadow(
-                              color: TColors.darkerGrey,
-                              blurRadius: TSizes.md,
-                            )
-                          ]),
-                          child: const CircleShape(
-                            width: 10,
-                            height: 10,
-                            fillColor: TColors.grey,
-                            darkModeBorderColor: TColors.grey,
-                            lightModeBorderColor: TColors.grey,
+                        SizedBox(
+                          width: screenWidth * .2,
+                          child: const Divider(
+                            color: TColors.borderPrimary,
                           ),
+                        ),
+                        const Icon(
+                          Iconsax.arrow_right_1,
+                          color: TColors.borderPrimary,
                         ),
                       ],
                     ),
@@ -112,7 +113,7 @@ class FareDisplayContainer extends StatelessWidget {
                           width: TSizes.spaceBtwItems / 4,
                         ),
                         Text(
-                          '${controller.fareCalculationData.first.distance ?? ''} Km',
+                          '${controller.fareCalculationData.first.routeDetails!.distance ?? ''} Km',
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ],
@@ -148,11 +149,27 @@ class FareDisplayContainer extends StatelessWidget {
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 Text(
-                  '\u{20B9}${controller.fareCalculationData.first.fare ?? ''}/-',
+                  '\u{20B9}${controller.fareCalculationData.first.routeDetails!.fare ?? ''}/-',
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
               ],
             ),
+            const SizedBox(
+              height: TSizes.spaceBtwSections,
+            ),
+            CustomElevatedBtn(
+              onPressed: () {
+                Get.off(() => BookQrScreen(
+                    fromStation: controller.fareCalculationData.first
+                            .routeDetails!.fromStationName ??
+                        '',
+                    toStation: controller.fareCalculationData.first
+                            .routeDetails!.toStationName ??
+                        '',
+                    selectedTicketType: controller.ticketType.value));
+              },
+              child: const Text('Book Ticket'),
+            )
           ],
         ),
       ),

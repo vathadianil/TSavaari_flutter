@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:tsavaari/features/card_reacharge/controllers/metro_card_controller.dart';
+import 'package:tsavaari/features/card_reacharge/screens/widgets/add_or_edit_card_details.popup.dart';
+import 'package:tsavaari/features/card_reacharge/screens/widgets/delete_card_popup.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/image_strings.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
@@ -24,6 +28,7 @@ class CardFrontView extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
     final screenWidth = TDeviceUtils.getScreenWidth(context);
+    final cardController = MetroCardController.instance;
 
     return Container(
       margin: EdgeInsets.symmetric(
@@ -61,7 +66,28 @@ class CardFrontView extends StatelessWidget {
                 children: [
                   FloatingActionButton(
                     heroTag: "edit-btn$cardNumber",
-                    onPressed: () {},
+                    onPressed: () {
+                      cardController.cardHolderName.text = cardController
+                              .cardDetailsByUser
+                              .first
+                              .cardDetails![
+                                  cardController.carouselCurrentIndex.value]
+                              .cardDesc ??
+                          '';
+                      cardController.cardNumber.text = cardController
+                              .cardDetailsByUser
+                              .first
+                              .cardDetails![
+                                  cardController.carouselCurrentIndex.value]
+                              .cardNo ??
+                          '';
+                      Get.dialog(
+                        barrierDismissible: false,
+                        const AddOrEditCardDetailsPopup(
+                          type: 'edit',
+                        ),
+                      );
+                    },
                     mini: true,
                     shape: const CircleBorder(),
                     backgroundColor: TColors.white,
@@ -72,7 +98,9 @@ class CardFrontView extends StatelessWidget {
                   ),
                   FloatingActionButton(
                     heroTag: "remove-btn$cardNumber",
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.dialog(const DeleteCardPopup());
+                    },
                     mini: true,
                     shape: const CircleBorder(),
                     backgroundColor: TColors.white,
@@ -97,7 +125,7 @@ class CardFrontView extends StatelessWidget {
 
             //--  Recharge button
             Positioned(
-              top: constraints.maxHeight * .3,
+              top: constraints.maxHeight * .32,
               right: constraints.maxWidth * .05,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(

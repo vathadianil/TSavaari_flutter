@@ -8,13 +8,14 @@ class TTextFormFieldTheme {
 
   static InputDecorationTheme lightInputDecorationTheme = InputDecorationTheme(
     errorMaxLines: 3,
-    prefixIconColor: TColors.darkGrey,
-    suffixIconColor: TColors.darkGrey,
+    prefixIconColor: TColors.primary,
+    suffixIconColor: TColors.primary,
     // constraints: const BoxConstraints.expand(height: TSizes.inputFieldHeight),
     labelStyle: const TextStyle()
-        .copyWith(fontSize: TSizes.fontSizeMd, color: TColors.black),
+        .copyWith(fontSize: TSizes.fontSizeMd, color: TColors.dark),
+
     hintStyle: const TextStyle()
-        .copyWith(fontSize: TSizes.fontSizeSm, color: TColors.black),
+        .copyWith(fontSize: TSizes.fontSizeSm, color: TColors.dark),
     errorStyle: const TextStyle().copyWith(fontStyle: FontStyle.normal),
     floatingLabelStyle:
         const TextStyle().copyWith(color: TColors.black.withOpacity(0.8)),
@@ -24,11 +25,11 @@ class TTextFormFieldTheme {
     ),
     enabledBorder: const OutlineInputBorder().copyWith(
       borderRadius: BorderRadius.circular(TSizes.inputFieldRadius),
-      borderSide: const BorderSide(width: 1, color: TColors.grey),
+      borderSide: const BorderSide(width: 1, color: TColors.accent),
     ),
     focusedBorder: const OutlineInputBorder().copyWith(
       borderRadius: BorderRadius.circular(TSizes.inputFieldRadius),
-      borderSide: const BorderSide(width: 1, color: TColors.dark),
+      borderSide: const BorderSide(width: 1, color: TColors.primary),
     ),
     errorBorder: const OutlineInputBorder().copyWith(
       borderRadius: BorderRadius.circular(TSizes.inputFieldRadius),
@@ -42,8 +43,8 @@ class TTextFormFieldTheme {
 
   static InputDecorationTheme darkInputDecorationTheme = InputDecorationTheme(
     errorMaxLines: 2,
-    prefixIconColor: TColors.darkGrey,
-    suffixIconColor: TColors.darkGrey,
+    prefixIconColor: TColors.accent,
+    suffixIconColor: TColors.accent,
     // constraints: const BoxConstraints.expand(height: TSizes.inputFieldHeight),
     labelStyle: const TextStyle()
         .copyWith(fontSize: TSizes.fontSizeMd, color: TColors.white),

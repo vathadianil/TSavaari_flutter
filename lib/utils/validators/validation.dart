@@ -65,5 +65,20 @@ class TValidator {
     return null;
   }
 
+  static String? validateCardNumber(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Card number is required.';
+    }
+
+    // Regular expression for phone number validation
+    final phoneRegExp = RegExp(r'^\d{14}$');
+
+    if (!phoneRegExp.hasMatch(value)) {
+      return 'Invalid Card number format (14 digits required).';
+    }
+
+    return null;
+  }
+
 // Add more custom validators as needed for your specific requirements.
 }

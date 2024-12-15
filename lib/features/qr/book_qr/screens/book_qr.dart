@@ -17,13 +17,26 @@ import 'package:tsavaari/utils/constants/text_strings.dart';
 import 'package:tsavaari/utils/device/device_utility.dart';
 
 class BookQrScreen extends StatelessWidget {
-  const BookQrScreen({super.key});
+  const BookQrScreen(
+      {super.key,
+      this.fromStation = '',
+      this.toStation = '',
+      this.selectedTicketType = false});
+
+  final String fromStation;
+  final String toStation;
+  final bool selectedTicketType;
 
   @override
   Widget build(BuildContext context) {
     Get.put(StationListController());
-    Get.put(BookQrController());
+    Get.put(BookQrController(
+      sourceStation: fromStation,
+      destinationStation: toStation,
+      selectedTicketType: selectedTicketType,
+    ));
     Get.put(CheckBoxController());
+
     final screenHeight = TDeviceUtils.getScreenHeight();
     return Scaffold(
       appBar: TAppBar(

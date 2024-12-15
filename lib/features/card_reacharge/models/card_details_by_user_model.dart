@@ -7,7 +7,7 @@ class CardDetailsByUserModel {
       {this.returnCode, this.returnMessage, this.cardDetails});
 
   CardDetailsByUserModel.fromJson(Map<String, dynamic> json) {
-    returnCode = json['returnCode'];
+    returnCode = json['returnCode'].toString();
     returnMessage = json['returnMessage'];
     if (json['cardDetails'] != null) {
       cardDetails = <CardDetails>[];

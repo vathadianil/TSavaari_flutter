@@ -47,15 +47,16 @@ class ServiceCards extends StatelessWidget {
           const SizedBox(
             height: TSizes.spaceBtwItems / 2,
           ),
-          Expanded(
-            child: Text(
-              service.title,
-              textScaler: TextScaleUtil.getScaledText(context, maxScale: 3),
-              style: Theme.of(context).textTheme.labelSmall,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
+          Text(
+            service.title,
+            textScaler: TextScaleUtil.getScaledText(context, maxScale: 3),
+            style: Theme.of(context)
+                .textTheme
+                .labelLarge!
+                .copyWith(fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

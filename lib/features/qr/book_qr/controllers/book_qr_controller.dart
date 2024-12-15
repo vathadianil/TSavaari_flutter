@@ -24,8 +24,15 @@ import 'package:tsavaari/utils/popups/loaders.dart';
 
 class BookQrController extends GetxController {
   static BookQrController get instance => Get.find();
-
+  BookQrController({
+    this.sourceStation = '',
+    this.destinationStation = '',
+    this.selectedTicketType = false,
+  });
   //variables
+  final String sourceStation;
+  final String destinationStation;
+  final bool selectedTicketType;
   final isLoading = false.obs;
   final ticketType = false.obs;
   final passengerCount = 1.obs;
@@ -36,6 +43,17 @@ class BookQrController extends GetxController {
   final stationController = StationListController.instance;
   final qrFareData = <QrGetFareModel>{}.obs;
   final fareCalculationData = <FareCalculationModel>{}.obs;
+
+  @override
+  onReady() {
+    super.onReady();
+    if (sourceStation != '' && destinationStation != '') {
+      source.value = sourceStation;
+      destination.value = destinationStation;
+      ticketType.value = selectedTicketType;
+      getFare();
+    }
+  }
 
   Future<void> getFare() async {
     try {
@@ -76,7 +94,8 @@ class BookQrController extends GetxController {
 
       isLoading.value = true;
 
-      if (Get.currentRoute == Routes.bookQr) {
+      if (Get.currentRoute == Routes.bookQr ||
+          Get.currentRoute == Routes.bookQrFromScreen) {
         final payload = {
           "token": "$token",
           "fromStationId": fromStationId,

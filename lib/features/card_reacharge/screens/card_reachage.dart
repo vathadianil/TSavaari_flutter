@@ -11,6 +11,7 @@ import 'package:tsavaari/features/card_reacharge/screens/widgets/card_topup_hist
 import 'package:tsavaari/features/card_reacharge/screens/widgets/travel_history_card.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
 import 'package:tsavaari/utils/device/device_utility.dart';
+import 'package:tsavaari/features/card_reacharge/screens/widgets/add_or_edit_card_details.popup.dart';
 
 class CardReachargeScreen extends StatelessWidget {
   const CardReachargeScreen({super.key});
@@ -35,22 +36,52 @@ class CardReachargeScreen extends StatelessWidget {
         title: const Text('Card Recharge'),
         actions: [
           AddCard(
-            onPressed: () {},
+            onPressed: () {
+              cardController.cardHolderName.text = '';
+              cardController.cardNumber.text = '';
+              Get.dialog(
+                barrierDismissible: false,
+                const AddOrEditCardDetailsPopup(
+                  type: 'add',
+                ),
+              );
+            },
           ),
         ],
       ),
       body: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         padding: const EdgeInsets.all(TSizes.defaultSpace),
         child: Obx(
           () => Column(
             children: [
               //--Metro Card
               if (cardController.isCardDetailsLoading.value)
-                CardLayoutShimmer(cardHeight: cardHeight),
-              if (!cardController.isCardDetailsLoading.value)
+                Column(
+                  children: [
+                    CardLayoutShimmer(cardHeight: cardHeight),
+                    const SizedBox(
+                      height: TSizes.spaceBtwSections * 2,
+                    ),
+                  ],
+                ),
+              if (!cardController.isCardDetailsLoading.value &&
+                  cardController.cardDetailsByUser.isNotEmpty &&
+                  cardController
+                      .cardDetailsByUser.first.cardDetails!.isNotEmpty)
                 CardLayout(
                   cardHeight: cardHeight,
                   cardBalance: cardBalance,
+                ),
+              if (!cardController.isCardDetailsLoading.value &&
+                  cardController.cardDetailsByUser.isEmpty)
+                const Column(
+                  children: [
+                    Text('No Card Data Found'),
+                    SizedBox(
+                      height: TSizes.spaceBtwSections,
+                    ),
+                  ],
                 ),
 
               ButtonTabbar(

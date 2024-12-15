@@ -32,11 +32,16 @@ class CardLayoutShimmer extends StatelessWidget {
           )
         ],
       ),
-      child: ShimmerEffect(
-        height: cardHeight,
-        width: double.infinity,
-        color:
-            THelperFunctions.isDarkMode(context) ? TColors.dark : TColors.light,
+      child: Column(
+        children: [
+          ShimmerEffect(
+            height: cardHeight,
+            width: double.infinity,
+            color: THelperFunctions.isDarkMode(context)
+                ? TColors.dark
+                : TColors.light,
+          ),
+        ],
       ),
     );
   }

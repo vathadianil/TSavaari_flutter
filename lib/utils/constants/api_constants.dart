@@ -24,6 +24,8 @@ class ApiEndPoint {
 
   //Card Rechage
   static String getCardDetailsByUser = 'db/get_card_details?userID=';
+  static String addOrUpdateCardDetails = 'db/add_update_card';
+  static String deleteCard = 'db/delete_card?ID=';
 
   //Hyd Metro Website Url
   static String hydMetroWebsiteUrl = 'https://www.ltmetro.com/penalty-charter/';

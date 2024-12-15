@@ -25,6 +25,34 @@ class MetroCardRepository extends GetxController {
     }
   }
 
+  Future<CardDetailsByUserModel> addOrUpdateCardDetailsByUser(payload) async {
+    try {
+      final data =
+          await THttpHelper.post(ApiEndPoint.addOrUpdateCardDetails, payload);
+      return CardDetailsByUserModel.fromJson(data);
+    } on FormatException catch (_) {
+      throw const TFormatException();
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw 'Something went wrong. Please try again later!';
+    }
+  }
+
+  Future<CardDetailsByUserModel> deleteCardDetailsByUser(payload) async {
+    try {
+      final data =
+          await THttpHelper.delete('${ApiEndPoint.deleteCard}$payload');
+      return CardDetailsByUserModel.fromJson(data);
+    } on FormatException catch (_) {
+      throw const TFormatException();
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw 'Something went wrong. Please try again later!';
+    }
+  }
+
   Future<List<CardTravelHistoryModel>> getMetroCardTravelHistory() async {
     try {
       final list = [
