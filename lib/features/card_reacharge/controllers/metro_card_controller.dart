@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:tsavaari/data/repositories/metro_card/metro_card_repository.dart';
 import 'package:tsavaari/features/card_reacharge/models/card_details_by_user_model.dart';
 import 'package:tsavaari/features/card_reacharge/models/card_travel_history_model.dart';
+import 'package:tsavaari/features/card_reacharge/models/card_trx_details_model.dart';
+import 'package:tsavaari/features/card_reacharge/models/last_recharge_status_model.dart';
+import 'package:tsavaari/utils/constants/card_recharge_utils.dart';
 import 'package:tsavaari/utils/constants/image_strings.dart';
 import 'package:tsavaari/utils/helpers/network_manager.dart';
 import 'package:tsavaari/utils/popups/full_screen_loader.dart';
 import 'package:tsavaari/utils/popups/loaders.dart';
-import 'dart:math';
 import 'dart:convert';
-import 'package:crypto/crypto.dart';
 
 class MetroCardController extends GetxController {
   static MetroCardController get instance => Get.find();
@@ -18,8 +19,12 @@ class MetroCardController extends GetxController {
   //variables
   final isCardDetailsLoading = false.obs;
   final isTravelHistoryLoading = false.obs;
+  final isLastRcgStatusLoading = false.obs;
+  final isCardTrxLoading = false.obs;
   final cardTravelHistoryData = <CardTravelHistoryModel>[].obs;
   final cardDetailsByUser = <CardDetailsByUserModel>{}.obs;
+  final lastRcgStatus = <LastRechargeStatusModel>{}.obs;
+  final cardTrxListData = <CardTrxListModel>[].obs;
   final _cardRepository = Get.put(MetroCardRepository());
   final userId = '336838';
   final carouselCurrentIndex = 0.obs;
@@ -39,45 +44,6 @@ class MetroCardController extends GetxController {
     carouselCurrentIndex.value = index;
   }
 
-  String getBankRequestDateTime() {
-    final now = DateTime.now();
-    final formattedDateTime = "${now.year.toString().padLeft(4, '0')}"
-        "${now.month.toString().padLeft(2, '0')}"
-        "${now.day.toString().padLeft(2, '0')}"
-        "${now.hour.toString().padLeft(2, '0')}"
-        "${now.minute.toString().padLeft(2, '0')}"
-        "${now.second.toString().padLeft(2, '0')}";
-    return formattedDateTime;
-  }
-
-  String getBankReferenceNumber(String cardNumber, String bankRequestDateTime) {
-    final backRef = bankRequestDateTime + generateRandomNumber(6);
-    return backRef;
-  }
-
-  String generateRandomNumber(int charLength) {
-    if (charLength < 1) return '0';
-
-    final random = Random();
-    final min = pow(10, charLength - 1).toInt();
-    final max = pow(10, charLength).toInt() - 1;
-
-    return (min + random.nextInt(max - min + 1)).toString();
-  }
-
-  String getHash(String cardNumber, String bankRefNumber) {
-    final base = (cardNumber + bankRefNumber).trim();
-
-    // Convert the string to bytes (UTF-8)
-    final bytes = utf8.encode(base);
-
-    // Compute the SHA-256 hash
-    final digest = sha256.convert(bytes);
-
-    // Convert the hash to a hexadecimal string
-    return digest.toString();
-  }
-
   //Fetch Card Details
   Future<void> fetchMetroCardDetailsByUser() async {
     try {
@@ -87,6 +53,8 @@ class MetroCardController extends GetxController {
           await _cardRepository.getMetroCardDetailsByUser(userId);
       if (cardDetails.returnCode == '0') {
         cardDetailsByUser.add(cardDetails);
+        fetchCardLastTrasactionStatus(cardDetails.cardDetails![0].cardNo!);
+        fetchCardTransactionDetails(cardDetails.cardDetails![0].cardNo!);
       }
     } catch (e) {
       TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
@@ -226,15 +194,103 @@ class MetroCardController extends GetxController {
     }
   }
 
-  void copyTextToClipboard(String text) async {
-    const String textToCopy = '2244325454543654365435';
+  // void copyTextToClipboard(String text) async {
+  //   const String textToCopy = '2244325454543654365435';
 
-    if (textToCopy.isNotEmpty) {
-      try {
-        await Clipboard.setData(const ClipboardData(text: textToCopy));
-      } catch (e) {
-        TLoaders.errorSnackBar(title: 'Failed to Copy to Clipboard');
-      }
+  //   if (textToCopy.isNotEmpty) {
+  //     try {
+  //       await Clipboard.setData(const ClipboardData(text: textToCopy));
+  //     } catch (e) {
+  //       TLoaders.errorSnackBar(title: 'Failed to Copy to Clipboard');
+  //     }
+  //   }
+  // }
+
+  Future<void> fetchCardLastTrasactionStatus(String cardNumber) async {
+    try {
+      // Create the plain credentials
+      isLastRcgStatusLoading.value = true;
+      String plainCredentials = CardRechargeUtils.plainCredentials;
+
+      // Encode to Base64
+      String base64Credentials = base64Encode(utf8.encode(plainCredentials));
+      String authorizationHeader = "Basic $base64Credentials";
+
+      // Generate required data
+      String bankRequestDateTime = CardRechargeUtils.getBankRequestDateTime();
+      String bankRefNumber = CardRechargeUtils.getBankReferenceNumber(
+          cardNumber, bankRequestDateTime);
+
+      String bankCode = CardRechargeUtils.bankCode;
+      String hash = CardRechargeUtils.getHash(cardNumber, bankRefNumber);
+
+      // Prepare the request body
+      Map<String, String> payload = {
+        "TicketEngravedID": cardNumber,
+        "BankCode": bankCode,
+        "BankReferenceNumber": bankRefNumber,
+        "Hash": hash,
+      };
+
+      // Prepare the HTTP headers
+      Map<String, String> headers = {
+        "Authorization": authorizationHeader,
+        "Content-Type": "application/json",
+      };
+
+      // Make the POST request
+      lastRcgStatus.clear();
+      final response = await _cardRepository.getLastTransactionDetailsByCard(
+          payload, headers);
+      lastRcgStatus.add(response);
+    } catch (e) {
+      TLoaders.errorSnackBar(
+          title: 'Error', message: 'Failed to fetch last recharge status');
+    } finally {
+      isLastRcgStatusLoading.value = false;
+    }
+  }
+
+  Future<void> fetchCardTransactionDetails(String cardNumber) async {
+    try {
+      // Create the plain credentials
+      isCardTrxLoading.value = true;
+      String plainCredentials = CardRechargeUtils.plainCredentials;
+
+      // Encode to Base64
+      String base64Credentials = base64Encode(utf8.encode(plainCredentials));
+      String authorizationHeader = "Basic $base64Credentials";
+
+      // Generate required data
+      String bankCode = CardRechargeUtils.bankCode;
+      String hash = CardRechargeUtils.getHash(cardNumber, bankCode);
+
+      // Prepare the request body
+      Map<String, String> payload = {
+        "TicketEngravedID": cardNumber,
+        "BankCode": bankCode,
+        "Hash": hash,
+      };
+
+      // Prepare the HTTP headers
+      Map<String, String> headers = {
+        "Authorization": authorizationHeader,
+        "Content-Type": "application/json",
+      };
+
+      // Make the POST request
+      cardTrxListData.clear();
+
+      final response =
+          await _cardRepository.getCardTrxDetails(payload, headers);
+
+      cardTrxListData
+          .assignAll(response.response as Iterable<CardTrxListModel>);
+    } catch (e) {
+      TLoaders.errorSnackBar(
+          title: 'Error', message: 'Failed to Fetch Card transaction history');
+    } finally {
+      isCardTrxLoading.value = false;
     }
   }
 }

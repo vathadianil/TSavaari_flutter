@@ -24,6 +24,9 @@ class ApiEndPoint {
 
   //Card Rechage
   static String getCardDetailsByUser = 'db/get_card_details?userID=';
+  static String getLastRechargeStatus =
+      'HydRechargeApi/api/NEBULACARD_TSA_TXN_STATUS';
+  static String getCardTrxDetails = 'HydRechargeApi/api/NEBULACARD_TXN_DETAILS';
   static String addOrUpdateCardDetails = 'db/add_update_card';
   static String deleteCard = 'db/delete_card?ID=';
 

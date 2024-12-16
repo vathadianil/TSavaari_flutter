@@ -2,6 +2,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:tsavaari/features/card_reacharge/models/card_details_by_user_model.dart';
 import 'package:tsavaari/features/card_reacharge/models/card_travel_history_model.dart';
+import 'package:tsavaari/features/card_reacharge/models/card_trx_details_model.dart';
+import 'package:tsavaari/features/card_reacharge/models/last_recharge_status_model.dart';
 import 'package:tsavaari/utils/constants/api_constants.dart';
 import 'package:tsavaari/utils/exceptions/format_exceptions.dart';
 import 'package:tsavaari/utils/exceptions/platform_exceptions.dart';
@@ -16,6 +18,43 @@ class MetroCardRepository extends GetxController {
         '${ApiEndPoint.getCardDetailsByUser}$userId',
       );
       return CardDetailsByUserModel.fromJson(data);
+    } on FormatException catch (_) {
+      throw const TFormatException();
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw 'Something went wrong. Please try again later!';
+    }
+  }
+
+  Future<LastRechargeStatusModel> getLastTransactionDetailsByCard(
+      payload, headers) async {
+    try {
+      final data = await THttpHelper.post(
+        ApiEndPoint.getLastRechargeStatus,
+        payload,
+        newUrl: false,
+        headers: headers,
+      );
+      return LastRechargeStatusModel.fromJson(data);
+    } on FormatException catch (_) {
+      throw const TFormatException();
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw 'Something went wrong. Please try again later!';
+    }
+  }
+
+  Future<CardTrxDetailsModel> getCardTrxDetails(payload, headers) async {
+    try {
+      final data = await THttpHelper.post(
+        ApiEndPoint.getCardTrxDetails,
+        payload,
+        newUrl: false,
+        headers: headers,
+      );
+      return CardTrxDetailsModel.fromJson(data);
     } on FormatException catch (_) {
       throw const TFormatException();
     } on PlatformException catch (e) {

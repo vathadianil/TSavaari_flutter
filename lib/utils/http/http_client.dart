@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class THttpHelper {
-  static const String _baseUrlOld = 'https://devapp.tsavaari.com/LTProject';
+  static const String _baseUrlOld =
+      'https://nebulacard.ltmetro.com'; //'https://devapp.tsavaari.com/LTProject';
   static const String _baseUrl = 'https://stage.tsavaari.com';
 
   // Helper method to make a GET request
@@ -16,19 +17,25 @@ class THttpHelper {
   }
 
   // Helper method to make a POST request
-  static Future<Map<String, dynamic>> post(String endpoint, dynamic data,
-      {bool newUrl = true}) async {
+  static Future<Map<String, dynamic>> post(
+    String endpoint,
+    dynamic data, {
+    bool newUrl = true,
+    dynamic headers,
+  }) async {
     final url = newUrl ? _baseUrl : _baseUrlOld;
 
     final response = await http.post(
       Uri.parse('$url/$endpoint'),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: headers ??
+          {
+            'Content-Type': 'application/json',
+          },
       body: data != null ? json.encode(data) : null,
     );
     // .timeout(const Duration(seconds: 10));
     print('------------------------------------------------------');
+    print('headers : $headers');
     print('payload : $data');
     print('response: ${response.body}');
     return _handleResponse(response);
@@ -57,7 +64,8 @@ class THttpHelper {
     if (response.statusCode == 200) {
       var res = response.body;
       if (response.body[0] == '[') {
-        res = response.body.substring(1, response.body.length - 1);
+        // res = response.body.substring(1, response.body.length - 1);
+        res = '{"response": ${response.body}}';
       }
       return json.decode(res);
     } else {
