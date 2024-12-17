@@ -5,6 +5,9 @@ import 'dart:convert';
 class CardRechargeUtils {
   static String plainCredentials = "HYDMetroMobileApp:MobileApp@HydMetro1234";
   static String bankCode = "05";
+  static String topUpChannel = "08";
+  static String cardValidationDecryptString = "dFNhdmFhciFhZmNzYWx0";
+  static String decryptAesKey = "000102030405060708090a0b0c0d0e0f";
 
   static String getBankRequestDateTime() {
     final now = DateTime.now();
@@ -44,5 +47,29 @@ class CardRechargeUtils {
 
     // Convert the hash to a hexadecimal string
     return digest.toString();
+  }
+
+  // String getDecryptedString(String value, String hash) {
+  //   try {
+  //     // Decode the Base64-encoded value
+  //     List<int> decodedBytes = base64Decode(value);
+  //     // Convert the decoded bytes to a UTF-8 string
+  //     String decrypted = utf8.decode(decodedBytes);
+  //     return decrypted;
+  //   } catch (e) {
+  //     return "crypto error";
+  //   }
+  // }
+
+  static String getDecryptedString(String value, String hash) {
+    try {
+      // Decode the Base64-encoded string
+      final decodedBytes = base64Decode(value);
+      final decrypted = utf8.decode(decodedBytes);
+
+      return decrypted;
+    } catch (e) {
+      throw ("Error during decryption: $e");
+    }
   }
 }

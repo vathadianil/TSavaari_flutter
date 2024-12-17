@@ -4,6 +4,7 @@ import 'package:tsavaari/features/card_reacharge/models/card_details_by_user_mod
 import 'package:tsavaari/features/card_reacharge/models/card_travel_history_model.dart';
 import 'package:tsavaari/features/card_reacharge/models/card_trx_details_model.dart';
 import 'package:tsavaari/features/card_reacharge/models/last_recharge_status_model.dart';
+import 'package:tsavaari/features/card_reacharge/models/nebula_card_validation_model.dart';
 import 'package:tsavaari/utils/constants/api_constants.dart';
 import 'package:tsavaari/utils/exceptions/format_exceptions.dart';
 import 'package:tsavaari/utils/exceptions/platform_exceptions.dart';
@@ -37,6 +38,41 @@ class MetroCardRepository extends GetxController {
         headers: headers,
       );
       return LastRechargeStatusModel.fromJson(data);
+    } on FormatException catch (_) {
+      throw const TFormatException();
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw 'Something went wrong. Please try again later!';
+    }
+  }
+
+  Future<NebulaCardValidationModel> validateNebulaCard(payload, headers) async {
+    try {
+      final data = await THttpHelper.post(
+        ApiEndPoint.validateNebulaCardUrl,
+        payload,
+        newUrl: false,
+        headers: headers,
+      );
+      return NebulaCardValidationModel.fromJson(data);
+    } on FormatException catch (_) {
+      throw const TFormatException();
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw 'Something went wrong. Please try again later!';
+    }
+  }
+
+  Future<Map<String, dynamic>> getSqsDetails() async {
+    try {
+      final data = await THttpHelper.get(
+        ApiEndPoint.getSqsDetailsUrl,
+        newUrl: false,
+        amazonUrl: true,
+      );
+      return data;
     } on FormatException catch (_) {
       throw const TFormatException();
     } on PlatformException catch (e) {

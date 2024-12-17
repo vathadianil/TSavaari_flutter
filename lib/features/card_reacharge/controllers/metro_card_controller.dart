@@ -1,17 +1,21 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:tsavaari/data/repositories/metro_card/metro_card_repository.dart';
 import 'package:tsavaari/features/card_reacharge/models/card_details_by_user_model.dart';
 import 'package:tsavaari/features/card_reacharge/models/card_travel_history_model.dart';
 import 'package:tsavaari/features/card_reacharge/models/card_trx_details_model.dart';
 import 'package:tsavaari/features/card_reacharge/models/last_recharge_status_model.dart';
-import 'package:tsavaari/utils/constants/card_recharge_utils.dart';
+import 'package:tsavaari/features/card_reacharge/models/nebula_card_validation_model.dart';
+import 'package:tsavaari/features/card_reacharge/models/sqs_details_model.dart';
+import 'package:tsavaari/utils/helpers/card_recharge_utils.dart';
 import 'package:tsavaari/utils/constants/image_strings.dart';
 import 'package:tsavaari/utils/helpers/network_manager.dart';
 import 'package:tsavaari/utils/popups/full_screen_loader.dart';
 import 'package:tsavaari/utils/popups/loaders.dart';
 import 'dart:convert';
+import 'package:encrypt/encrypt.dart' as encrypt;
 
 class MetroCardController extends GetxController {
   static MetroCardController get instance => Get.find();
@@ -21,7 +25,9 @@ class MetroCardController extends GetxController {
   final isTravelHistoryLoading = false.obs;
   final isLastRcgStatusLoading = false.obs;
   final isCardTrxLoading = false.obs;
+  final isNebulaCardValidating = false.obs;
   final cardTravelHistoryData = <CardTravelHistoryModel>[].obs;
+  final cardValidationData = <NebulaCardValidationModel>{}.obs;
   final cardDetailsByUser = <CardDetailsByUserModel>{}.obs;
   final lastRcgStatus = <LastRechargeStatusModel>{}.obs;
   final cardTrxListData = <CardTrxListModel>[].obs;
@@ -53,8 +59,9 @@ class MetroCardController extends GetxController {
           await _cardRepository.getMetroCardDetailsByUser(userId);
       if (cardDetails.returnCode == '0') {
         cardDetailsByUser.add(cardDetails);
-        fetchCardLastTrasactionStatus(cardDetails.cardDetails![0].cardNo!);
-        fetchCardTransactionDetails(cardDetails.cardDetails![0].cardNo!);
+        // fetchCardLastTrasactionStatus(cardDetails.cardDetails![0].cardNo!);
+        // fetchCardTransactionDetails(cardDetails.cardDetails![0].cardNo!);
+        validateNebulaCard(cardDetails.cardDetails![0].cardNo!);
       }
     } catch (e) {
       TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
@@ -194,17 +201,55 @@ class MetroCardController extends GetxController {
     }
   }
 
-  // void copyTextToClipboard(String text) async {
-  //   const String textToCopy = '2244325454543654365435';
+  Future<void> validateNebulaCard(String cardNumber) async {
+    try {
+      // Create the plain credentials
+      isNebulaCardValidating.value = true;
 
-  //   if (textToCopy.isNotEmpty) {
-  //     try {
-  //       await Clipboard.setData(const ClipboardData(text: textToCopy));
-  //     } catch (e) {
-  //       TLoaders.errorSnackBar(title: 'Failed to Copy to Clipboard');
-  //     }
-  //   }
-  // }
+      final sqsDetails = await getSqsDetails();
+
+      if (sqsDetails != null) {
+        String accessToken = CardRechargeUtils.getDecryptedString(
+            sqsDetails.samsungToken,
+            CardRechargeUtils.cardValidationDecryptString);
+
+        // Prepare the HTTP headers
+        Map<String, String> headers = {
+          "Authorization": accessToken,
+          "Content-Type": "application/json",
+        };
+
+        // Generate required data
+        String bankRequestDateTime = CardRechargeUtils.getBankRequestDateTime();
+        String bankRefNumber = CardRechargeUtils.getBankReferenceNumber(
+            cardNumber, bankRequestDateTime);
+        String hash = CardRechargeUtils.getHash(cardNumber, bankRefNumber);
+
+        // Prepare the request body
+        Map<String, String> payload = {
+          "TicketEngravedID": cardNumber,
+          "BankCode": CardRechargeUtils.bankCode,
+          "BankReferenceNumber": bankRefNumber,
+          'BankRequestDateTime': bankRequestDateTime,
+          "TopUpChannel": CardRechargeUtils.topUpChannel,
+          "Hash": hash,
+        };
+        // Make the POST request
+        cardValidationData.clear();
+        final response =
+            await _cardRepository.validateNebulaCard(payload, headers);
+        cardValidationData.add(response);
+        // lastRcgStatus.add(response);
+      } else {
+        throw 'Something went wrong.Please try Again!';
+      }
+    } catch (e) {
+      TLoaders.errorSnackBar(
+          title: 'Error', message: 'Failed to fetch Card validation details');
+    } finally {
+      isNebulaCardValidating.value = false;
+    }
+  }
 
   Future<void> fetchCardLastTrasactionStatus(String cardNumber) async {
     try {
@@ -291,6 +336,67 @@ class MetroCardController extends GetxController {
           title: 'Error', message: 'Failed to Fetch Card transaction history');
     } finally {
       isCardTrxLoading.value = false;
+    }
+  }
+
+  Future<SqsDetailsModel?> getSqsDetails() async {
+    try {
+      final data = await _cardRepository.getSqsDetails();
+      String decryptedText = decryptAes(
+          data['response'] as String, CardRechargeUtils.decryptAesKey);
+
+      if (decryptedText.isNotEmpty) {
+        // Parse decrypted JSON
+        final Map<String, dynamic> obj = jsonDecode(decryptedText);
+
+        String accessKey = obj['a'];
+        String secret = obj['s'];
+        String url = obj['u'];
+        String samsungToken = obj['t'];
+
+        if (accessKey.isNotEmpty && secret.isNotEmpty) {
+          // Pass values to callback
+          final sqlsDetails = SqsDetailsModel(
+              accessKey: accessKey,
+              secret: secret,
+              url: url,
+              samsungToken: samsungToken);
+          return sqlsDetails;
+        } else {
+          throw ("Invalid credentials received.");
+        }
+      } else {
+        throw ("Decryption failed.");
+      }
+    } catch (e) {
+      TLoaders.errorSnackBar(
+          title: 'Error', message: 'Something went wrong. Please Try again!');
+    }
+    return null;
+  }
+
+  String decryptAes(String encryptedText, String secretKey) {
+    try {
+      // Decode Base64-encoded encrypted text
+      final encryptedBytes = base64Decode(encryptedText);
+
+      // Convert the secret key to 16 bytes for AES-128 or 32 bytes for AES-256
+      final key = encrypt.Key.fromUtf8(secretKey.padRight(32, ' '));
+      final iv = encrypt.IV(Uint8List(16));
+
+      // Set up the encrypter with AES in CBC mode and PKCS5 padding
+      final encrypter = encrypt.Encrypter(
+        encrypt.AES(key, mode: encrypt.AESMode.cbc, padding: 'PKCS7'),
+      );
+
+      // Decrypt the data
+      final decrypted = encrypter.decryptBytes(
+        encrypt.Encrypted(encryptedBytes),
+        iv: iv,
+      );
+      return utf8.decode(decrypted);
+    } catch (e) {
+      throw "Decryption Error: $e";
     }
   }
 }

@@ -30,6 +30,7 @@ dependencies:
 
   #Card Recharge
   crypto: ^3.0.3
+  encrypt: ^5.0.3
 
   #Icon Packages
   cupertino_icons: ^1.0.2
