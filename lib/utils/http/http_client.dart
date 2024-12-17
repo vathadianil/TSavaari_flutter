@@ -17,6 +17,8 @@ class THttpHelper {
             : _baseUrlOld;
     final response = await http.get(Uri.parse('$url/$endpoint'));
     // .timeout(const Duration(seconds: 10));
+    print('------------------------------------------------------');
+    print('response: ${response.body}');
     return amazonUrl
         ? _handleStringResponse(response)
         : _handleResponse(response);
@@ -62,12 +64,14 @@ class THttpHelper {
   static Future<Map<String, dynamic>> delete(String endpoint) async {
     final response = await http.delete(Uri.parse('$_baseUrl/$endpoint'));
     // .timeout(const Duration(seconds: 10));
+    print('$_baseUrl/$endpoint');
+    print(response.body);
     return _handleResponse(response);
   }
 
   // Handle the HTTP response
   static Map<String, dynamic> _handleResponse(http.Response response) {
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       var res = response.body;
       if (response.body[0] == '[' || response.body[0] != '{') {
         res = '{"response": ${response.body}}';

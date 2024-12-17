@@ -114,10 +114,10 @@ class MetroCardRepository extends GetxController {
     }
   }
 
-  Future<CardDetailsByUserModel> deleteCardDetailsByUser(payload) async {
+  Future<CardDetailsByUserModel> deleteCardDetailsByUser(userId, cardNo) async {
     try {
-      final data =
-          await THttpHelper.delete('${ApiEndPoint.deleteCard}$payload');
+      final data = await THttpHelper.delete(
+          '${ApiEndPoint.deleteCard}$userId&CARDNO=$cardNo');
       return CardDetailsByUserModel.fromJson(data);
     } on FormatException catch (_) {
       throw const TFormatException();

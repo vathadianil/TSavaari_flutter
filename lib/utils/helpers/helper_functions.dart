@@ -139,6 +139,13 @@ class THelperFunctions {
     return '$day-$month-$year';
   }
 
+  static String getFormattedDateString1(String dateString) {
+    final year = dateString.substring(2, 4);
+    final month = dateString.substring(4, 6);
+    final day = dateString.substring(6, 8);
+    return '$day/$month/$year';
+  }
+
   static List<T> removeDuplicates<T>(List<T> list) {
     return list.toSet().toList();
   }

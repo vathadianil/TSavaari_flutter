@@ -65,6 +65,7 @@ class AddOrEditCardDetailsPopup extends StatelessWidget {
                 TextFormField(
                   controller: cardController.cardNumber,
                   enabled: type == 'add',
+                  keyboardType: TextInputType.number,
                   validator: (value) => TValidator.validateCardNumber(value),
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(
@@ -80,6 +81,7 @@ class AddOrEditCardDetailsPopup extends StatelessWidget {
                           : TColors.darkGrey,
                     ),
                     // labelText: 'Card Number',
+
                     label: Text(
                       'Card Number',
                       style: Theme.of(context)

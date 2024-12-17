@@ -31,7 +31,7 @@ class ApiEndPoint {
   static String validateNebulaCardUrl = 'HydAppAPI/api/VALIDATE_NEBULACARD';
   static String getCardTrxDetails = 'HydRechargeApi/api/NEBULACARD_TXN_DETAILS';
   static String addOrUpdateCardDetails = 'db/add_update_card';
-  static String deleteCard = 'db/delete_card?ID=';
+  static String deleteCard = 'db/delete_card?USERID=';
 
   //Hyd Metro Website Url
   static String hydMetroWebsiteUrl = 'https://www.ltmetro.com/penalty-charter/';

@@ -27,7 +27,7 @@ class MetroCardController extends GetxController {
   final isCardTrxLoading = false.obs;
   final isNebulaCardValidating = false.obs;
   final cardTravelHistoryData = <CardTravelHistoryModel>[].obs;
-  final cardValidationData = <NebulaCardValidationModel>{}.obs;
+  final storeNebulaCardValidationDetails = <NebulaCardValidationModel>[].obs;
   final cardDetailsByUser = <CardDetailsByUserModel>{}.obs;
   final lastRcgStatus = <LastRechargeStatusModel>{}.obs;
   final cardTrxListData = <CardTrxListModel>[].obs;
@@ -48,6 +48,10 @@ class MetroCardController extends GetxController {
   //Update page navigation dots
   void updatePageIndicator(index) {
     carouselCurrentIndex.value = index;
+    if (!storeNebulaCardValidationDetails.asMap().containsKey(index)) {
+      validateNebulaCard(
+          cardDetailsByUser.first.cardDetails![index].cardNo!, 'fetch');
+    }
   }
 
   //Fetch Card Details
@@ -61,7 +65,7 @@ class MetroCardController extends GetxController {
         cardDetailsByUser.add(cardDetails);
         // fetchCardLastTrasactionStatus(cardDetails.cardDetails![0].cardNo!);
         // fetchCardTransactionDetails(cardDetails.cardDetails![0].cardNo!);
-        validateNebulaCard(cardDetails.cardDetails![0].cardNo!);
+        validateNebulaCard(cardDetails.cardDetails![0].cardNo!, 'fetch');
       }
     } catch (e) {
       TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
@@ -100,6 +104,17 @@ class MetroCardController extends GetxController {
         return;
       }
 
+      if (type == 'add') {
+        final cardValidationData = await validateNebulaCard(cardNo!, 'add');
+        if (cardValidationData!.nebulaCardValidationStatus != '00') {
+          TFullScreenLoader.stopLoading();
+          TLoaders.errorSnackBar(
+              title: 'Error',
+              message: cardValidationData.nebulaCardValidationMessage);
+          return;
+        }
+      }
+
       final payload = {
         "id": cardId,
         "userID": userId,
@@ -131,8 +146,6 @@ class MetroCardController extends GetxController {
               : 'Unable to add card Details.Please try again later!',
         );
       }
-      //Stop Loading
-      // TFullScreenLoader.stopLoading();
     } catch (e) {
       TFullScreenLoader.stopLoading();
       TLoaders.errorSnackBar(
@@ -160,10 +173,11 @@ class MetroCardController extends GetxController {
         return;
       }
 
-      final cardId =
-          cardDetailsByUser.first.cardDetails![carouselCurrentIndex.value].id;
+      final cardNo = cardDetailsByUser
+          .first.cardDetails![carouselCurrentIndex.value].cardNo;
 
-      final response = await _cardRepository.deleteCardDetailsByUser(cardId);
+      final response =
+          await _cardRepository.deleteCardDetailsByUser(userId, cardNo);
 
       if (response.returnCode == '0') {
         TFullScreenLoader.stopLoading();
@@ -201,7 +215,8 @@ class MetroCardController extends GetxController {
     }
   }
 
-  Future<void> validateNebulaCard(String cardNumber) async {
+  Future<NebulaCardValidationModel?> validateNebulaCard(
+      String cardNumber, String callingfrom) async {
     try {
       // Create the plain credentials
       isNebulaCardValidating.value = true;
@@ -235,13 +250,21 @@ class MetroCardController extends GetxController {
           "Hash": hash,
         };
         // Make the POST request
-        cardValidationData.clear();
+
         final response =
             await _cardRepository.validateNebulaCard(payload, headers);
-        cardValidationData.add(response);
-        // lastRcgStatus.add(response);
+        // if(response.nebulaCardValidationStatus == ''){
+
+        // }
+        if (callingfrom == 'fetch') {
+          storeNebulaCardValidationDetails.insert(
+              carouselCurrentIndex.value, response);
+        } else {
+          storeNebulaCardValidationDetails.insert(0, response);
+        }
+        return response;
       } else {
-        throw 'Something went wrong.Please try Again!';
+        throw 'Failed to fetch Card validation details!!!!!!!!!';
       }
     } catch (e) {
       TLoaders.errorSnackBar(
@@ -249,6 +272,7 @@ class MetroCardController extends GetxController {
     } finally {
       isNebulaCardValidating.value = false;
     }
+    return null;
   }
 
   Future<void> fetchCardLastTrasactionStatus(String cardNumber) async {

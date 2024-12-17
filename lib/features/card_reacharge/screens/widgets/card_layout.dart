@@ -29,6 +29,8 @@ class CardLayout extends StatelessWidget {
       children: [
         CarouselSlider(
           options: CarouselOptions(
+            enableInfiniteScroll:
+                cardController.storeNebulaCardValidationDetails.length == 1,
             autoPlay: false,
             disableCenter: false,
             height: screenWidth * .55,
