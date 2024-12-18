@@ -60,7 +60,7 @@ class RefundPreviewController extends GetxController {
             "transactionType": "",
             "refundQuoteId": ""
           });
-          refundPreviewData.add(response);
+          refundPreviewData.add(response.response![0]);
           if (index == tickets.length - 1) {
             isLoading.value = false;
           }
@@ -146,13 +146,16 @@ class RefundPreviewController extends GetxController {
           }
 
           final response = await Future.wait(apiArray);
+          print('------------------------------------');
+          print(response);
           refundConfirmData.assignAll(response);
 
           //Stop Loading
           TFullScreenLoader.stopLoading();
           var isSuccess = true;
           for (var refundStatus in response) {
-            if (refundStatus.returnCode != '0') {
+            final status = refundStatus.response[0];
+            if (status.returnCode != '0') {
               isSuccess = false;
             }
           }

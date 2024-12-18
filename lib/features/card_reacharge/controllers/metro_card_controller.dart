@@ -36,6 +36,7 @@ class MetroCardController extends GetxController {
   final carouselCurrentIndex = 0.obs;
   final cardHolderName = TextEditingController();
   final cardNumber = TextEditingController();
+  final selectedTopupAmount = '0'.obs;
 
   GlobalKey<FormState> cardAddOrUpdateFormKey = GlobalKey<FormState>();
 
@@ -242,7 +243,8 @@ class MetroCardController extends GetxController {
         };
 
         // Generate required data
-        String bankRequestDateTime = CardRechargeUtils.getBankRequestDateTime();
+        String bankRequestDateTime =
+            CardRechargeUtils.getBankRequestDateTimeForValidation();
         String bankRefNumber = CardRechargeUtils.getBankReferenceNumber(
             cardNumber, bankRequestDateTime);
         String hash = CardRechargeUtils.getHash(cardNumber, bankRefNumber);

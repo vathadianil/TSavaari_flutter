@@ -4,6 +4,8 @@ import 'package:iconsax/iconsax.dart';
 import 'package:tsavaari/features/card_reacharge/controllers/metro_card_controller.dart';
 import 'package:tsavaari/features/card_reacharge/screens/widgets/add_or_edit_card_details.popup.dart';
 import 'package:tsavaari/features/card_reacharge/screens/widgets/delete_card_popup.dart';
+import 'package:tsavaari/features/card_reacharge/screens/widgets/topup_bottomsheet.dart';
+import 'package:tsavaari/features/qr/display_qr/controllers/bottom_sheet_pageview_controller.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/image_strings.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
@@ -152,34 +154,58 @@ class CardFrontView extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    //--  Recharge button
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: TColors.success,
-                        side: const BorderSide(color: TColors.white),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: TSizes.xs,
-                          horizontal: TSizes.md,
+                    if (cardController.isNebulaCardValidating.value)
+                      ShimmerEffect(
+                        width: constraints.maxWidth * .9,
+                        height: constraints.maxHeight * .25,
+                      ),
+                    if (!cardController.isNebulaCardValidating.value &&
+                        cardController
+                            .storeNebulaCardValidationDetails.isNotEmpty)
+                      //--  Recharge button
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: TColors.success,
+                          side: const BorderSide(color: TColors.white),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: TSizes.xs,
+                            horizontal: TSizes.md,
+                          ),
+                          elevation: TSizes.sm,
                         ),
-                        elevation: TSizes.sm,
+                        onPressed: () {
+                          // Get.dialog(
+                          //   barrierDismissible: false,
+                          //   TopupDialog(
+                          //     cardData: cardController
+                          //             .storeNebulaCardValidationDetails[
+                          //         cardController.carouselCurrentIndex.value],
+                          //   ),
+                          // );
+                          showModalBottomSheet(
+                              isScrollControlled: true,
+                              context: context,
+                              builder: (context) => TopupBottomSheet(
+                                    cardData: cardController
+                                            .storeNebulaCardValidationDetails[
+                                        cardController
+                                            .carouselCurrentIndex.value],
+                                  )).whenComplete(() {
+                            Get.delete<BottomSheetPageViewController>();
+                          });
+                        },
+                        child: Text(
+                          'Top up',
+                          style:
+                              Theme.of(context).textTheme.labelSmall!.copyWith(
+                                    color: TColors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
                       ),
-                      onPressed: () {},
-                      child: Text(
-                        'Top up',
-                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                              color: TColors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ),
                     SizedBox(
                       width: constraints.maxWidth * .08,
                     ),
-                    if (cardController.isNebulaCardValidating.value)
-                      ShimmerEffect(
-                        width: constraints.maxHeight * .7,
-                        height: constraints.maxHeight * .25,
-                      ),
                     if (!cardController.isNebulaCardValidating.value &&
                         cardController
                             .storeNebulaCardValidationDetails.isNotEmpty)

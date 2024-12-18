@@ -5,6 +5,7 @@ import 'package:tsavaari/bottom_navigation/bottom_navigation_menu.dart';
 import 'package:tsavaari/common/controllers/checkbox_controller.dart';
 import 'package:tsavaari/common/widgets/appbar/t_appbar.dart';
 import 'package:tsavaari/common/widgets/layout/max_width_container.dart';
+import 'package:tsavaari/features/qr/display_qr/controllers/bottom_sheet_pageview_controller.dart';
 import 'package:tsavaari/features/qr/display_qr/controllers/change_destination_preview_controller.dart';
 import 'package:tsavaari/features/qr/display_qr/controllers/display_qr_controller.dart';
 import 'package:tsavaari/features/qr/display_qr/controllers/refund_preview_controller.dart';
@@ -84,6 +85,7 @@ class DisplayQrScreen extends StatelessWidget {
                     );
                   }).whenComplete(() {
                 Get.delete<RefundPreviewController>();
+                Get.delete<BottomSheetPageViewController>();
                 Get.delete<ChangeDestinationPreviewController>();
               });
             }),

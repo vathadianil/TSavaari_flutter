@@ -88,6 +88,7 @@ class THttpHelper {
       if (response.body[0] == '[' || response.body[0] != '{') {
         res = '{"response": "${response.body}"}';
       }
+      print(res);
       return json.decode(res);
     } else {
       throw Exception('Failed to load data: ${response.statusCode}');

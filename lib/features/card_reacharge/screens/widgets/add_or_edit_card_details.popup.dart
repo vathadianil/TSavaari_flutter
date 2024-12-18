@@ -52,11 +52,12 @@ class AddOrEditCardDetailsPopup extends StatelessWidget {
                       ],
                     ),
                     IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          FocusScope.of(context).requestFocus(FocusNode());
-                        },
-                        icon: const Icon(Iconsax.close_circle)),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        FocusScope.of(context).requestFocus(FocusNode());
+                      },
+                      icon: const Icon(Iconsax.close_circle),
+                    ),
                   ],
                 ),
                 const SizedBox(

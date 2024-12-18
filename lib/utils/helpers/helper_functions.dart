@@ -114,6 +114,11 @@ class THelperFunctions {
     return DateFormat(format).format(date);
   }
 
+  static String getFormattedDateTime1(DateTime date,
+      {String format = 'dd MMM yyyy hh:mm'}) {
+    return DateFormat(format).format(date);
+  }
+
   static String getFormattedDateTime(String date,
       {String currentDateFormat = 'yyyy-MM-dd HH:mm:ss',
       String targetDateFormat = 'dd-MM-yyyy HH:mm:ss'}) {

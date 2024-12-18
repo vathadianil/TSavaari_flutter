@@ -1,4 +1,27 @@
 class RefundPreviewModel {
+  List<Response>? response;
+
+  RefundPreviewModel({this.response});
+
+  RefundPreviewModel.fromJson(Map<String, dynamic> json) {
+    if (json['response'] != null) {
+      response = <Response>[];
+      json['response'].forEach((v) {
+        response!.add(Response.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (response != null) {
+      data['response'] = response!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Response {
   String? refundQuoteId;
   String? ltmrhlPurchaseId;
   String? passId;
@@ -13,23 +36,22 @@ class RefundPreviewModel {
   String? returnCode;
   String? returnMsg;
 
-  RefundPreviewModel({
-    this.refundQuoteId,
-    this.ltmrhlPurchaseId,
-    this.passId,
-    this.rjtId,
-    this.ticketid,
-    this.noOfRemainingTrips,
-    this.storedValueBalance,
-    this.actualFarePaid,
-    this.surCharge,
-    this.gst,
-    this.refundAmount,
-    this.returnCode,
-    this.returnMsg,
-  });
+  Response(
+      {this.refundQuoteId,
+      this.ltmrhlPurchaseId,
+      this.passId,
+      this.rjtId,
+      this.ticketid,
+      this.noOfRemainingTrips,
+      this.storedValueBalance,
+      this.actualFarePaid,
+      this.surCharge,
+      this.gst,
+      this.refundAmount,
+      this.returnCode,
+      this.returnMsg});
 
-  RefundPreviewModel.fromJson(Map<String, dynamic> json) {
+  Response.fromJson(Map<String, dynamic> json) {
     refundQuoteId = json['refundQuoteId'];
     ltmrhlPurchaseId = json['ltmrhlPurchaseId'];
     passId = json['passId'];

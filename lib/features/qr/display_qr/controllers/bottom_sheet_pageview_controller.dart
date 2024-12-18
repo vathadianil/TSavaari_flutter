@@ -25,6 +25,13 @@ class BottomSheetPageViewController extends GetxController {
 
   void firstPage(BuildContext context) {
     int page = 0;
+    currentPageIndex.value = page;
+    pageController.jumpToPage(page);
+  }
+
+  void topupAmountConfirmPage(BuildContext context) {
+    int page = 1;
+    currentPageIndex.value = page;
     pageController.jumpToPage(page);
   }
 }

@@ -2,6 +2,8 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
+
 class CardRechargeUtils {
   static String plainCredentials = "HYDMetroMobileApp:MobileApp@HydMetro1234";
   static String bankCode = "05";
@@ -18,6 +20,13 @@ class CardRechargeUtils {
         "${now.minute.toString().padLeft(2, '0')}"
         "${now.second.toString().padLeft(2, '0')}";
     return formattedDateTime;
+  }
+
+  static String getBankRequestDateTimeForValidation() {
+    final now = DateTime.now();
+    final dateTimeString = DateFormat('yyyyMMddhhmm').format(now);
+    final result = "${dateTimeString}00";
+    return result;
   }
 
   static String getBankReferenceNumber(

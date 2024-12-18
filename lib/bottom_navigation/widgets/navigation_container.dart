@@ -9,20 +9,14 @@ import 'package:tsavaari/utils/device/device_utility.dart';
 final List<BottomNavigationModel> navigationList = [
   BottomNavigationModel(
       id: '1', active: true, icon: 'home', targetPageIndex: 0, title: 'Home'),
-  // BottomNavigationModel(
-  //     id: '2',
-  //     active: true,
-  //     icon: 'history',
-  //     targetPageIndex: 1,
-  //     title: 'History'),
   BottomNavigationModel(
-      id: '3',
+      id: '2',
       active: true,
       icon: 'order',
       targetPageIndex: 1,
       title: 'Orders'),
   BottomNavigationModel(
-      id: '4',
+      id: '2',
       active: true,
       icon: 'user',
       targetPageIndex: 2,
