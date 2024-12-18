@@ -8,6 +8,7 @@ import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/image_strings.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
 import 'package:tsavaari/utils/device/device_utility.dart';
+import 'package:tsavaari/utils/helpers/card_recharge_utils.dart';
 import 'package:tsavaari/utils/helpers/helper_functions.dart';
 import 'package:tsavaari/utils/loaders/shimmer_effect.dart';
 
@@ -30,7 +31,6 @@ class CardFrontView extends StatelessWidget {
     final isDark = THelperFunctions.isDarkMode(context);
     final screenWidth = TDeviceUtils.getScreenWidth(context);
     final cardController = MetroCardController.instance;
-
     return Container(
       margin: EdgeInsets.symmetric(
         vertical: screenWidth * .025,
@@ -66,7 +66,8 @@ class CardFrontView extends StatelessWidget {
               child: Row(
                 children: [
                   FloatingActionButton(
-                    heroTag: "edit-btn$cardNumber",
+                    heroTag:
+                        "edit-btn${CardRechargeUtils.generateRandomNumber(5)}",
                     onPressed: () {
                       cardController.cardHolderName.text = cardController
                               .cardDetailsByUser
@@ -98,7 +99,8 @@ class CardFrontView extends StatelessWidget {
                     ),
                   ),
                   FloatingActionButton(
-                    heroTag: "remove-btn$cardNumber",
+                    heroTag:
+                        "remove-btn${CardRechargeUtils.generateRandomNumber(5)}",
                     onPressed: () {
                       Get.dialog(const DeleteCardPopup());
                     },
