@@ -175,14 +175,6 @@ class CardFrontView extends StatelessWidget {
                           elevation: TSizes.sm,
                         ),
                         onPressed: () {
-                          // Get.dialog(
-                          //   barrierDismissible: false,
-                          //   TopupDialog(
-                          //     cardData: cardController
-                          //             .storeNebulaCardValidationDetails[
-                          //         cardController.carouselCurrentIndex.value],
-                          //   ),
-                          // );
                           showModalBottomSheet(
                               isScrollControlled: true,
                               context: context,
