@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:tsavaari/common/widgets/button/custom_elevated_btn.dart';
+import 'package:tsavaari/features/card_reacharge/controllers/amounts_scroll_controller.dart';
 import 'package:tsavaari/features/card_reacharge/controllers/metro_card_controller.dart';
 import 'package:tsavaari/features/card_reacharge/models/nebula_card_validation_model.dart';
 import 'package:tsavaari/features/qr/display_qr/controllers/bottom_sheet_pageview_controller.dart';
@@ -22,6 +22,7 @@ class TopupMainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final cardController = MetroCardController.instance;
     final screenWidth = TDeviceUtils.getScreenWidth(context);
+    final scrollController = Get.put(AmountsScrollController());
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,39 +65,87 @@ class TopupMainPage extends StatelessWidget {
             height: TSizes.spaceBtwItems,
           ),
           SizedBox(
-            height: screenWidth * .1,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) => Container(
-                decoration: BoxDecoration(
-                  color: TColors.info.withOpacity(.1),
-                  borderRadius: BorderRadius.circular((screenWidth * .1) / 2),
-                ),
-                child: InkWell(
-                  onTap: () {
-                    cardController.selectedTopupAmount.value =
-                        cardData.cardDetails![0].amounts![index];
-                  },
-                  child: Center(
-                    child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: screenWidth * .05),
-                      child: Text(
-                        cardData.cardDetails![0].amounts![index],
-                        style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                              color: TColors.info,
-                              fontWeight: FontWeight.bold,
+            height: screenWidth * .7,
+            child: ListWheelScrollView(
+                controller: scrollController.controller,
+                physics: const FixedExtentScrollPhysics(),
+                itemExtent: screenWidth * .2,
+                perspective: 0.008,
+                squeeze: .9,
+                onSelectedItemChanged: (index) {
+                  cardController.selectedTopupAmount.value =
+                      cardData.cardDetails![0].amounts![index];
+                },
+                children: cardData.cardDetails![0].amounts!
+                    .map(
+                      (amount) => Container(
+                        decoration: BoxDecoration(
+                          color: TColors.primary,
+                          borderRadius:
+                              BorderRadius.circular((screenWidth * .1) / 2),
+                        ),
+                        child: SizedBox(
+                          width: screenWidth * .6,
+                          child: InkWell(
+                            onTap: () {
+                              cardController.selectedTopupAmount.value = amount;
+                            },
+                            child: Center(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: screenWidth * .05,
+                                ),
+                                child: Text(
+                                  amount,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge!
+                                      .copyWith(
+                                        color: TColors.light,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ),
                             ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-              ),
-              separatorBuilder: (context, index) => SizedBox(
-                width: screenWidth * 0.01,
-              ),
-              itemCount: cardData.cardDetails![0].amounts!.length,
-            ),
+                    )
+                    .toList()),
+            // ListView.separated(
+            //   shrinkWrap: true,
+            //   // controller: scrollController.scrollController,
+            //   scrollDirection: Axis.horizontal,
+            //   itemBuilder: (context, index) => Container(
+            //     decoration: BoxDecoration(
+            //       color: TColors.info.withOpacity(.1),
+            //       borderRadius: BorderRadius.circular((screenWidth * .1) / 2),
+            //     ),
+            //     child: InkWell(
+            //       onTap: () {
+            //         cardController.selectedTopupAmount.value =
+            //             cardData.cardDetails![0].amounts![index];
+            //       },
+            //       child: Center(
+            //         child: Padding(
+            //           padding:
+            //               EdgeInsets.symmetric(horizontal: screenWidth * .05),
+            //           child: Text(
+            //             cardData.cardDetails![0].amounts![index],
+            //             style: Theme.of(context).textTheme.labelLarge!.copyWith(
+            //                   color: TColors.info,
+            //                   fontWeight: FontWeight.bold,
+            //                 ),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            //   separatorBuilder: (context, index) => SizedBox(
+            //     width: screenWidth * 0.01,
+            //   ),
+            //   itemCount: cardData.cardDetails![0].amounts!.length,
+            // ),
           ),
           const SizedBox(
             height: TSizes.spaceBtwSections,

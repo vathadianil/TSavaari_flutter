@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:tsavaari/common/controllers/checkbox_controller.dart';
+import 'package:tsavaari/features/card_reacharge/controllers/amounts_scroll_controller.dart';
 import 'package:tsavaari/features/card_reacharge/controllers/metro_card_controller.dart';
 import 'package:tsavaari/features/card_reacharge/models/nebula_card_validation_model.dart';
 import 'package:tsavaari/features/qr/book_qr/screens/widgets/proceed_to_pay_btn.dart';
@@ -32,6 +33,7 @@ class ConfirmTopup extends StatelessWidget {
                 onPressed: () {
                   BottomSheetPageViewController.instace.firstPage(context);
                   Get.delete<CheckBoxController>();
+                  Get.delete<AmountsScrollController>();
                 },
                 icon: const Icon(Iconsax.arrow_left)),
             const SizedBox(

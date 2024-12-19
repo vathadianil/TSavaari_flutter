@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:tsavaari/features/card_reacharge/controllers/amounts_scroll_controller.dart';
 import 'package:tsavaari/features/card_reacharge/controllers/metro_card_controller.dart';
 import 'package:tsavaari/features/card_reacharge/screens/widgets/add_or_edit_card_details.popup.dart';
 import 'package:tsavaari/features/card_reacharge/screens/widgets/delete_card_popup.dart';
@@ -192,6 +193,7 @@ class CardFrontView extends StatelessWidget {
                                             .carouselCurrentIndex.value],
                                   )).whenComplete(() {
                             Get.delete<BottomSheetPageViewController>();
+                            Get.delete<AmountsScrollController>();
                           });
                         },
                         child: Text(

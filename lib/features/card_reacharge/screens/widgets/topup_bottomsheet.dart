@@ -18,23 +18,26 @@ class TopupBottomSheet extends StatelessWidget {
     final screenHeight = TDeviceUtils.getScreenHeight();
     return Padding(
       padding: const EdgeInsets.all(TSizes.defaultSpace),
-      child: Obx(
-        () => SizedBox(
-          height: bottomSheetContoller.currentPageIndex.value == 0
-              ? screenHeight * .3
-              : screenHeight * .65,
-          child: PageView(
-            controller: bottomSheetContoller.pageController,
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              TopupMainPage(cardData: cardData),
-              ConfirmTopup(
-                cardDetails: cardData,
-              ),
-            ],
-          ),
+      child:
+          // Obx(
+          //   () =>
+          SizedBox(
+        // height: bottomSheetContoller.currentPageIndex.value == 0
+        //     ? screenHeight * .65
+        //     : screenHeight * .65,
+        height: screenHeight * .65,
+        child: PageView(
+          controller: bottomSheetContoller.pageController,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            TopupMainPage(cardData: cardData),
+            ConfirmTopup(
+              cardDetails: cardData,
+            ),
+          ],
         ),
       ),
+      // ),
     );
   }
 }
