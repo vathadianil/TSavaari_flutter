@@ -36,8 +36,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   iconsax: ^0.0.8
 
-  #Cash free payment
+  #Payment Gateway Packages
   flutter_cashfree_pg_sdk: ^2.2.0+38
+  payu_checkoutpro_flutter: ^1.2.4
 
   #State Management Packages
   get: ^4.6.6
