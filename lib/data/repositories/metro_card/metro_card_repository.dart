@@ -100,6 +100,24 @@ class MetroCardRepository extends GetxController {
     }
   }
 
+  Future<CardTravelHistoryModel> getCardTravelHistory(payload, headers) async {
+    try {
+      final data = await THttpHelper.post(
+        ApiEndPoint.getCardTravelHistory,
+        payload,
+        newUrl: false,
+        headers: headers,
+      );
+      return CardTravelHistoryModel.fromJson(data);
+    } on FormatException catch (_) {
+      throw const TFormatException();
+    } on PlatformException catch (e) {
+      throw TPlatformException(e.code).message;
+    } catch (e) {
+      throw 'Something went wrong. Please try again later!';
+    }
+  }
+
   Future<CardDetailsByUserModel> addOrUpdateCardDetailsByUser(payload) async {
     try {
       final data =
@@ -119,33 +137,6 @@ class MetroCardRepository extends GetxController {
       final data = await THttpHelper.delete(
           '${ApiEndPoint.deleteCard}$userId&CARDNO=$cardNo');
       return CardDetailsByUserModel.fromJson(data);
-    } on FormatException catch (_) {
-      throw const TFormatException();
-    } on PlatformException catch (e) {
-      throw TPlatformException(e.code).message;
-    } catch (e) {
-      throw 'Something went wrong. Please try again later!';
-    }
-  }
-
-  Future<List<CardTravelHistoryModel>> getMetroCardTravelHistory() async {
-    try {
-      final list = [
-        CardTravelHistoryModel(
-            fromStation: 'Hi Tech City',
-            toStation: 'Nagole',
-            travelDateTime: '20240715',
-            dDCTAmount: '55',
-            reminingBalance: '593'),
-        CardTravelHistoryModel(
-            fromStation: 'Nagole',
-            toStation: 'Hi Tech City',
-            travelDateTime: '20240712',
-            dDCTAmount: '55',
-            reminingBalance: '648'),
-      ].toList();
-
-      return list;
     } on FormatException catch (_) {
       throw const TFormatException();
     } on PlatformException catch (e) {

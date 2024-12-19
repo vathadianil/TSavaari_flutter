@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tsavaari/common/widgets/shapes/circle_shape.dart';
 import 'package:tsavaari/common/widgets/shapes/dashed_vertical_line.dart';
+import 'package:tsavaari/features/card_reacharge/models/card_travel_history_model.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
 import 'package:tsavaari/utils/helpers/helper_functions.dart';
@@ -8,7 +9,10 @@ import 'package:tsavaari/utils/helpers/helper_functions.dart';
 class TravelHistoryCard extends StatelessWidget {
   const TravelHistoryCard({
     super.key,
+    required this.cardTravelData,
   });
+
+  final CardTravelHistoryList cardTravelData;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +54,7 @@ class TravelHistoryCard extends StatelessWidget {
                         style: Theme.of(context).textTheme.labelMedium,
                       ),
                       Text(
-                        '\u{20B9}100/-',
+                        '\u{20B9}${cardTravelData.dDCTAmount}/-',
                         style: Theme.of(context)
                             .textTheme
                             .displaySmall!
@@ -78,7 +82,7 @@ class TravelHistoryCard extends StatelessWidget {
                           width: TSizes.sm,
                         ),
                         Text(
-                          '\u{20B9}900/-',
+                          '\u{20B9}${cardTravelData.reminingBalance}/-',
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ],
@@ -86,25 +90,25 @@ class TravelHistoryCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const Stack(
+              Stack(
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         children: [
-                          CircleShape(
+                          const CircleShape(
                             borderWidth: 2,
                             width: 12,
                             height: 12,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: TSizes.sm,
                           ),
                           SizedBox(
                             width: 80,
                             child: Text(
-                              'Nagole',
+                              cardTravelData.fromStation ?? '',
                               maxLines: 1,
                               softWrap: true,
                               overflow: TextOverflow.ellipsis,
@@ -112,24 +116,24 @@ class TravelHistoryCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: TSizes.spaceBtwSections + 3,
                       ),
                       Row(
                         children: [
-                          CircleShape(
+                          const CircleShape(
                             borderWidth: 2,
                             width: 12,
                             height: 12,
                             fillColor: TColors.dark,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: TSizes.sm,
                           ),
                           SizedBox(
                             width: 80,
                             child: Text(
-                              'Uppal',
+                              cardTravelData.toStation ?? '',
                               maxLines: 1,
                               softWrap: true,
                               overflow: TextOverflow.ellipsis,
@@ -139,7 +143,7 @@ class TravelHistoryCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Positioned(
+                  const Positioned(
                     top: 15,
                     left: 6,
                     child: CustomPaint(
@@ -154,82 +158,6 @@ class TravelHistoryCard extends StatelessWidget {
           ),
         ],
       ),
-
-      // child: Column(
-      //   crossAxisAlignment: CrossAxisAlignment.start,
-      //   children: [
-      //     Text(
-      //       '24 Nov 2024',
-      //       style: Theme.of(context).textTheme.labelLarge,
-      //     ),
-      //     Row(
-      //       children: [
-      //         const Column(
-      //           children: [
-      //             CircleShape(
-      //               borderWidth: 2,
-      //               width: 12,
-      //               height: 12,
-      //             ),
-      //             SizedBox(
-      //               height: TSizes.sm,
-      //             ),
-      //             Text('Nagole'),
-      //           ],
-      //         ),
-      //         Flexible(
-      //             child: Column(
-      //           children: [
-      //             Text(
-      //               '\u{20B9}30/-',
-      //               style: Theme.of(context).textTheme.displaySmall,
-      //             ),
-      //             const Divider(),
-      //             Container(
-      //               padding: const EdgeInsets.symmetric(
-      //                   horizontal: TSizes.md, vertical: TSizes.sm),
-      //               decoration: BoxDecoration(
-      //                 color: isDark
-      //                     ? TColors.darkContainer
-      //                     : TColors.white,
-      //                 borderRadius: BorderRadius.circular(TSizes.lg),
-      //               ),
-      //               child: Row(
-      //                 mainAxisSize: MainAxisSize.min,
-      //                 children: [
-      //                   Text(
-      //                     'Balance',
-      //                     style: Theme.of(context).textTheme.labelSmall,
-      //                   ),
-      //                   const SizedBox(
-      //                     width: TSizes.sm,
-      //                   ),
-      //                   Text(
-      //                     '\u{20B9}900/-',
-      //                     style: Theme.of(context).textTheme.bodyLarge,
-      //                   ),
-      //                 ],
-      //               ),
-      //             ),
-      //           ],
-      //         )),
-      //         Column(
-      //           children: [
-      //             CircleShape(
-      //               borderWidth: 2,
-      //               width: 12,
-      //               height: 12,
-      //             ),
-      //             SizedBox(
-      //               height: TSizes.sm,
-      //             ),
-      //             Text('Uppal'),
-      //           ],
-      //         ),
-      //       ],
-      //     ),
-      //   ],
-      // ),
     );
   }
 }

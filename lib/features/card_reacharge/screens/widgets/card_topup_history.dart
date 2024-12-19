@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:tsavaari/features/card_reacharge/models/card_trx_details_model.dart';
 import 'package:tsavaari/utils/constants/colors.dart';
 import 'package:tsavaari/utils/constants/sizes.dart';
 import 'package:tsavaari/utils/device/device_utility.dart';
@@ -8,10 +9,10 @@ import 'package:tsavaari/utils/helpers/helper_functions.dart';
 class CardTopupHistory extends StatelessWidget {
   const CardTopupHistory({
     super.key,
-    required this.index,
+    required this.cardPaymentTrxData,
   });
 
-  final int index;
+  final CardTrxListModel cardPaymentTrxData;
 
   @override
   Widget build(BuildContext context) {
@@ -39,21 +40,30 @@ class CardTopupHistory extends StatelessWidget {
                 width: 50,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: index == 0 ? TColors.dark : TColors.grey,
+                  color: cardPaymentTrxData.transactionStatus == '34'
+                      ? TColors.grey
+                      : TColors.dark,
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: Icon(
-                  index == 0 ? Iconsax.repeat_circle : Iconsax.tick_circle,
-                  color: index == 0 ? TColors.secondary : TColors.success,
+                  cardPaymentTrxData.transactionStatus == '34'
+                      ? Iconsax.tick_circle
+                      : Iconsax.repeat_circle,
+                  color: cardPaymentTrxData.transactionStatus == '34'
+                      ? TColors.success
+                      : TColors.secondary,
                 ),
               ),
               const SizedBox(
                 height: TSizes.sm,
               ),
               //-- Amount
-              Text('+200/-', style: Theme.of(context).textTheme.titleLarge),
+              Text('+${cardPaymentTrxData.addedValue}/-',
+                  style: Theme.of(context).textTheme.titleLarge),
               Text(
-                index == 0 ? 'Pending' : 'Success',
+                cardPaymentTrxData.transactionStatus == '34'
+                    ? 'Success'
+                    : 'Pending',
                 style: Theme.of(context).textTheme.labelSmall,
               ),
             ],
@@ -75,7 +85,7 @@ class CardTopupHistory extends StatelessWidget {
               SizedBox(
                 width: TDeviceUtils.getScreenWidth(context) * .6,
                 child: Text(
-                  '123324354353556565464654645',
+                  cardPaymentTrxData.merchantTransactionID ?? '',
                   style: Theme.of(context).textTheme.bodyLarge,
                   overflow: TextOverflow.ellipsis,
                   softWrap: true,
@@ -94,7 +104,9 @@ class CardTopupHistory extends StatelessWidget {
                   SizedBox(
                     width: 170,
                     child: Text(
-                      '24-11-2024 11:22:24 AM',
+                      THelperFunctions.getFormattedDateTimeString1(
+                        cardPaymentTrxData.transactionDateTime!,
+                      ),
                       style: Theme.of(context).textTheme.bodyLarge,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

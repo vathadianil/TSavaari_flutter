@@ -24,13 +24,14 @@ class MetroCardController extends GetxController {
   final isCardDetailsLoading = false.obs;
   final isTravelHistoryLoading = false.obs;
   final isLastRcgStatusLoading = false.obs;
-  final isCardTrxLoading = false.obs;
+  final isCardPaymentDataLoading = true.obs;
+  final isCardTravelHistoryLoading = true.obs;
   final isNebulaCardValidating = false.obs;
-  final cardTravelHistoryData = <CardTravelHistoryModel>[].obs;
+  final cardTravelHistoryList = <CardTravelHistoryList>[].obs;
   final storeNebulaCardValidationDetails = <NebulaCardValidationModel>[].obs;
   final cardDetailsByUser = <CardDetailsByUserModel>{}.obs;
   final lastRcgStatus = <LastRechargeStatusModel>{}.obs;
-  final cardTrxListData = <CardTrxListModel>[].obs;
+  final cardPaymentListData = <CardTrxListModel>[].obs;
   final _cardRepository = Get.put(MetroCardRepository());
   final userId = '336838';
   final carouselCurrentIndex = 0.obs;
@@ -64,11 +65,13 @@ class MetroCardController extends GetxController {
           await _cardRepository.getMetroCardDetailsByUser(userId);
       if (cardDetails.returnCode == '0') {
         cardDetailsByUser.add(cardDetails);
-        // fetchCardLastTrasactionStatus(cardDetails.cardDetails![0].cardNo!);
-        // fetchCardTransactionDetails(cardDetails.cardDetails![0].cardNo!);
+
         if (callingfrom == 'fetch' || callingfrom == 'delete') {
           validateNebulaCard(cardDetails.cardDetails![0].cardNo!, callingfrom);
         }
+        // fetchCardLastTrasactionStatus(cardDetails.cardDetails![0].cardNo!);
+        fetchCardTravelHistory(cardDetails.cardDetails![0].cardNo!);
+        fetchCardTransactionDetails(cardDetails.cardDetails![0].cardNo!);
       }
     } catch (e) {
       TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
@@ -209,19 +212,6 @@ class MetroCardController extends GetxController {
     }
   }
 
-  //Fetch Travel History
-  Future<void> fetchMetroCardTravelHistory() async {
-    try {
-      isTravelHistoryLoading.value = true;
-      final travelHistory = await _cardRepository.getMetroCardTravelHistory();
-      cardTravelHistoryData.assignAll(travelHistory);
-    } catch (e) {
-      TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
-    } finally {
-      isTravelHistoryLoading.value = false;
-    }
-  }
-
   Future<NebulaCardValidationModel?> validateNebulaCard(
       String cardNumber, String callingfrom) async {
     try {
@@ -333,7 +323,7 @@ class MetroCardController extends GetxController {
   Future<void> fetchCardTransactionDetails(String cardNumber) async {
     try {
       // Create the plain credentials
-      isCardTrxLoading.value = true;
+      isCardPaymentDataLoading.value = true;
       String plainCredentials = CardRechargeUtils.plainCredentials;
 
       // Encode to Base64
@@ -358,18 +348,61 @@ class MetroCardController extends GetxController {
       };
 
       // Make the POST request
-      cardTrxListData.clear();
+      cardPaymentListData.clear();
 
       final response =
           await _cardRepository.getCardTrxDetails(payload, headers);
 
-      cardTrxListData
+      cardPaymentListData
           .assignAll(response.response as Iterable<CardTrxListModel>);
     } catch (e) {
       TLoaders.errorSnackBar(
           title: 'Error', message: 'Failed to Fetch Card transaction history');
     } finally {
-      isCardTrxLoading.value = false;
+      isCardPaymentDataLoading.value = false;
+    }
+  }
+
+  Future<void> fetchCardTravelHistory(String cardNumber) async {
+    try {
+      // Create the plain credentials
+      isCardTravelHistoryLoading.value = true;
+      String plainCredentials = CardRechargeUtils.plainCredentials;
+
+      // Encode to Base64
+      String base64Credentials = base64Encode(utf8.encode(plainCredentials));
+      String authorizationHeader = "Basic $base64Credentials";
+
+      // Generate required data
+      String bankCode = CardRechargeUtils.bankCode;
+      String hash = CardRechargeUtils.getHash(cardNumber, bankCode);
+
+      // Prepare the request body
+      Map<String, String> payload = {
+        "TicketEngravedID": cardNumber,
+        "BankCode": bankCode,
+        "Hash": hash,
+      };
+
+      // Prepare the HTTP headers
+      Map<String, String> headers = {
+        "Authorization": authorizationHeader,
+        "Content-Type": "application/json",
+      };
+
+      // Make the POST request
+      cardTravelHistoryList.clear();
+
+      final response =
+          await _cardRepository.getCardTravelHistory(payload, headers);
+
+      cardTravelHistoryList
+          .assignAll(response.response as Iterable<CardTravelHistoryList>);
+    } catch (e) {
+      TLoaders.errorSnackBar(
+          title: 'Error', message: 'Failed to Fetch Card Travel history');
+    } finally {
+      isCardTravelHistoryLoading.value = false;
     }
   }
 

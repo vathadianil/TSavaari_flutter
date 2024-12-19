@@ -1,18 +1,41 @@
 class CardTravelHistoryModel {
+  List<CardTravelHistoryList>? response;
+
+  CardTravelHistoryModel({this.response});
+
+  CardTravelHistoryModel.fromJson(Map<String, dynamic> json) {
+    if (json['response'] != null) {
+      response = <CardTravelHistoryList>[];
+      json['response'].forEach((v) {
+        response!.add(CardTravelHistoryList.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (response != null) {
+      data['response'] = response!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class CardTravelHistoryList {
   String? fromStation;
   String? toStation;
   String? travelDateTime;
   String? dDCTAmount;
   String? reminingBalance;
 
-  CardTravelHistoryModel(
+  CardTravelHistoryList(
       {this.fromStation,
       this.toStation,
       this.travelDateTime,
       this.dDCTAmount,
       this.reminingBalance});
 
-  CardTravelHistoryModel.fromJson(Map<String, dynamic> json) {
+  CardTravelHistoryList.fromJson(Map<String, dynamic> json) {
     fromStation = json['FromStation'];
     toStation = json['ToStation'];
     travelDateTime = json['TravelDateTime'];

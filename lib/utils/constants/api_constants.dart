@@ -30,6 +30,8 @@ class ApiEndPoint {
       "files.tsavaari.com/jsondata/GetSqsDetails.json";
   static String validateNebulaCardUrl = 'HydAppAPI/api/VALIDATE_NEBULACARD';
   static String getCardTrxDetails = 'HydRechargeApi/api/NEBULACARD_TXN_DETAILS';
+  static String getCardTravelHistory =
+      'HydRechargeApi/api/NEBULACARD_TRAVEL_HISTORY';
   static String addOrUpdateCardDetails = 'db/add_update_card';
   static String deleteCard = 'db/delete_card?USERID=';
 

@@ -12,6 +12,7 @@ import 'package:tsavaari/features/card_reacharge/screens/widgets/travel_history_
 import 'package:tsavaari/utils/constants/sizes.dart';
 import 'package:tsavaari/utils/device/device_utility.dart';
 import 'package:tsavaari/features/card_reacharge/screens/widgets/add_or_edit_card_details.popup.dart';
+import 'package:tsavaari/utils/loaders/shimmer_effect.dart';
 
 class CardReachargeScreen extends StatelessWidget {
   const CardReachargeScreen({super.key});
@@ -96,27 +97,16 @@ class CardReachargeScreen extends StatelessWidget {
               ),
 
               //--Travel history cards
-              if (btnTabbarController.tabIndex.value == 0)
+              if (btnTabbarController.tabIndex.value == 0 &&
+                  cardController.isCardTravelHistoryLoading.value)
                 ListView.separated(
-                  shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 3,
+                  shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return const TravelHistoryCard();
-                  },
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(
-                      height: TSizes.spaceBtwItems,
+                    return ShimmerEffect(
+                      width: double.infinity,
+                      height: screenWidth * .3,
                     );
-                  },
-                ),
-              //--Transaction history cards
-              if (btnTabbarController.tabIndex.value == 1)
-                ListView.separated(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return CardTopupHistory(index: index);
                   },
                   separatorBuilder: (context, index) {
                     return const SizedBox(
@@ -125,6 +115,70 @@ class CardReachargeScreen extends StatelessWidget {
                   },
                   itemCount: 2,
                 ),
+              if (btnTabbarController.tabIndex.value == 0 &&
+                  cardController.cardTravelHistoryList.isNotEmpty)
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: cardController.cardTravelHistoryList.length,
+                  itemBuilder: (context, index) {
+                    return TravelHistoryCard(
+                      cardTravelData:
+                          cardController.cardTravelHistoryList[index],
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(
+                      height: TSizes.spaceBtwItems,
+                    );
+                  },
+                ),
+              if (btnTabbarController.tabIndex.value == 0 &&
+                  cardController.cardTravelHistoryList.isEmpty &&
+                  !cardController.isCardTravelHistoryLoading.value)
+                const Text('No Data Found'),
+
+              //--Transaction history cards
+              if (btnTabbarController.tabIndex.value == 1 &&
+                  cardController.isCardPaymentDataLoading.value)
+                ListView.separated(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return ShimmerEffect(
+                      width: double.infinity,
+                      height: screenWidth * .3,
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(
+                      height: TSizes.spaceBtwItems,
+                    );
+                  },
+                  itemCount: 2,
+                ),
+              if (btnTabbarController.tabIndex.value == 1 &&
+                  cardController.cardPaymentListData.isNotEmpty)
+                ListView.separated(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return CardTopupHistory(
+                      cardPaymentTrxData:
+                          cardController.cardPaymentListData[index],
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(
+                      height: TSizes.spaceBtwItems,
+                    );
+                  },
+                  itemCount: cardController.cardPaymentListData.length,
+                ),
+              if (btnTabbarController.tabIndex.value == 1 &&
+                  cardController.cardPaymentListData.isEmpty &&
+                  !cardController.isCardPaymentDataLoading.value)
+                const Text('No Data Found'),
             ],
           ),
         ),

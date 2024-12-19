@@ -137,10 +137,27 @@ class THelperFunctions {
     return '$day-$month-$year $hours:$minutes:$seconds';
   }
 
+  static String getFormattedDateTimeString1(String dateString) {
+    final year = dateString.substring(0, 4);
+    final month = dateString.substring(4, 6);
+    final day = dateString.substring(6, 8);
+    final hours = dateString.substring(8, 10);
+    final minutes = dateString.substring(10, 12);
+    final seconds = dateString.substring(12, 14);
+    return '$day-$month-$year $hours:$minutes:$seconds';
+  }
+
   static String getFormattedDateString(String dateString) {
     final day = dateString.substring(0, 2);
     final month = monthToNumberMap[dateString.substring(3, 6)];
     final year = dateString.substring(7, 11);
+    return '$day-$month-$year';
+  }
+
+  static String getFormattedDateString2(String dateString) {
+    final year = dateString.substring(0, 4);
+    final month = monthToNumberMap[dateString.substring(4, 6)];
+    final day = dateString.substring(6, 8);
     return '$day-$month-$year';
   }
 
