@@ -20,13 +20,11 @@ class CardFrontView extends StatelessWidget {
     super.key,
     required this.cardHeight,
     required this.cardHolderName,
-    required this.cardBalance,
     required this.cardNumber,
   });
 
   final double cardHeight;
   final String cardHolderName;
-  final String cardBalance;
   final String cardNumber;
 
   @override

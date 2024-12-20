@@ -1,9 +1,13 @@
 class CardTrxDetailsModel {
+  String? errorCode;
+  String? errorDescription;
   List<CardTrxListModel>? response;
 
   CardTrxDetailsModel({this.response});
 
   CardTrxDetailsModel.fromJson(Map<String, dynamic> json) {
+    errorCode = json['ErrorCode'] ?? '';
+    errorDescription = json['ErrorDescription'] ?? '';
     if (json['response'] != null) {
       response = <CardTrxListModel>[];
       json['response'].forEach((v) {
@@ -14,6 +18,8 @@ class CardTrxDetailsModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['ErrorCode'] = errorCode;
+    data['ErrorDescription'] = errorDescription;
     if (response != null) {
       data['response'] = response!.map((v) => v.toJson()).toList();
     }

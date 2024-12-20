@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tsavaari/data/repositories/metro_card/metro_card_repository.dart';
@@ -352,12 +353,16 @@ class MetroCardController extends GetxController {
 
       final response =
           await _cardRepository.getCardTrxDetails(payload, headers);
-
-      cardPaymentListData
-          .assignAll(response.response as Iterable<CardTrxListModel>);
+      if (response.errorCode != null && response.errorCode != "104") {
+        cardPaymentListData
+            .assignAll(response.response as Iterable<CardTrxListModel>);
+      }
     } catch (e) {
-      TLoaders.errorSnackBar(
-          title: 'Error', message: 'Failed to Fetch Card transaction history');
+      if (kDebugMode) {
+        print(e);
+      }
+      // TLoaders.errorSnackBar(
+      //     title: 'Error', message: 'Failed to Fetch Card Payment history');
     } finally {
       isCardPaymentDataLoading.value = false;
     }
@@ -390,17 +395,20 @@ class MetroCardController extends GetxController {
         "Content-Type": "application/json",
       };
 
-      // Make the POST request
       cardTravelHistoryList.clear();
-
       final response =
           await _cardRepository.getCardTravelHistory(payload, headers);
 
-      cardTravelHistoryList
-          .assignAll(response.response as Iterable<CardTravelHistoryList>);
+      if (response.errorCode != "104") {
+        cardTravelHistoryList
+            .assignAll(response.response as Iterable<CardTravelHistoryList>);
+      }
     } catch (e) {
-      TLoaders.errorSnackBar(
-          title: 'Error', message: 'Failed to Fetch Card Travel history');
+      if (kDebugMode) {
+        print(e);
+      }
+      // TLoaders.errorSnackBar(
+      //     title: 'Error', message: 'Failed to Fetch Card Travel history');
     } finally {
       isCardTravelHistoryLoading.value = false;
     }

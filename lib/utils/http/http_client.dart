@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class THttpHelper {
@@ -17,8 +18,11 @@ class THttpHelper {
             : _baseUrlOld;
     final response = await http.get(Uri.parse('$url/$endpoint'));
     // .timeout(const Duration(seconds: 10));
-    print('------------------------------------------------------');
-    print('response: ${response.body}');
+    if (kDebugMode) {
+      print('------------------------------------------------------');
+      print('response: ${response.body}');
+    }
+
     return amazonUrl
         ? _handleStringResponse(response)
         : _handleResponse(response);
@@ -42,10 +46,12 @@ class THttpHelper {
       body: data != null ? json.encode(data) : null,
     );
     // .timeout(const Duration(seconds: 10));
-    print('------------------------------------------------------');
-    print('headers : $headers');
-    print('payload : $data');
-    print('response: ${response.body}');
+    if (kDebugMode) {
+      print('------------------------------------------------------');
+      print('headers : $headers');
+      print('payload : $data');
+      print('response: ${response.body}');
+    }
     return _handleResponse(response);
   }
 
@@ -64,8 +70,10 @@ class THttpHelper {
   static Future<Map<String, dynamic>> delete(String endpoint) async {
     final response = await http.delete(Uri.parse('$_baseUrl/$endpoint'));
     // .timeout(const Duration(seconds: 10));
-    print('$_baseUrl/$endpoint');
-    print(response.body);
+    if (kDebugMode) {
+      print('$_baseUrl/$endpoint');
+      print(response.body);
+    }
     return _handleResponse(response);
   }
 
@@ -76,6 +84,7 @@ class THttpHelper {
       if (response.body[0] == '[' || response.body[0] != '{') {
         res = '{"response": ${response.body}}';
       }
+
       return json.decode(res);
     } else {
       throw Exception('Failed to load data: ${response.statusCode}');
@@ -88,7 +97,6 @@ class THttpHelper {
       if (response.body[0] == '[' || response.body[0] != '{') {
         res = '{"response": "${response.body}"}';
       }
-      print(res);
       return json.decode(res);
     } else {
       throw Exception('Failed to load data: ${response.statusCode}');

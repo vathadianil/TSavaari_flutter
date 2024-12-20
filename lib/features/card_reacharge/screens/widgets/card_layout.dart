@@ -16,11 +16,9 @@ class CardLayout extends StatelessWidget {
   const CardLayout({
     super.key,
     required this.cardHeight,
-    required this.cardBalance,
   });
 
   final double cardHeight;
-  final String cardBalance;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +48,6 @@ class CardLayout extends StatelessWidget {
                     foreGroudndWidget: CardFrontView(
                       cardHeight: cardHeight,
                       cardHolderName: cardData.cardDesc ?? '',
-                      cardBalance: cardBalance,
                       cardNumber: cardData.cardNo ?? '',
                     ),
                     backGroundWidget: CardBackView(
