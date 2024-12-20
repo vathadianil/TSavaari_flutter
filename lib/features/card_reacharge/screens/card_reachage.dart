@@ -96,25 +96,45 @@ class CardReachargeScreen extends StatelessWidget {
                   cardController.isCardTravelHistoryLoading.value)
                 const CardHiistroyShimmer(),
               if (btnTabbarController.tabIndex.value == 0 &&
-                  cardController.cardTravelHistoryList.isNotEmpty)
-                ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: cardController.cardTravelHistoryList.length,
-                  itemBuilder: (context, index) {
-                    return TravelHistoryCard(
-                      cardTravelData:
-                          cardController.cardTravelHistoryList[index],
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(
-                      height: TSizes.spaceBtwItems,
-                    );
-                  },
+                  !cardController.isCardTravelHistoryLoading.value &&
+                  cardController.cardTravelHistoryList.isNotEmpty &&
+                  cardController
+                      .cardTravelHistoryList[
+                          cardController.carouselCurrentIndex.value]
+                      .response!
+                      .isNotEmpty)
+                Obx(
+                  () => ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: cardController
+                        .cardTravelHistoryList[
+                            cardController.carouselCurrentIndex.value]
+                        .response!
+                        .length,
+                    itemBuilder: (context, index) {
+                      return TravelHistoryCard(
+                        cardTravelData: cardController
+                            .cardTravelHistoryList[
+                                cardController.carouselCurrentIndex.value]
+                            .response![index],
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(
+                        height: TSizes.spaceBtwItems,
+                      );
+                    },
+                  ),
                 ),
               if (btnTabbarController.tabIndex.value == 0 &&
-                  cardController.cardTravelHistoryList.isEmpty &&
+                  cardController.cardTravelHistoryList.isNotEmpty &&
+                  !cardController.isCardTravelHistoryLoading.value &&
+                  cardController
+                      .cardTravelHistoryList[
+                          cardController.carouselCurrentIndex.value]
+                      .response!
+                      .isEmpty &&
                   !cardController.isCardTravelHistoryLoading.value)
                 const Text('No Data Found'),
 
@@ -123,25 +143,50 @@ class CardReachargeScreen extends StatelessWidget {
                   cardController.isCardPaymentDataLoading.value)
                 const CardHiistroyShimmer(),
               if (btnTabbarController.tabIndex.value == 1 &&
-                  cardController.cardPaymentListData.isNotEmpty)
-                ListView.separated(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return CardTopupHistory(
-                      cardPaymentTrxData:
-                          cardController.cardPaymentListData[index],
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(
-                      height: TSizes.spaceBtwItems,
-                    );
-                  },
-                  itemCount: cardController.cardPaymentListData.length,
+                  cardController.cardPaymentListData.isNotEmpty &&
+                  !cardController.isCardPaymentDataLoading.value &&
+                  cardController
+                          .cardPaymentListData[
+                              cardController.carouselCurrentIndex.value]
+                          .response !=
+                      null &&
+                  cardController
+                      .cardPaymentListData[
+                          cardController.carouselCurrentIndex.value]
+                      .response!
+                      .isNotEmpty)
+                Obx(
+                  () => ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return CardTopupHistory(
+                        cardPaymentTrxData: cardController
+                            .cardPaymentListData[
+                                cardController.carouselCurrentIndex.value]
+                            .response![index],
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(
+                        height: TSizes.spaceBtwItems,
+                      );
+                    },
+                    itemCount: cardController
+                        .cardPaymentListData[
+                            cardController.carouselCurrentIndex.value]
+                        .response!
+                        .length,
+                  ),
                 ),
               if (btnTabbarController.tabIndex.value == 1 &&
-                  cardController.cardPaymentListData.isEmpty &&
+                  cardController.cardPaymentListData.isNotEmpty &&
+                  !cardController.isCardPaymentDataLoading.value &&
+                  cardController
+                      .cardPaymentListData[
+                          cardController.carouselCurrentIndex.value]
+                      .response!
+                      .isEmpty &&
                   !cardController.isCardPaymentDataLoading.value)
                 const Text('No Data Found'),
             ],

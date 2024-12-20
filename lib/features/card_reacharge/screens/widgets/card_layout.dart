@@ -1,9 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:tsavaari/common/widgets/containers/t_circular_container.dart';
 import 'package:tsavaari/common/widgets/containers/t_flip.dart';
+import 'package:tsavaari/features/card_reacharge/controllers/onde_direction_scroll_physics.dart';
 import 'package:tsavaari/features/card_reacharge/controllers/metro_card_controller.dart';
 import 'package:tsavaari/features/card_reacharge/screens/widgets/card_back_view.dart';
 import 'package:tsavaari/features/card_reacharge/screens/widgets/card_front_view.dart';
@@ -31,7 +31,9 @@ class CardLayout extends StatelessWidget {
             options: CarouselOptions(
               scrollPhysics: cardController.isNebulaCardValidating.value
                   ? const NeverScrollableScrollPhysics()
-                  : const AlwaysScrollableScrollPhysics(),
+                  : cardController.carouselCurrentIndex.value == 0
+                      ? const OneDirectionScrollPhysics()
+                      : const AlwaysScrollableScrollPhysics(),
               enableInfiniteScroll:
                   cardController.cardDetailsByUser.first.cardDetails!.length !=
                       1,
